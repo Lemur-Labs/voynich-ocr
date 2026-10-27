@@ -1,0 +1,11 @@
+# Append-only. A later row supersedes an earlier one by saying so; rows are never edited or reordered.
+- id: VO-001
+  date: "2026-10-26"
+  by: brian
+  decision: Voynich OCR is a standalone research repository in Lemur-Labs. It is not a bridge tenant and not factory work, and its documents live in this repository.
+  source: owner, planning session 2026-10-26
+- id: VO-002
+  date: "2026-10-26"
+  by: brian
+  decision: Not onboarded to the kit for now. The planning pattern (gated phases, trade studies, pre-registration) is meant for reuse on other projects, so the repository is built in the house's standard shape; the onboarding question stays open to the challenge in docs/plan.md section 7.
+  source: owner, planning session 2026-10-26
