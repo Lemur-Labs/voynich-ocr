@@ -11,3 +11,6 @@ Status: formulation (F0). Nothing is built yet.
 | [docs/plan.md](docs/plan.md) | Process, kickoff corrections, phases and gates, trade studies, open recommendations |
 | [docs/decisions.yaml](docs/decisions.yaml) | Decisions in force, append-only |
 | [AGENTS.md](AGENTS.md) | Rules for anyone, person or agent, working here |
+
+Licensing: code is MIT ([LICENSE](LICENSE)); the writeup, the disagreement map and other generated outputs are
+CC BY 4.0. Transliterations are © their authors and images are Beinecke public domain; neither is redistributed here.
