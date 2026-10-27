@@ -4,7 +4,9 @@ version = "0.0.0"
 description = "Calibrated glyph recognition for the Voynich manuscript, scored against transcriber disagreement"
 license = "MIT"
 requires-python = ">=3.12,<3.13"
-dependencies = []
+dependencies = [
+    "numpy>=2.5.4",
+]
 
 [dependency-groups]
 dev = ["pytest>=8", "ruff>=0.6"]
