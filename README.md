@@ -14,3 +14,14 @@ Status: formulation (F0). Nothing is built yet.
 
 Licensing: code is MIT ([LICENSE](LICENSE)); the writeup, the disagreement map and other generated outputs are
 CC BY 4.0. Transliterations are © their authors and images are Beinecke public domain; neither is redistributed here.
+
+## Reproduce
+
+```
+uv sync
+make snapshot        # fetch third-party inputs into data/raw/ and check them against snapshot/manifest.sha256
+make lint test
+```
+
+If an upstream file changes, `make snapshot` fails with the path. `make snapshot-pull` restores the pinned bytes from
+the project's bucket.

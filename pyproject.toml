@@ -1,0 +1,20 @@
+[project]
+name = "voynich-ocr"
+version = "0.0.0"
+description = "Calibrated glyph recognition for the Voynich manuscript, scored against transcriber disagreement"
+license = "MIT"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 110
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
