@@ -107,3 +107,11 @@ def test_word_breaks_compare_per_boundary_and_drawing_counts_as_a_space():
 def test_gated_columns_need_tier_three():
     cols, _ = _columns({"ZL": _g("A1"), "IT": _g("A1")})
     assert not cols[0].gated
+
+
+def test_gated_columns_need_three_contributing_sources_after_the_mask():
+    codes = {"ZL": ALL, "IT": frozenset({"A1", "B1"}), "GC": ALL}
+    cols, _ = _columns({"ZL": _g("A1Q1"), "IT": _g("A1B1"), "GC": _g("A1Q1")}, codes)
+    assert (cols[1].tier, cols[1].contributing, cols[1].cls) == (3, ("ZL", "GC"), "agree")
+    assert not cols[1].gated
+    assert cols[0].gated
