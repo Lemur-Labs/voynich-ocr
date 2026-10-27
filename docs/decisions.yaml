@@ -104,3 +104,38 @@
   by: brian
   decision: docs/prereg.md is frozen with sha256 9d33cd8e1bb90ca3fb1eeabc6ea4cc003a18da4889744f81b39ba9b6456bc06d. Later changes are appended amendments only.
   source: owner approved KDP-F E5, 2026-10-27
+- id: VO-022
+  date: "2026-10-27"
+  by: brian
+  decision: G1 passes. The corrected run (mask fix 5833731, failing test c4fe89f) is the gate run. The pre-fix run (9180f72, headline 6.84%) stays in history and is named in the packet.
+  source: owner approved G1-1, docs/gates/G1.md, 2026-10-27
+- id: VO-023
+  date: "2026-10-27"
+  by: brian
+  decision: Prereg amendment A1 sets MIN_GROUP_COVERAGE to 0.72, the 5th percentile of 40-page non-test draws on the gated set after A2. The packet's 0.80 came from the set before A2.
+  source: owner approved G1-2, then chose 0.72 when A2 moved the percentile, 2026-10-27
+- id: VO-024
+  date: "2026-10-27"
+  by: brian
+  decision: Prereg amendment A2. A gated column needs at least 3 contributing sources after the mask. This applies to the H1, H2 and H3 gated sets.
+  source: owner approved G1-3, docs/gates/G1.md, 2026-10-27
+- id: VO-025
+  date: "2026-10-27"
+  by: brian
+  decision: One-directional conventions (GC d5, FG iin, ZL ligature codes) and partly transcribed FG or CD lines are reported, not reclassified. The nine interpretations listed in the G1 packet are ratified.
+  source: owner approved G1-4, G1-5 and G1-6, docs/gates/G1.md, 2026-10-27
+- id: VO-026
+  date: "2026-10-27"
+  by: brian
+  decision: The repository goes public. The non-test per-column files are published as GitHub release map-v0, not committed. The owner posts map v0 from an agent draft (VO-006).
+  source: owner approved G1-7, docs/gates/G1.md, 2026-10-27
+- id: VO-027
+  date: "2026-10-27"
+  by: claude
+  decision: docs/prereg.md with A1 and A2 appended has sha256 62e1ed1c04d7ec09ca7d2d8c10a1d5031a09782b7eb99efc2e3ed8ad238f6904.
+  source: docs/prereg.md Amendments
+- id: VO-028
+  date: "2026-10-27"
+  by: brian
+  decision: Supersedes VO-026's release contents. Release map-v0 carries per-column class, tier, flag, contributing sources and the gated flag, without readings or codes, plus summary.json. Outreach asks the transliteration authors whether the full files may be published later.
+  source: owner chose "strip text" at G1-7, 2026-10-27
