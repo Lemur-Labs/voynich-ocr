@@ -190,6 +190,7 @@ def coverage() -> dict:
         chosen = rng.choice(eligible, size=COVERAGE_PAGES, replace=False)
         draws.append(figures(np.isin(pages, chosen)))
     draws = np.array(draws)
+    void_share = float((draws.min(axis=1) < scoring.MIN_GROUP_COVERAGE).mean())
     all_type, all_page = figures(np.ones(len(pages), dtype=bool))
     return {
         "seed": COVERAGE_SEED,
@@ -200,6 +201,7 @@ def coverage() -> dict:
         f"{COVERAGE_PAGES}_page_draws_from_{len(eligible)}_eligible": {
             "within_type_p5_p50_p95": [round(float(x), 4) for x in np.percentile(draws[:, 0], [5, 50, 95])],
             "within_page_p5_p50_p95": [round(float(x), 4) for x in np.percentile(draws[:, 1], [5, 50, 95])],
+            f"void_share_at_{scoring.MIN_GROUP_COVERAGE}": round(void_share, 4),
         },
     }
 

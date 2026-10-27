@@ -229,6 +229,16 @@ def column_row(c: Column) -> str:
 COLUMN_HEADER = "locus\tcolumn\ttier\tclass\tflag\tcontributing\treadings\tcodes"
 
 
+def published_row(c: Column) -> str:
+    """No readings or codes: the transliterations are not ours to redistribute."""
+    flag = "zl_uncertain" if c.zl_uncertain else ""
+    gated = "gated" if c.gated else ""
+    return "\t".join([c.locus, str(c.index), str(c.tier), c.cls, flag, ",".join(c.contributing), gated])
+
+
+PUBLISHED_HEADER = "locus\tcolumn\ttier\tclass\tflag\tcontributing\tgated"
+
+
 def _rate(columns: list[Column]) -> dict:
     gated = [c for c in columns if c.gated]
     n_dis = sum(c.cls == "disagree" for c in gated)
@@ -330,7 +340,7 @@ def write(out: Path, inputs: Inputs, maps: dict[str, tuple[list[Column], list[Bo
     for name, (columns, _) in maps.items():
         rows = [COLUMN_HEADER] + [column_row(c) for c in columns]
         (out / "columns" / f"{name}.tsv").write_text("\n".join(rows) + "\n")
-        shown = [COLUMN_HEADER] + [column_row(c) for c in columns if c.page not in test]
+        shown = [PUBLISHED_HEADER] + [published_row(c) for c in columns if c.page not in test]
         (out / "published" / f"{name}.tsv").write_text("\n".join(shown) + "\n")
     summary = summarize(maps, inputs, test)
     (out / "summary.json").write_text(json.dumps(summary, indent=1, sort_keys=False) + "\n")
