@@ -18,7 +18,7 @@
    "published/leave-IT-out.tsv": "dff522206ce055a909f09cfd88acd0b461b9c0df1ad8bb1415453b869a839f3f",
    "published/leave-ZL-IT-out.tsv": "85ddbeb7255180ea08246d9765a3c7e4d0b5ad1b87b6f7eeaecd7321aa85f7a0",
    "published/leave-ZL-out.tsv": "2effd7f7c5df6f698837545003408f2c5412e97454b8938cb24e4305dd8a85fd",
-   "summary.json": "febede30b15feb7a9cec8d66bfb09646671665d4aafaca4cbe8639e61a765f03"
+   "summary.json": "df901b5705b3bfcf154dae74b40e24f30b1ba3339f9b2062b70e6c316350f275"
   }
  },
  "parser": {
@@ -77,20 +77,20 @@
  "outcome": "pass",
  "coverage": {
   "seed": 20261031,
-  "glyphs": 122859,
+  "glyphs": 119997,
   "pages": 185,
-  "within_type_all_nontest": 0.9921,
-  "within_page_all_nontest": 0.9034,
+  "within_type_all_nontest": 0.958,
+  "within_page_all_nontest": 0.8839,
   "40_page_draws_from_162_eligible": {
    "within_type_p5_p50_p95": [
-    0.8137,
-    0.9146,
-    0.9211
+    0.7267,
+    0.8475,
+    0.9188
    ],
    "within_page_p5_p50_p95": [
-    0.8301,
-    0.8948,
-    0.9402
+    0.7924,
+    0.8734,
+    0.9242
    ]
   }
  }

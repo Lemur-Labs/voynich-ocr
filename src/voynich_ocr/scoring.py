@@ -218,7 +218,7 @@ def void_for_attrition(kept: int, total: int) -> bool:
 
 
 # docs/prereg.md amendment A1.
-MIN_GROUP_COVERAGE: float | None = 0.80
+MIN_GROUP_COVERAGE: float | None = 0.72
 
 
 def void_for_underpower(coverage: float, minimum: float | None = MIN_GROUP_COVERAGE) -> bool:

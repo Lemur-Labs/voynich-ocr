@@ -202,4 +202,20 @@ These are reported beside it:
 
 ## Amendments
 
-None.
+### A1 — 2026-10-27 — H3, coverage minimum
+
+- **Change:** `scoring.MIN_GROUP_COVERAGE = 0.72`.
+- **Reason:** H3 fixes this value at G1 from non-test pages. 200 draws of 40 pages, seed 20261031, from the 162
+  non-test pages all fixed sources cover, on the gated set after A2. The 5th percentiles are 0.727 within type and
+  0.792 within page. At 0.72, 4.5% of draws void. The G1 packet proposed 0.80 from the gated set before A2; on the
+  set after A2, 0.80 voids 22% of draws. The owner chose 0.72 to keep the stated rule: H3 voids only when the test
+  set is less scorable than about 95% of same-size non-test sets.
+
+### A2 — 2026-10-27 — H1, H2 and H3 gated sets
+
+- **Change:** a gated column also needs at least 3 contributing sources after the expressibility mask, beside tier
+  ≥3.
+- **Reason:** without it, a tier-3 column can be left with 2 sources. On non-test pages these disagreed 90.5% of the
+  time (2,602 of 2,874 columns), mostly ZL against GC over GC's `d5`. That is disagreement by construction, the
+  mirror of the agreement by construction the tier rule prevents. The non-test headline moves from 6.61% to 4.59%.
+  No test-page figure has been computed.
