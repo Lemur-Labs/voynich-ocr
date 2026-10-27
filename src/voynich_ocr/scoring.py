@@ -79,44 +79,140 @@ def _entropy(counts: Counter) -> float:
     return float(-(p * np.log2(p)).sum())
 
 
-def loo_cluster_entropy(clusters: np.ndarray, readings: list[list[str]]) -> np.ndarray:
-    """Entropy of the transcribers' readings in each instance's cluster, excluding the instance's own readings.
+def loo_cluster_entropy(clusters: np.ndarray, readings: list[list[str]], pages: np.ndarray) -> np.ndarray:
+    """Entropy of the transcribers' readings in each instance's cluster, excluding every instance on its page.
 
-    Leaving the instance out matters: a glyph the transcribers disagree on adds several readings to its own
-    cluster, which would raise that cluster's entropy by construction.
+    Excluding the instance matters: a glyph the transcribers disagree on adds several readings to its own cluster,
+    raising that cluster's entropy by construction. Excluding the whole page matters too: repeated words carry
+    one transcriber's convention for that page into the cluster.
     """
     pooled: dict[int, Counter] = {}
-    for c, r in zip(clusters, readings):
+    same_page: dict[tuple[int, object], Counter] = {}
+    for c, r, p in zip(clusters, readings, pages):
         pooled.setdefault(int(c), Counter()).update(r)
+        same_page.setdefault((int(c), p), Counter()).update(r)
     out = np.empty(len(readings))
-    for i, (c, r) in enumerate(zip(clusters, readings)):
-        out[i] = _entropy(pooled[int(c)] - Counter(r))
+    for i, (c, p) in enumerate(zip(clusters, pages)):
+        out[i] = _entropy(pooled[int(c)] - same_page[(int(c), p)])
     return out
 
 
-def entropy_gap(cluster_entropy: np.ndarray, disagree: np.ndarray) -> Callable[[np.ndarray], float]:
+def _gap(h: np.ndarray, d: np.ndarray) -> float:
+    return float(h[d].mean() - h[~d].mean())
+
+
+def within_stratum_gap(
+    cluster_entropy: np.ndarray, disagree: np.ndarray, strata: np.ndarray
+) -> Callable[[np.ndarray], float]:
+    """Entropy gap computed inside each stratum (the ZL token) and weighted by instance count.
+
+    Pooled over all tokens, the gap is positive whenever some tokens are disputed more than others, which the
+    text alone shows; within a token, only the images can separate disputed instances from undisputed ones.
+    """
+
     def statistic(idx: np.ndarray) -> float:
-        d = disagree[idx]
-        return float(cluster_entropy[idx][d].mean() - cluster_entropy[idx][~d].mean())
+        h, d, s = cluster_entropy[idx], disagree[idx], strata[idx]
+        total, weight = 0.0, 0
+        for key in np.unique(s):
+            m = s == key
+            if d[m].any() and (~d[m]).any():
+                total += m.sum() * _gap(h[m], d[m])
+                weight += m.sum()
+        return total / weight if weight else 0.0
 
     return statistic
 
 
-def disagreement_auroc(confidence: np.ndarray, disagree: np.ndarray) -> Callable[[np.ndarray], float]:
+def permutation_null(
+    statistic_for: Callable[[np.ndarray], Callable[[np.ndarray], float]],
+    disagree: np.ndarray,
+    pages: np.ndarray,
+    resamples: int = BOOTSTRAP_RESAMPLES,
+    seed: int = BOOTSTRAP_SEED,
+) -> float:
+    """97.5th percentile of the statistic with `disagree` shuffled within each page."""
+    rng = np.random.default_rng(seed)
+    members = [np.flatnonzero(pages == p) for p in np.unique(pages)]
+    everything = np.arange(disagree.size)
+    draws = []
+    for _ in range(resamples):
+        shuffled = disagree.copy()
+        for m in members:
+            shuffled[m] = disagree[rng.permutation(m)]
+        draws.append(statistic_for(shuffled)(everything))
+    return float(np.percentile(draws, 97.5))
+
+
+def auroc_statistic(scores: np.ndarray, disagree: np.ndarray) -> Callable[[np.ndarray], float]:
+    """Higher score should mean more likely disputed: pass 1 - confidence, or a baseline score."""
+
     def statistic(idx: np.ndarray) -> float:
-        return auroc(1.0 - confidence[idx], disagree[idx])
+        return auroc(scores[idx], disagree[idx])
 
     return statistic
 
 
-def decide_clusters(gap: Interval) -> str:
-    return "pass" if gap.lo > 0 else "kill"
+def within_group_auroc(
+    scores: np.ndarray,
+    disagree: np.ndarray,
+    groups: np.ndarray,
+    min_pos: int,
+    min_neg: int,
+    weighted: bool,
+) -> Callable[[np.ndarray], float]:
+    """Mean of per-group AUROCs over groups with enough of both classes; glyph-weighted when `weighted`."""
+
+    def statistic(idx: np.ndarray) -> float:
+        sc, d, g = scores[idx], disagree[idx], groups[idx]
+        values, weights = [], []
+        for key in np.unique(g):
+            m = g == key
+            pos = int(d[m].sum())
+            if pos >= min_pos and m.sum() - pos >= min_neg:
+                values.append(auroc(sc[m], d[m]))
+                weights.append(m.sum() if weighted else 1)
+        if not values:
+            return 0.5
+        return float(np.average(values, weights=weights))
+
+    return statistic
 
 
-def decide_recognizer(full: Interval, leave_zl_out: Interval) -> str:
-    full_ok, loo_ok = full.lo > 0.5, leave_zl_out.lo > 0.5
+def within_type_auroc(scores: np.ndarray, disagree: np.ndarray, tokens: np.ndarray):
+    return within_group_auroc(scores, disagree, tokens, min_pos=20, min_neg=20, weighted=True)
+
+
+def within_page_auroc(scores: np.ndarray, disagree: np.ndarray, pages: np.ndarray):
+    return within_group_auroc(scores, disagree, pages, min_pos=10, min_neg=1, weighted=False)
+
+
+MAX_TEST_ATTRITION = 0.25
+
+
+def void_for_attrition(kept: int, total: int) -> bool:
+    return kept < (1 - MAX_TEST_ATTRITION) * total
+
+
+def decide_clusters(within_token_gap: Interval, null_975: float, control_point: float) -> str:
+    if within_token_gap.lo <= null_975:
+        return "kill"
+    return "pass" if control_point * within_token_gap.point > 0 else "narrow"
+
+
+def decide_recognizer(
+    within_type_full: Interval,
+    within_type_leave_zl_out: Interval,
+    within_page_full: Interval,
+    pooled_full: Interval,
+    best_baseline_point: float,
+) -> str:
+    """Full-map pass requires within-type and within-page signal and a pooled AUROC above every trivial baseline."""
+    full_ok = (
+        within_type_full.lo > 0.5 and within_page_full.lo > 0.5 and pooled_full.lo > best_baseline_point
+    )
+    loo_ok = within_type_leave_zl_out.lo > 0.5
     if full_ok and loo_ok:
         return "pass"
-    if full_ok or loo_ok:
+    if full_ok:
         return "narrow"
     return "kill"

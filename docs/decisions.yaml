@@ -49,3 +49,33 @@
   by: claude
   decision: Spike S1 found deterministic published mappings from all five sources into STA (bitrans rules files) and a deterministic forward function STA to STA-AAA (STA-aaa.bit, many-to-one). Under VO-005 the recognizer outputs STA-AAA. STA-aaa.bit is pinned by SHA-256 because its definition page is not yet final.
   source: docs/spikes/S1-sta-mapping.md; rule VO-005
+- id: VO-011
+  date: "2026-10-27"
+  by: claude
+  decision: The recognizer is Kraken 7.1.1 (CTC), run under Python 3.12. Glyph confidence comes from the full per-frame posteriors, never Kraken's built-in confidences.
+  source: auto-decided under docs/plan.md section 5 (margin 17%); docs/spikes/S3-kraken.md
+- id: VO-012
+  date: "2026-10-27"
+  by: claude
+  decision: Clustering features come from frozen DINOv2 ViT-S/14 (Apache-2.0), with HOG as a reported control. DINOv3 is not used, because its download is gated and its license passes through to redistributors.
+  source: auto-decided under docs/plan.md section 5; docs/spikes/S5-backbone-license.md
+- id: VO-013
+  date: "2026-10-27"
+  by: claude
+  decision: Line segmentation is Kraken's default blla model with a post-filter. A page whose filtered line count differs from its locus count is excluded, not corrected. Published word boxes (voynichese.com, arXiv 2608.17096) are not used.
+  source: auto-decided under docs/plan.md section 5; docs/spikes/S4-segmentation.md
+- id: VO-014
+  date: "2026-10-27"
+  by: claude
+  decision: IVTFF is parsed by our own parser. Zandbergen's ivtt is fetched and compiled as a local differential oracle and never vendored, since it carries no license.
+  source: auto-decided under docs/plan.md section 5 (margin 31%); docs/spikes/S2-ivtff-parser.md
+- id: VO-015
+  date: "2026-10-27"
+  by: claude
+  decision: Experiment tracking stays Make plus content-addressed artifacts and JSON metrics in git, with a Zenodo DOI at release. The synthetic hand is a glyph collage from cluster exemplars.
+  source: auto-decided under docs/plan.md section 5 (D6, D7)
+- id: VO-016
+  date: "2026-10-27"
+  by: claude
+  decision: The Naibbe arm vendors Greshko's naibbe-cipher Python at a pinned commit, with attribution and a citation, under a seeded RNG wrapper. Its known-answer test is the shipped ciphertext/plaintext pairs plus round-trips.
+  source: docs/spikes/S6-naibbe.md

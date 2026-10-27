@@ -68,12 +68,12 @@ F0 Formulation| W1 Map  |G1| W2 Seg+Clust |G2| W3 Recog+Calib |G3| W4 Naibbe+Rel
 - **G1 (Nov 2):** pass → **post map v0 to voynich.ninja** and start the reviewer outreach. Narrow → drop the partial sources and ship a 3-way map. Kill → impossible here unless the data is broken.
 
 ### W2 — Segmentation + glyph clustering (Nov 7–8)
-- **Build:** line segmentation (D4) on the text-heavy sections first. Glyph crops come from two proposers: (a) CTC alignment and (b) a label-free proposer (K-6). Feature embeddings (D3), then clustering.
+- **Build:** line segmentation (D4) on the text-heavy sections first. **Train the first Kraken model here.** CTC alignment needs one, so it can't wait for W3. Glyph crops come from two proposers: (a) CTC alignment and (b) a label-free proposer (K-6). Feature embeddings (D3), then clustering.
 - **Test:** the pre-registered cluster score. Do high-disagreement loci fall in clusters with higher label entropy across transcribers (AMI / entropy gap vs a shuffled baseline, page bootstrap)?
 - **G2 (Nov 9):** pass / narrow (fewer sections, one proposer) / kill clustering. If clustering is killed, deliverable 4 needs a different glyph source, so G2 also decides the Naibbe hand's source.
 
 ### W3 — Recognizer + calibration (Nov 14–15) — the main scored claim
-- **Build:** Kraken CTC (D1) trained on ZL (v1 drops `[a:b]` lines). Per-glyph confidences come from CTC posteriors. Temperature scaling on a held-out page split.
+- **Build:** retrain or keep the W2 Kraken model (D1; same pages, same seed). Per-glyph confidences come from the full CTC posteriors, with temperature scaling on the validation pages (`docs/prereg.md` H3).
 - **Test (pre-registered):** AUROC of (1 − confidence) predicting disagreement; page-clustered bootstrap CI; ECE; the same on the leave-ZL-out map. Splits are by page and stratified by section/hand.
 - **G3 (Nov 16):** pass if the CI lower bound is > 0.5 on both the full and leave-ZL-out maps. Narrow if only the full map passes: report it with the caveat. Kill if neither passes. Even on a kill, the map and clusters ship.
 - **In parallel, weekdays Nov 9–13:** port Naibbe and validate it on the 20 reference ciphertexts.
@@ -196,6 +196,22 @@ Weights: schedule risk 5 · confound control 4 · cost 3 · realism 3 (Σ15)
 | Generative handwriting model | −1 | 0 | −1 | +1 | −5 |
 
 → **Collage. Auto-decided.** It's reported as a ceiling anyway (charter).
+
+### Re-scored after spikes (F0.3, 2026-10-27)
+
+Evidence is in `docs/spikes/`. Each outcome is a `VO-` row.
+
+| Decision | Outcome | What changed | Row |
+|---|---|---|---|
+| D1 recognizer | **Kraken 7.1.1 CTC, auto-decided** | S3: full per-frame posteriors are available (`return_logits=True`). The built-in `confidences` is a peaky max and isn't used. Requires Python 3.12; Apache-2.0 | VO-011 |
+| D2 output alphabet | **STA-AAA** | S1: deterministic mappings exist and every source is already published in STA. Decided by the VO-005 rule | VO-010 |
+| D3 cluster features | **DINOv2 ViT-S/14, auto-decided; HOG control** | S5: DINOv3 is gated and carries pass-through license terms, which costs reviewer reproducibility (repro −1 → Σ −1). DINOv2 is Apache-2.0 (LICENSE checked) and the same size (Σ +2) | VO-012 |
+| D4 segmentation | **Kraken default `blla` + post-filter, auto-decided** | S4 and my own check of the f103r overlay: text lines are traced; false lines on stars, margins and page numbers. Published boxes are word-level, loose, and of unclear license, so they score −1 on license and +0 on accuracy → Σ 0. Pages whose filtered line count ≠ their locus count are excluded rather than corrected (no hand-labeling) | VO-013 |
+| D5 parser | **Own parser, auto-decided; `ivtt` as local oracle only** | S2: `ivtt` has no license, so it's fetched and run but never vendored. The format is `@nnn;`, not `&nnn;`. `ivtt` drops `!`-locator loci | VO-014 |
+| D6, D7 | unchanged, auto-decided | — | VO-015 |
+| Naibbe arm | **Vendor Greshko's own Python** | S6: github.com/greshko/naibbe-cipher (MIT, citation requested) plus the full tables on Zenodo (CC BY 4.0). The 20 reference ciphertexts weren't reachable; the known-answer test uses the shipped ciphertext/plaintext pairs and round-trips instead | VO-016 |
+
+Coverage, correcting K-2 (S2): ZL 227 pages, GC 226, IT 225, FG 202, CD 131. All five cover 131 pages (2,185 loci), and those are herbal and balneological only. Test pages therefore come from the 202 pages with ≥4 sources (`docs/prereg/splits.json`).
 
 ### Cost estimate (to verify in S3)
 GCP g2 (L4) **spot** instances for W2–W4 training/inference, at most a few tens of GPU-hours. **Budget alert at $100, hard stop at $200.** Storage for the snapshot is negligible. The dominant cost is agent tokens, not compute, which is why §6 is mostly about *not* spawning things.
