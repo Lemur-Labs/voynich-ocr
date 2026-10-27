@@ -217,8 +217,8 @@ def void_for_attrition(kept: int, total: int) -> bool:
     return kept < (1 - MAX_TEST_ATTRITION) * total
 
 
-# Set at G1 from non-test pages, by a dated pre-registration amendment, before any test inference.
-MIN_GROUP_COVERAGE: float | None = None
+# docs/prereg.md amendment A1.
+MIN_GROUP_COVERAGE: float | None = 0.80
 
 
 def void_for_underpower(coverage: float, minimum: float | None = MIN_GROUP_COVERAGE) -> bool:

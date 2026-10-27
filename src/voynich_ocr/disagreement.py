@@ -61,7 +61,12 @@ class Column:
 
     @property
     def gated(self) -> bool:
-        return self.tier >= GATED_TIER and self.cls in ("agree", "disagree") and not self.zl_uncertain
+        return (
+            self.tier >= GATED_TIER
+            and len(self.contributing) >= GATED_TIER
+            and self.cls in ("agree", "disagree")
+            and not self.zl_uncertain
+        )
 
 
 @dataclass(frozen=True)
