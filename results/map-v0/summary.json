@@ -1,0 +1,4369 @@
+{
+ "withheld_test_pages": 40,
+ "maps": {
+  "full": {
+   "sources": [
+    "ZL",
+    "IT",
+    "GC",
+    "FG",
+    "CD"
+   ],
+   "overall": {
+    "columns": 129030,
+    "classes": {
+     "agree": 112429,
+     "disagree": 8716,
+     "granularity": 1422,
+     "unknown": 693,
+     "unscorable": 5770
+    },
+    "zl_uncertain": 756,
+    "gated": 118540,
+    "gated_disagree": 8112,
+    "gated_rate": 0.068433
+   },
+   "by_tier": {
+    "1": {
+     "columns": 124,
+     "classes": {
+      "unknown": 5,
+      "unscorable": 119
+     },
+     "zl_uncertain": 1,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "2": {
+     "columns": 2220,
+     "classes": {
+      "agree": 1869,
+      "disagree": 230,
+      "unknown": 19,
+      "unscorable": 102
+     },
+     "zl_uncertain": 36,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "3": {
+     "columns": 16783,
+     "classes": {
+      "agree": 14383,
+      "disagree": 1468,
+      "unknown": 159,
+      "unscorable": 773
+     },
+     "zl_uncertain": 156,
+     "gated": 15723,
+     "gated_disagree": 1387,
+     "gated_rate": 0.088215
+    },
+    "4": {
+     "columns": 56654,
+     "classes": {
+      "agree": 49257,
+      "disagree": 3625,
+      "granularity": 720,
+      "unknown": 283,
+      "unscorable": 2769
+     },
+     "zl_uncertain": 232,
+     "gated": 52732,
+     "gated_disagree": 3520,
+     "gated_rate": 0.066753
+    },
+    "5": {
+     "columns": 53249,
+     "classes": {
+      "agree": 46920,
+      "disagree": 3393,
+      "granularity": 702,
+      "unknown": 227,
+      "unscorable": 2007
+     },
+     "zl_uncertain": 331,
+     "gated": 50085,
+     "gated_disagree": 3205,
+     "gated_rate": 0.063991
+    }
+   },
+   "word_breaks": {
+    "agree": 118849,
+    "disagree": 1703,
+    "uncertain": 3716
+   }
+  },
+  "leave-ZL-out": {
+   "sources": [
+    "IT",
+    "GC",
+    "FG",
+    "CD"
+   ],
+   "overall": {
+    "columns": 128806,
+    "classes": {
+     "agree": 110873,
+     "disagree": 5369,
+     "granularity": 1496,
+     "unknown": 617,
+     "unscorable": 10451
+    },
+    "zl_uncertain": 0,
+    "gated": 100784,
+    "gated_disagree": 4508,
+    "gated_rate": 0.044729
+   },
+   "by_tier": {
+    "1": {
+     "columns": 2169,
+     "classes": {
+      "unknown": 11,
+      "unscorable": 2158
+     },
+     "zl_uncertain": 0,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "2": {
+     "columns": 16761,
+     "classes": {
+      "agree": 14597,
+      "disagree": 861,
+      "unknown": 133,
+      "unscorable": 1170
+     },
+     "zl_uncertain": 0,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "3": {
+     "columns": 56641,
+     "classes": {
+      "agree": 49342,
+      "disagree": 2329,
+      "granularity": 766,
+      "unknown": 257,
+      "unscorable": 3947
+     },
+     "zl_uncertain": 0,
+     "gated": 51671,
+     "gated_disagree": 2329,
+     "gated_rate": 0.045074
+    },
+    "4": {
+     "columns": 53235,
+     "classes": {
+      "agree": 46934,
+      "disagree": 2179,
+      "granularity": 730,
+      "unknown": 216,
+      "unscorable": 3176
+     },
+     "zl_uncertain": 0,
+     "gated": 49113,
+     "gated_disagree": 2179,
+     "gated_rate": 0.044367
+    }
+   },
+   "word_breaks": {
+    "agree": 117672,
+    "disagree": 2319,
+    "uncertain": 2001
+   }
+  },
+  "leave-IT-out": {
+   "sources": [
+    "ZL",
+    "GC",
+    "FG",
+    "CD"
+   ],
+   "overall": {
+    "columns": 128642,
+    "classes": {
+     "agree": 113273,
+     "disagree": 7411,
+     "granularity": 1574,
+     "unknown": 583,
+     "unscorable": 5801
+    },
+    "zl_uncertain": 743,
+    "gated": 102516,
+    "gated_disagree": 6045,
+    "gated_rate": 0.058966
+   },
+   "by_tier": {
+    "1": {
+     "columns": 130,
+     "classes": {
+      "unknown": 5,
+      "unscorable": 125
+     },
+     "zl_uncertain": 1,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "2": {
+     "columns": 18793,
+     "classes": {
+      "agree": 16703,
+      "disagree": 1107,
+      "unknown": 101,
+      "unscorable": 882
+     },
+     "zl_uncertain": 189,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "3": {
+     "columns": 56557,
+     "classes": {
+      "agree": 49538,
+      "disagree": 3172,
+      "granularity": 809,
+      "unknown": 264,
+      "unscorable": 2774
+     },
+     "zl_uncertain": 228,
+     "gated": 52568,
+     "gated_disagree": 3081,
+     "gated_rate": 0.05861
+    },
+    "4": {
+     "columns": 53162,
+     "classes": {
+      "agree": 47032,
+      "disagree": 3132,
+      "granularity": 765,
+      "unknown": 213,
+      "unscorable": 2020
+     },
+     "zl_uncertain": 325,
+     "gated": 49948,
+     "gated_disagree": 2964,
+     "gated_rate": 0.059342
+    }
+   },
+   "word_breaks": {
+    "agree": 118766,
+    "disagree": 1540,
+    "uncertain": 3714
+   }
+  },
+  "leave-GC-out": {
+   "sources": [
+    "ZL",
+    "IT",
+    "FG",
+    "CD"
+   ],
+   "overall": {
+    "columns": 128918,
+    "classes": {
+     "agree": 118144,
+     "disagree": 5922,
+     "granularity": 1519,
+     "unknown": 654,
+     "unscorable": 2679
+    },
+    "zl_uncertain": 750,
+    "gated": 107040,
+    "gated_disagree": 4529,
+    "gated_rate": 0.042311
+   },
+   "by_tier": {
+    "1": {
+     "columns": 2328,
+     "classes": {
+      "unknown": 17,
+      "unscorable": 2311
+     },
+     "zl_uncertain": 36,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "2": {
+     "columns": 16772,
+     "classes": {
+      "agree": 15508,
+      "disagree": 1068,
+      "unknown": 147,
+      "unscorable": 49
+     },
+     "zl_uncertain": 155,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "3": {
+     "columns": 56606,
+     "classes": {
+      "agree": 52943,
+      "disagree": 2513,
+      "granularity": 771,
+      "unknown": 266,
+      "unscorable": 113
+     },
+     "zl_uncertain": 231,
+     "gated": 55273,
+     "gated_disagree": 2397,
+     "gated_rate": 0.043367
+    },
+    "4": {
+     "columns": 53212,
+     "classes": {
+      "agree": 49693,
+      "disagree": 2341,
+      "granularity": 748,
+      "unknown": 224,
+      "unscorable": 206
+     },
+     "zl_uncertain": 328,
+     "gated": 51767,
+     "gated_disagree": 2132,
+     "gated_rate": 0.041185
+    }
+   },
+   "word_breaks": {
+    "agree": 118062,
+    "disagree": 1699,
+    "uncertain": 2193
+   }
+  },
+  "leave-FG-out": {
+   "sources": [
+    "ZL",
+    "IT",
+    "GC",
+    "CD"
+   ],
+   "overall": {
+    "columns": 128904,
+    "classes": {
+     "agree": 115252,
+     "disagree": 7040,
+     "granularity": 312,
+     "unknown": 511,
+     "unscorable": 5789
+    },
+    "zl_uncertain": 749,
+    "gated": 119623,
+    "gated_disagree": 6458,
+    "gated_rate": 0.053986
+   },
+   "by_tier": {
+    "1": {
+     "columns": 124,
+     "classes": {
+      "unknown": 5,
+      "unscorable": 119
+     },
+     "zl_uncertain": 1,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "2": {
+     "columns": 2261,
+     "classes": {
+      "agree": 1909,
+      "disagree": 231,
+      "unknown": 19,
+      "unscorable": 102
+     },
+     "zl_uncertain": 36,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "3": {
+     "columns": 73088,
+     "classes": {
+      "agree": 65257,
+      "disagree": 3980,
+      "unknown": 304,
+      "unscorable": 3547
+     },
+     "zl_uncertain": 383,
+     "gated": 68946,
+     "gated_disagree": 3802,
+     "gated_rate": 0.055145
+    },
+    "4": {
+     "columns": 53431,
+     "classes": {
+      "agree": 48086,
+      "disagree": 2829,
+      "granularity": 312,
+      "unknown": 183,
+      "unscorable": 2021
+     },
+     "zl_uncertain": 329,
+     "gated": 50677,
+     "gated_disagree": 2656,
+     "gated_rate": 0.05241
+    }
+   },
+   "word_breaks": {
+    "agree": 119295,
+    "disagree": 1157,
+    "uncertain": 3713
+   }
+  },
+  "leave-CD-out": {
+   "sources": [
+    "ZL",
+    "IT",
+    "GC",
+    "FG"
+   ],
+   "overall": {
+    "columns": 128950,
+    "classes": {
+     "agree": 113305,
+     "disagree": 8152,
+     "granularity": 1138,
+     "unknown": 566,
+     "unscorable": 5789
+    },
+    "zl_uncertain": 752,
+    "gated": 118844,
+    "gated_disagree": 7566,
+    "gated_rate": 0.063663
+   },
+   "by_tier": {
+    "1": {
+     "columns": 124,
+     "classes": {
+      "unknown": 5,
+      "unscorable": 119
+     },
+     "zl_uncertain": 1,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "2": {
+     "columns": 2220,
+     "classes": {
+      "agree": 1869,
+      "disagree": 230,
+      "unknown": 19,
+      "unscorable": 102
+     },
+     "zl_uncertain": 36,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "3": {
+     "columns": 17012,
+     "classes": {
+      "agree": 14594,
+      "disagree": 1478,
+      "unknown": 159,
+      "unscorable": 781
+     },
+     "zl_uncertain": 156,
+     "gated": 15944,
+     "gated_disagree": 1397,
+     "gated_rate": 0.087619
+    },
+    "4": {
+     "columns": 109594,
+     "classes": {
+      "agree": 96842,
+      "disagree": 6444,
+      "granularity": 1138,
+      "unknown": 383,
+      "unscorable": 4787
+     },
+     "zl_uncertain": 559,
+     "gated": 102900,
+     "gated_disagree": 6169,
+     "gated_rate": 0.059951
+    }
+   },
+   "word_breaks": {
+    "agree": 119062,
+    "disagree": 1464,
+    "uncertain": 3716
+   }
+  },
+  "leave-ZL-IT-out": {
+   "sources": [
+    "GC",
+    "FG",
+    "CD"
+   ],
+   "overall": {
+    "columns": 128298,
+    "classes": {
+     "agree": 96668,
+     "disagree": 3566,
+     "granularity": 1718,
+     "unknown": 461,
+     "unscorable": 25885
+    },
+    "zl_uncertain": 0,
+    "gated": 48889,
+    "gated_disagree": 1859,
+    "gated_rate": 0.038025
+   },
+   "by_tier": {
+    "1": {
+     "columns": 18662,
+     "classes": {
+      "unknown": 46,
+      "unscorable": 18616
+     },
+     "zl_uncertain": 0,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "2": {
+     "columns": 56494,
+     "classes": {
+      "agree": 49638,
+      "disagree": 1707,
+      "granularity": 898,
+      "unknown": 211,
+      "unscorable": 4040
+     },
+     "zl_uncertain": 0,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "3": {
+     "columns": 53142,
+     "classes": {
+      "agree": 47030,
+      "disagree": 1859,
+      "granularity": 820,
+      "unknown": 204,
+      "unscorable": 3229
+     },
+     "zl_uncertain": 0,
+     "gated": 48889,
+     "gated_disagree": 1859,
+     "gated_rate": 0.038025
+    }
+   },
+   "word_breaks": {
+    "agree": 101774,
+    "disagree": 2011,
+    "uncertain": 1775
+   }
+  },
+  "ZL-IT-GC": {
+   "sources": [
+    "ZL",
+    "IT",
+    "GC"
+   ],
+   "overall": {
+    "columns": 128815,
+    "classes": {
+     "agree": 116193,
+     "disagree": 6437,
+     "unknown": 374,
+     "unscorable": 5811
+    },
+    "zl_uncertain": 744,
+    "gated": 119953,
+    "gated_disagree": 5877,
+    "gated_rate": 0.048994
+   },
+   "by_tier": {
+    "1": {
+     "columns": 124,
+     "classes": {
+      "unknown": 5,
+      "unscorable": 119
+     },
+     "zl_uncertain": 1,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "2": {
+     "columns": 2261,
+     "classes": {
+      "agree": 1909,
+      "disagree": 231,
+      "unknown": 19,
+      "unscorable": 102
+     },
+     "zl_uncertain": 36,
+     "gated": 0,
+     "gated_disagree": 0,
+     "gated_rate": null
+    },
+    "3": {
+     "columns": 126430,
+     "classes": {
+      "agree": 114284,
+      "disagree": 6206,
+      "unknown": 350,
+      "unscorable": 5590
+     },
+     "zl_uncertain": 707,
+     "gated": 119953,
+     "gated_disagree": 5877,
+     "gated_rate": 0.048994
+    }
+   },
+   "word_breaks": {
+    "agree": 119522,
+    "disagree": 889,
+    "uncertain": 3713
+   }
+  }
+ },
+ "pairwise": {
+  "ZL-IT": {
+   "columns": 117020,
+   "differ": 2381,
+   "rate": 0.020347,
+   "top": [
+    [
+     "a0",
+     "o0",
+     260
+    ],
+    [
+     "o0",
+     "a0",
+     112
+    ],
+    [
+     "c0:t0",
+     "i0:t0",
+     98
+    ],
+    [
+     "-",
+     "c0",
+     90
+    ],
+    [
+     "i0:t0",
+     "c0:t0",
+     86
+    ],
+    [
+     "-",
+     "c2",
+     83
+    ],
+    [
+     "-",
+     "i0",
+     73
+    ],
+    [
+     "l2:p1",
+     "q2:p1",
+     63
+    ],
+    [
+     "i0~i0~i0:b0",
+     "i0~i0:b0",
+     49
+    ],
+    [
+     "-",
+     "l2:p1",
+     44
+    ],
+    [
+     "c0~c0",
+     "c2:c1",
+     43
+    ],
+    [
+     "q2:p1",
+     "l2:p1",
+     42
+    ],
+    [
+     "y0",
+     "o0",
+     39
+    ],
+    [
+     "i0~i0:b0",
+     "i0~i0~i0:b0",
+     37
+    ],
+    [
+     "y0",
+     "a0",
+     37
+    ]
+   ]
+  },
+  "ZL-GC": {
+   "columns": 121937,
+   "differ": 4457,
+   "rate": 0.036552,
+   "top": [
+    [
+     "d0",
+     "d5",
+     2221
+    ],
+    [
+     "c2:v3:c1",
+     "c2:c1:v0",
+     308
+    ],
+    [
+     "o0",
+     "a0",
+     150
+    ],
+    [
+     "a0",
+     "o0",
+     145
+    ],
+    [
+     "l2:p1",
+     "q2:p1",
+     122
+    ],
+    [
+     "i0:t0",
+     "c0:t0",
+     86
+    ],
+    [
+     "c0:t0",
+     "i0:t0",
+     72
+    ],
+    [
+     "-",
+     "c0",
+     62
+    ],
+    [
+     "c0",
+     "-",
+     61
+    ],
+    [
+     "c0~c0",
+     "c2:c1",
+     44
+    ],
+    [
+     "i0~i0~i0:b0",
+     "i0~i0:b0",
+     44
+    ],
+    [
+     "a0",
+     "c0",
+     42
+    ],
+    [
+     "q2:p1",
+     "l2:p1",
+     42
+    ],
+    [
+     "i0~i0:b0",
+     "i0~i0~i0:b0",
+     39
+    ],
+    [
+     "c2:c1",
+     "c2:v3:c1",
+     33
+    ]
+   ]
+  },
+  "ZL-FG": {
+   "columns": 101276,
+   "differ": 3662,
+   "rate": 0.036159,
+   "top": [
+    [
+     "i0~i0:b0",
+     "i0~i0~i0:b0",
+     1004
+    ],
+    [
+     "o0",
+     "a0",
+     260
+    ],
+    [
+     "o0",
+     "-",
+     177
+    ],
+    [
+     "c0",
+     "-",
+     165
+    ],
+    [
+     "y0",
+     "-",
+     124
+    ],
+    [
+     "c0:t0",
+     "i0:t0",
+     91
+    ],
+    [
+     "a0",
+     "-",
+     89
+    ],
+    [
+     "c2:c1",
+     "-",
+     83
+    ],
+    [
+     "l2:p1",
+     "q2:p1",
+     83
+    ],
+    [
+     "i0~i0~i0~i0:b0",
+     "i0~i0~i0:b0",
+     81
+    ],
+    [
+     "e0",
+     "-",
+     78
+    ],
+    [
+     "a0",
+     "o0",
+     72
+    ],
+    [
+     "l2:p1",
+     "-",
+     68
+    ],
+    [
+     "d0",
+     "-",
+     61
+    ],
+    [
+     "i0:t0",
+     "-",
+     44
+    ]
+   ]
+  },
+  "ZL-CD": {
+   "columns": 49626,
+   "differ": 1097,
+   "rate": 0.022105,
+   "top": [
+    [
+     "c0:t0",
+     "i0:t0",
+     50
+    ],
+    [
+     "a0",
+     "o0",
+     49
+    ],
+    [
+     "l2:p1",
+     "q2:p1",
+     42
+    ],
+    [
+     "o0",
+     "-",
+     42
+    ],
+    [
+     "o0",
+     "a0",
+     42
+    ],
+    [
+     "c0",
+     "-",
+     31
+    ],
+    [
+     "c2:v3:c1",
+     "c2:c1",
+     30
+    ],
+    [
+     "y0",
+     "-",
+     26
+    ],
+    [
+     "-",
+     "c0",
+     25
+    ],
+    [
+     "q2:p1",
+     "l2:p1",
+     23
+    ],
+    [
+     "a0",
+     "-",
+     22
+    ],
+    [
+     "c2:c1",
+     "-",
+     21
+    ],
+    [
+     "c2:c1",
+     "c0~c0",
+     19
+    ],
+    [
+     "i0:t0",
+     "c0:t0",
+     19
+    ],
+    [
+     "c0",
+     "o0",
+     18
+    ]
+   ]
+  },
+  "IT-GC": {
+   "columns": 116991,
+   "differ": 2498,
+   "rate": 0.021352,
+   "top": [
+    [
+     "o0",
+     "a0",
+     226
+    ],
+    [
+     "l2:p1",
+     "q2:p1",
+     113
+    ],
+    [
+     "i0:t0",
+     "c0:t0",
+     101
+    ],
+    [
+     "c0",
+     "-",
+     95
+    ],
+    [
+     "a0",
+     "o0",
+     91
+    ],
+    [
+     "c0:t0",
+     "i0:t0",
+     78
+    ],
+    [
+     "i0",
+     "-",
+     73
+    ],
+    [
+     "c2",
+     "-",
+     64
+    ],
+    [
+     "q2:p1",
+     "l2:p1",
+     53
+    ],
+    [
+     "-",
+     "c0",
+     50
+    ],
+    [
+     "i2:j1",
+     "c2:j1",
+     48
+    ],
+    [
+     "l2:p1",
+     "-",
+     46
+    ],
+    [
+     "o0",
+     "y0",
+     43
+    ],
+    [
+     "a0",
+     "c0",
+     41
+    ],
+    [
+     "c0~c0",
+     "c0",
+     40
+    ]
+   ]
+  },
+  "IT-FG": {
+   "columns": 101208,
+   "differ": 3693,
+   "rate": 0.036489,
+   "top": [
+    [
+     "i0~i0:b0",
+     "i0~i0~i0:b0",
+     1018
+    ],
+    [
+     "o0",
+     "a0",
+     309
+    ],
+    [
+     "c0",
+     "-",
+     174
+    ],
+    [
+     "o0",
+     "-",
+     169
+    ],
+    [
+     "y0",
+     "-",
+     121
+    ],
+    [
+     "a0",
+     "-",
+     97
+    ],
+    [
+     "l2:p1",
+     "-",
+     94
+    ],
+    [
+     "c2:c1",
+     "-",
+     79
+    ],
+    [
+     "e0",
+     "-",
+     76
+    ],
+    [
+     "i0~i0~i0~i0:b0",
+     "i0~i0~i0:b0",
+     75
+    ],
+    [
+     "c0:t0",
+     "i0:t0",
+     65
+    ],
+    [
+     "l2:p1",
+     "q2:p1",
+     62
+    ],
+    [
+     "i0",
+     "-",
+     61
+    ],
+    [
+     "d0",
+     "-",
+     58
+    ],
+    [
+     "q2:p1",
+     "-",
+     55
+    ]
+   ]
+  },
+  "IT-CD": {
+   "columns": 49615,
+   "differ": 1373,
+   "rate": 0.027673,
+   "top": [
+    [
+     "o0",
+     "a0",
+     72
+    ],
+    [
+     "l2:p1",
+     "q2:p1",
+     55
+    ],
+    [
+     "c0:t0",
+     "i0:t0",
+     51
+    ],
+    [
+     "a0",
+     "o0",
+     50
+    ],
+    [
+     "c0",
+     "-",
+     46
+    ],
+    [
+     "q2:p1",
+     "l2:p1",
+     45
+    ],
+    [
+     "o0",
+     "-",
+     40
+    ],
+    [
+     "c2:v3:c1",
+     "c2:c1",
+     39
+    ],
+    [
+     "i0:t0",
+     "c0:t0",
+     31
+    ],
+    [
+     "-",
+     "c0",
+     30
+    ],
+    [
+     "y0",
+     "-",
+     28
+    ],
+    [
+     "a0",
+     "-",
+     26
+    ],
+    [
+     "c2:c1",
+     "-",
+     26
+    ],
+    [
+     "c2:c1",
+     "c0~c0",
+     24
+    ],
+    [
+     "i0",
+     "-",
+     22
+    ]
+   ]
+  },
+  "GC-FG": {
+   "columns": 101276,
+   "differ": 4009,
+   "rate": 0.039585,
+   "top": [
+    [
+     "i0~i0:b0",
+     "i0~i0~i0:b0",
+     1015
+    ],
+    [
+     "o0",
+     "a0",
+     293
+    ],
+    [
+     "c0",
+     "-",
+     177
+    ],
+    [
+     "o0",
+     "-",
+     169
+    ],
+    [
+     "y0",
+     "-",
+     129
+    ],
+    [
+     "q2:p1",
+     "l2:p1",
+     105
+    ],
+    [
+     "a0",
+     "o0",
+     101
+    ],
+    [
+     "c0:t0",
+     "i0:t0",
+     94
+    ],
+    [
+     "a0",
+     "-",
+     93
+    ],
+    [
+     "i0~i0~i0~i0:b0",
+     "i0~i0~i0:b0",
+     89
+    ],
+    [
+     "l2:p1",
+     "q2:p1",
+     84
+    ],
+    [
+     "c2:c1",
+     "-",
+     79
+    ],
+    [
+     "e0",
+     "-",
+     79
+    ],
+    [
+     "l2:p1",
+     "-",
+     69
+    ],
+    [
+     "d0",
+     "-",
+     60
+    ]
+   ]
+  },
+  "GC-CD": {
+   "columns": 49674,
+   "differ": 1366,
+   "rate": 0.027499,
+   "top": [
+    [
+     "a0",
+     "o0",
+     70
+    ],
+    [
+     "o0",
+     "a0",
+     69
+    ],
+    [
+     "q2:p1",
+     "l2:p1",
+     54
+    ],
+    [
+     "l2:p1",
+     "q2:p1",
+     53
+    ],
+    [
+     "c0",
+     "-",
+     45
+    ],
+    [
+     "c0:t0",
+     "i0:t0",
+     45
+    ],
+    [
+     "c2:v3:c1",
+     "c2:c1",
+     45
+    ],
+    [
+     "o0",
+     "-",
+     41
+    ],
+    [
+     "-",
+     "c0",
+     36
+    ],
+    [
+     "i0:t0",
+     "c0:t0",
+     28
+    ],
+    [
+     "y0",
+     "-",
+     26
+    ],
+    [
+     "c2:c1",
+     "-",
+     23
+    ],
+    [
+     "c2:c1",
+     "c0~c0",
+     22
+    ],
+    [
+     "a0",
+     "-",
+     21
+    ],
+    [
+     "y0",
+     "o0",
+     19
+    ]
+   ]
+  },
+  "FG-CD": {
+   "columns": 49341,
+   "differ": 2142,
+   "rate": 0.043412,
+   "top": [
+    [
+     "i0~i0~i0:b0",
+     "i0~i0:b0",
+     321
+    ],
+    [
+     "a0",
+     "o0",
+     106
+    ],
+    [
+     "-",
+     "c0",
+     86
+    ],
+    [
+     "q2:p1",
+     "l2:p1",
+     74
+    ],
+    [
+     "l2:p1",
+     "q2:p1",
+     60
+    ],
+    [
+     "o0",
+     "a0",
+     58
+    ],
+    [
+     "-",
+     "o0",
+     55
+    ],
+    [
+     "-",
+     "y0",
+     51
+    ],
+    [
+     "c0:t0",
+     "i0:t0",
+     50
+    ],
+    [
+     "o0",
+     "-",
+     49
+    ],
+    [
+     "c0",
+     "-",
+     45
+    ],
+    [
+     "-",
+     "c2:c1",
+     39
+    ],
+    [
+     "c2:v3:c1",
+     "c2:c1",
+     38
+    ],
+    [
+     "i0:t0",
+     "c0:t0",
+     37
+    ],
+    [
+     "-",
+     "e0",
+     35
+    ]
+   ]
+  }
+ },
+ "pages": {
+  "f1r": {
+   "columns": 755,
+   "classes": {
+    "agree": 622,
+    "disagree": 62,
+    "granularity": 11,
+    "unknown": 29,
+    "unscorable": 31
+   },
+   "zl_uncertain": 6,
+   "gated": 681,
+   "gated_disagree": 60,
+   "gated_rate": 0.088106,
+   "word_break_disagree": 13
+  },
+  "f2r": {
+   "columns": 353,
+   "classes": {
+    "agree": 316,
+    "disagree": 9,
+    "granularity": 3,
+    "unknown": 5,
+    "unscorable": 20
+   },
+   "zl_uncertain": 0,
+   "gated": 325,
+   "gated_disagree": 9,
+   "gated_rate": 0.027692,
+   "word_break_disagree": 2
+  },
+  "f2v": {
+   "columns": 210,
+   "classes": {
+    "agree": 194,
+    "disagree": 3,
+    "granularity": 6,
+    "unknown": 2,
+    "unscorable": 5
+   },
+   "zl_uncertain": 0,
+   "gated": 197,
+   "gated_disagree": 3,
+   "gated_rate": 0.015228,
+   "word_break_disagree": 1
+  },
+  "f3r": {
+   "columns": 466,
+   "classes": {
+    "agree": 435,
+    "disagree": 14,
+    "unknown": 2,
+    "unscorable": 15
+   },
+   "zl_uncertain": 0,
+   "gated": 449,
+   "gated_disagree": 14,
+   "gated_rate": 0.03118,
+   "word_break_disagree": 5
+  },
+  "f4r": {
+   "columns": 230,
+   "classes": {
+    "agree": 205,
+    "disagree": 7,
+    "granularity": 1,
+    "unknown": 3,
+    "unscorable": 14
+   },
+   "zl_uncertain": 1,
+   "gated": 212,
+   "gated_disagree": 7,
+   "gated_rate": 0.033019,
+   "word_break_disagree": 2
+  },
+  "f4v": {
+   "columns": 310,
+   "classes": {
+    "agree": 277,
+    "disagree": 16,
+    "unknown": 2,
+    "unscorable": 15
+   },
+   "zl_uncertain": 2,
+   "gated": 291,
+   "gated_disagree": 15,
+   "gated_rate": 0.051546,
+   "word_break_disagree": 4
+  },
+  "f5r": {
+   "columns": 204,
+   "classes": {
+    "agree": 189,
+    "disagree": 8,
+    "unknown": 2,
+    "unscorable": 5
+   },
+   "zl_uncertain": 1,
+   "gated": 197,
+   "gated_disagree": 8,
+   "gated_rate": 0.040609,
+   "word_break_disagree": 2
+  },
+  "f5v": {
+   "columns": 177,
+   "classes": {
+    "agree": 163,
+    "disagree": 7,
+    "unknown": 3,
+    "unscorable": 4
+   },
+   "zl_uncertain": 0,
+   "gated": 170,
+   "gated_disagree": 7,
+   "gated_rate": 0.041176,
+   "word_break_disagree": 1
+  },
+  "f6r": {
+   "columns": 288,
+   "classes": {
+    "agree": 268,
+    "disagree": 14,
+    "unknown": 1,
+    "unscorable": 5
+   },
+   "zl_uncertain": 2,
+   "gated": 281,
+   "gated_disagree": 13,
+   "gated_rate": 0.046263,
+   "word_break_disagree": 1
+  },
+  "f6v": {
+   "columns": 399,
+   "classes": {
+    "agree": 354,
+    "disagree": 30,
+    "granularity": 1,
+    "unknown": 5,
+    "unscorable": 9
+   },
+   "zl_uncertain": 4,
+   "gated": 380,
+   "gated_disagree": 27,
+   "gated_rate": 0.071053,
+   "word_break_disagree": 4
+  },
+  "f7v": {
+   "columns": 274,
+   "classes": {
+    "agree": 243,
+    "disagree": 8,
+    "granularity": 1,
+    "unknown": 6,
+    "unscorable": 16
+   },
+   "zl_uncertain": 1,
+   "gated": 251,
+   "gated_disagree": 8,
+   "gated_rate": 0.031873,
+   "word_break_disagree": 6
+  },
+  "f8r": {
+   "columns": 535,
+   "classes": {
+    "agree": 477,
+    "disagree": 24,
+    "granularity": 5,
+    "unknown": 7,
+    "unscorable": 22
+   },
+   "zl_uncertain": 4,
+   "gated": 498,
+   "gated_disagree": 22,
+   "gated_rate": 0.044177,
+   "word_break_disagree": 5
+  },
+  "f8v": {
+   "columns": 422,
+   "classes": {
+    "agree": 389,
+    "disagree": 17,
+    "granularity": 3,
+    "unknown": 5,
+    "unscorable": 8
+   },
+   "zl_uncertain": 0,
+   "gated": 406,
+   "gated_disagree": 17,
+   "gated_rate": 0.041872,
+   "word_break_disagree": 3
+  },
+  "f9r": {
+   "columns": 305,
+   "classes": {
+    "agree": 285,
+    "disagree": 13,
+    "granularity": 1,
+    "unknown": 2,
+    "unscorable": 4
+   },
+   "zl_uncertain": 3,
+   "gated": 295,
+   "gated_disagree": 11,
+   "gated_rate": 0.037288,
+   "word_break_disagree": 5
+  },
+  "f9v": {
+   "columns": 303,
+   "classes": {
+    "agree": 283,
+    "disagree": 9,
+    "unknown": 1,
+    "unscorable": 10
+   },
+   "zl_uncertain": 2,
+   "gated": 290,
+   "gated_disagree": 7,
+   "gated_rate": 0.024138,
+   "word_break_disagree": 2
+  },
+  "f10r": {
+   "columns": 324,
+   "classes": {
+    "agree": 317,
+    "disagree": 4,
+    "unscorable": 3
+   },
+   "zl_uncertain": 2,
+   "gated": 321,
+   "gated_disagree": 4,
+   "gated_rate": 0.012461,
+   "word_break_disagree": 4
+  },
+  "f10v": {
+   "columns": 195,
+   "classes": {
+    "agree": 188,
+    "disagree": 3,
+    "unscorable": 4
+   },
+   "zl_uncertain": 0,
+   "gated": 191,
+   "gated_disagree": 3,
+   "gated_rate": 0.015707,
+   "word_break_disagree": 1
+  },
+  "f11r": {
+   "columns": 188,
+   "classes": {
+    "agree": 176,
+    "disagree": 5,
+    "unknown": 2,
+    "unscorable": 5
+   },
+   "zl_uncertain": 2,
+   "gated": 179,
+   "gated_disagree": 4,
+   "gated_rate": 0.022346,
+   "word_break_disagree": 1
+  },
+  "f11v": {
+   "columns": 169,
+   "classes": {
+    "agree": 157,
+    "disagree": 6,
+    "unknown": 2,
+    "unscorable": 4
+   },
+   "zl_uncertain": 1,
+   "gated": 163,
+   "gated_disagree": 6,
+   "gated_rate": 0.03681,
+   "word_break_disagree": 1
+  },
+  "f13r": {
+   "columns": 281,
+   "classes": {
+    "agree": 261,
+    "disagree": 6,
+    "granularity": 1,
+    "unknown": 5,
+    "unscorable": 8
+   },
+   "zl_uncertain": 2,
+   "gated": 266,
+   "gated_disagree": 6,
+   "gated_rate": 0.022556,
+   "word_break_disagree": 4
+  },
+  "f13v": {
+   "columns": 234,
+   "classes": {
+    "agree": 224,
+    "disagree": 5,
+    "granularity": 1,
+    "unknown": 2,
+    "unscorable": 2
+   },
+   "zl_uncertain": 2,
+   "gated": 227,
+   "gated_disagree": 4,
+   "gated_rate": 0.017621,
+   "word_break_disagree": 4
+  },
+  "f14r": {
+   "columns": 275,
+   "classes": {
+    "agree": 258,
+    "disagree": 7,
+    "unknown": 2,
+    "unscorable": 8
+   },
+   "zl_uncertain": 1,
+   "gated": 265,
+   "gated_disagree": 7,
+   "gated_rate": 0.026415,
+   "word_break_disagree": 5
+  },
+  "f14v": {
+   "columns": 257,
+   "classes": {
+    "agree": 247,
+    "disagree": 8,
+    "granularity": 1,
+    "unscorable": 1
+   },
+   "zl_uncertain": 1,
+   "gated": 254,
+   "gated_disagree": 7,
+   "gated_rate": 0.027559,
+   "word_break_disagree": 7
+  },
+  "f15r": {
+   "columns": 316,
+   "classes": {
+    "agree": 298,
+    "disagree": 7,
+    "granularity": 1,
+    "unknown": 4,
+    "unscorable": 6
+   },
+   "zl_uncertain": 0,
+   "gated": 305,
+   "gated_disagree": 7,
+   "gated_rate": 0.022951,
+   "word_break_disagree": 3
+  },
+  "f15v": {
+   "columns": 231,
+   "classes": {
+    "agree": 216,
+    "disagree": 9,
+    "unknown": 3,
+    "unscorable": 3
+   },
+   "zl_uncertain": 3,
+   "gated": 224,
+   "gated_disagree": 8,
+   "gated_rate": 0.035714,
+   "word_break_disagree": 5
+  },
+  "f16r": {
+   "columns": 304,
+   "classes": {
+    "agree": 283,
+    "disagree": 7,
+    "unknown": 2,
+    "unscorable": 12
+   },
+   "zl_uncertain": 3,
+   "gated": 288,
+   "gated_disagree": 6,
+   "gated_rate": 0.020833,
+   "word_break_disagree": 4
+  },
+  "f17r": {
+   "columns": 310,
+   "classes": {
+    "agree": 257,
+    "disagree": 19,
+    "granularity": 6,
+    "unknown": 6,
+    "unscorable": 22
+   },
+   "zl_uncertain": 2,
+   "gated": 275,
+   "gated_disagree": 18,
+   "gated_rate": 0.065455,
+   "word_break_disagree": 3
+  },
+  "f17v": {
+   "columns": 499,
+   "classes": {
+    "agree": 452,
+    "disagree": 22,
+    "granularity": 4,
+    "unknown": 1,
+    "unscorable": 20
+   },
+   "zl_uncertain": 4,
+   "gated": 472,
+   "gated_disagree": 20,
+   "gated_rate": 0.042373,
+   "word_break_disagree": 10
+  },
+  "f18v": {
+   "columns": 249,
+   "classes": {
+    "agree": 231,
+    "disagree": 13,
+    "unknown": 1,
+    "unscorable": 4
+   },
+   "zl_uncertain": 1,
+   "gated": 243,
+   "gated_disagree": 12,
+   "gated_rate": 0.049383,
+   "word_break_disagree": 4
+  },
+  "f19r": {
+   "columns": 270,
+   "classes": {
+    "agree": 253,
+    "disagree": 8,
+    "granularity": 1,
+    "unknown": 3,
+    "unscorable": 5
+   },
+   "zl_uncertain": 0,
+   "gated": 261,
+   "gated_disagree": 8,
+   "gated_rate": 0.030651,
+   "word_break_disagree": 6
+  },
+  "f20r": {
+   "columns": 356,
+   "classes": {
+    "agree": 335,
+    "disagree": 6,
+    "unknown": 3,
+    "unscorable": 12
+   },
+   "zl_uncertain": 1,
+   "gated": 340,
+   "gated_disagree": 5,
+   "gated_rate": 0.014706,
+   "word_break_disagree": 4
+  },
+  "f20v": {
+   "columns": 285,
+   "classes": {
+    "agree": 261,
+    "disagree": 10,
+    "unknown": 4,
+    "unscorable": 10
+   },
+   "zl_uncertain": 2,
+   "gated": 269,
+   "gated_disagree": 8,
+   "gated_rate": 0.02974,
+   "word_break_disagree": 7
+  },
+  "f21r": {
+   "columns": 376,
+   "classes": {
+    "agree": 345,
+    "disagree": 11,
+    "unscorable": 20
+   },
+   "zl_uncertain": 1,
+   "gated": 355,
+   "gated_disagree": 10,
+   "gated_rate": 0.028169,
+   "word_break_disagree": 5
+  },
+  "f22v": {
+   "columns": 290,
+   "classes": {
+    "agree": 274,
+    "disagree": 8,
+    "unknown": 1,
+    "unscorable": 7
+   },
+   "zl_uncertain": 2,
+   "gated": 281,
+   "gated_disagree": 7,
+   "gated_rate": 0.024911,
+   "word_break_disagree": 3
+  },
+  "f23r": {
+   "columns": 388,
+   "classes": {
+    "agree": 363,
+    "disagree": 14,
+    "granularity": 1,
+    "unknown": 3,
+    "unscorable": 7
+   },
+   "zl_uncertain": 5,
+   "gated": 374,
+   "gated_disagree": 11,
+   "gated_rate": 0.029412,
+   "word_break_disagree": 4
+  },
+  "f23v": {
+   "columns": 335,
+   "classes": {
+    "agree": 309,
+    "disagree": 11,
+    "granularity": 1,
+    "unknown": 4,
+    "unscorable": 10
+   },
+   "zl_uncertain": 2,
+   "gated": 320,
+   "gated_disagree": 11,
+   "gated_rate": 0.034375,
+   "word_break_disagree": 6
+  },
+  "f24r": {
+   "columns": 369,
+   "classes": {
+    "agree": 324,
+    "disagree": 25,
+    "granularity": 3,
+    "unknown": 5,
+    "unscorable": 12
+   },
+   "zl_uncertain": 1,
+   "gated": 349,
+   "gated_disagree": 25,
+   "gated_rate": 0.071633,
+   "word_break_disagree": 6
+  },
+  "f24v": {
+   "columns": 320,
+   "classes": {
+    "agree": 275,
+    "disagree": 17,
+    "granularity": 5,
+    "unknown": 12,
+    "unscorable": 11
+   },
+   "zl_uncertain": 6,
+   "gated": 290,
+   "gated_disagree": 15,
+   "gated_rate": 0.051724,
+   "word_break_disagree": 8
+  },
+  "f25v": {
+   "columns": 210,
+   "classes": {
+    "agree": 191,
+    "disagree": 10,
+    "unknown": 5,
+    "unscorable": 4
+   },
+   "zl_uncertain": 1,
+   "gated": 200,
+   "gated_disagree": 9,
+   "gated_rate": 0.045,
+   "word_break_disagree": 3
+  },
+  "f26r": {
+   "columns": 348,
+   "classes": {
+    "agree": 290,
+    "disagree": 43,
+    "granularity": 2,
+    "unknown": 1,
+    "unscorable": 12
+   },
+   "zl_uncertain": 0,
+   "gated": 333,
+   "gated_disagree": 43,
+   "gated_rate": 0.129129,
+   "word_break_disagree": 7
+  },
+  "f27r": {
+   "columns": 294,
+   "classes": {
+    "agree": 280,
+    "disagree": 12,
+    "unscorable": 2
+   },
+   "zl_uncertain": 2,
+   "gated": 290,
+   "gated_disagree": 10,
+   "gated_rate": 0.034483,
+   "word_break_disagree": 4
+  },
+  "f28r": {
+   "columns": 264,
+   "classes": {
+    "agree": 250,
+    "disagree": 6,
+    "granularity": 3,
+    "unscorable": 5
+   },
+   "zl_uncertain": 0,
+   "gated": 256,
+   "gated_disagree": 6,
+   "gated_rate": 0.023438,
+   "word_break_disagree": 6
+  },
+  "f28v": {
+   "columns": 226,
+   "classes": {
+    "agree": 204,
+    "disagree": 9,
+    "unknown": 1,
+    "unscorable": 12
+   },
+   "zl_uncertain": 1,
+   "gated": 213,
+   "gated_disagree": 9,
+   "gated_rate": 0.042254,
+   "word_break_disagree": 3
+  },
+  "f29r": {
+   "columns": 230,
+   "classes": {
+    "agree": 212,
+    "disagree": 8,
+    "unscorable": 10
+   },
+   "zl_uncertain": 1,
+   "gated": 219,
+   "gated_disagree": 7,
+   "gated_rate": 0.031963,
+   "word_break_disagree": 4
+  },
+  "f29v": {
+   "columns": 310,
+   "classes": {
+    "agree": 280,
+    "disagree": 16,
+    "granularity": 1,
+    "unscorable": 13
+   },
+   "zl_uncertain": 3,
+   "gated": 295,
+   "gated_disagree": 15,
+   "gated_rate": 0.050847,
+   "word_break_disagree": 11
+  },
+  "f30r": {
+   "columns": 367,
+   "classes": {
+    "agree": 342,
+    "disagree": 11,
+    "granularity": 3,
+    "unscorable": 11
+   },
+   "zl_uncertain": 2,
+   "gated": 351,
+   "gated_disagree": 10,
+   "gated_rate": 0.02849,
+   "word_break_disagree": 12
+  },
+  "f30v": {
+   "columns": 251,
+   "classes": {
+    "agree": 226,
+    "disagree": 11,
+    "unscorable": 14
+   },
+   "zl_uncertain": 4,
+   "gated": 233,
+   "gated_disagree": 8,
+   "gated_rate": 0.034335,
+   "word_break_disagree": 3
+  },
+  "f31r": {
+   "columns": 420,
+   "classes": {
+    "agree": 358,
+    "disagree": 29,
+    "granularity": 5,
+    "unknown": 5,
+    "unscorable": 23
+   },
+   "zl_uncertain": 4,
+   "gated": 383,
+   "gated_disagree": 25,
+   "gated_rate": 0.065274,
+   "word_break_disagree": 7
+  },
+  "f31v": {
+   "columns": 433,
+   "classes": {
+    "agree": 381,
+    "disagree": 29,
+    "granularity": 3,
+    "unscorable": 20
+   },
+   "zl_uncertain": 4,
+   "gated": 408,
+   "gated_disagree": 28,
+   "gated_rate": 0.068627,
+   "word_break_disagree": 7
+  },
+  "f32r": {
+   "columns": 280,
+   "classes": {
+    "agree": 266,
+    "disagree": 9,
+    "unscorable": 5
+   },
+   "zl_uncertain": 1,
+   "gated": 274,
+   "gated_disagree": 8,
+   "gated_rate": 0.029197,
+   "word_break_disagree": 5
+  },
+  "f32v": {
+   "columns": 271,
+   "classes": {
+    "agree": 256,
+    "disagree": 9,
+    "unscorable": 6
+   },
+   "zl_uncertain": 3,
+   "gated": 264,
+   "gated_disagree": 8,
+   "gated_rate": 0.030303,
+   "word_break_disagree": 7
+  },
+  "f33r": {
+   "columns": 287,
+   "classes": {
+    "agree": 259,
+    "disagree": 21,
+    "unscorable": 7
+   },
+   "zl_uncertain": 3,
+   "gated": 277,
+   "gated_disagree": 19,
+   "gated_rate": 0.068592,
+   "word_break_disagree": 4
+  },
+  "f33v": {
+   "columns": 366,
+   "classes": {
+    "agree": 322,
+    "disagree": 32,
+    "unscorable": 12
+   },
+   "zl_uncertain": 1,
+   "gated": 353,
+   "gated_disagree": 31,
+   "gated_rate": 0.087819,
+   "word_break_disagree": 8
+  },
+  "f34r": {
+   "columns": 561,
+   "classes": {
+    "agree": 516,
+    "disagree": 40,
+    "granularity": 1,
+    "unscorable": 4
+   },
+   "zl_uncertain": 7,
+   "gated": 549,
+   "gated_disagree": 35,
+   "gated_rate": 0.063752,
+   "word_break_disagree": 10
+  },
+  "f34v": {
+   "columns": 467,
+   "classes": {
+    "agree": 394,
+    "disagree": 57,
+    "granularity": 1,
+    "unscorable": 15
+   },
+   "zl_uncertain": 4,
+   "gated": 447,
+   "gated_disagree": 54,
+   "gated_rate": 0.120805,
+   "word_break_disagree": 8
+  },
+  "f35v": {
+   "columns": 307,
+   "classes": {
+    "agree": 286,
+    "disagree": 7,
+    "granularity": 3,
+    "unscorable": 11
+   },
+   "zl_uncertain": 1,
+   "gated": 293,
+   "gated_disagree": 7,
+   "gated_rate": 0.023891,
+   "word_break_disagree": 9
+  },
+  "f36r": {
+   "columns": 217,
+   "classes": {
+    "agree": 199,
+    "disagree": 6,
+    "granularity": 2,
+    "unscorable": 10
+   },
+   "zl_uncertain": 0,
+   "gated": 205,
+   "gated_disagree": 6,
+   "gated_rate": 0.029268,
+   "word_break_disagree": 5
+  },
+  "f36v": {
+   "columns": 261,
+   "classes": {
+    "agree": 243,
+    "disagree": 9,
+    "granularity": 1,
+    "unscorable": 8
+   },
+   "zl_uncertain": 4,
+   "gated": 251,
+   "gated_disagree": 9,
+   "gated_rate": 0.035857,
+   "word_break_disagree": 4
+  },
+  "f37r": {
+   "columns": 289,
+   "classes": {
+    "agree": 259,
+    "disagree": 11,
+    "granularity": 12,
+    "unscorable": 7
+   },
+   "zl_uncertain": 1,
+   "gated": 270,
+   "gated_disagree": 11,
+   "gated_rate": 0.040741,
+   "word_break_disagree": 5
+  },
+  "f37v": {
+   "columns": 343,
+   "classes": {
+    "agree": 302,
+    "disagree": 23,
+    "granularity": 3,
+    "unscorable": 15
+   },
+   "zl_uncertain": 2,
+   "gated": 324,
+   "gated_disagree": 22,
+   "gated_rate": 0.067901,
+   "word_break_disagree": 3
+  },
+  "f38r": {
+   "columns": 147,
+   "classes": {
+    "agree": 143,
+    "disagree": 2,
+    "unscorable": 2
+   },
+   "zl_uncertain": 1,
+   "gated": 145,
+   "gated_disagree": 2,
+   "gated_rate": 0.013793,
+   "word_break_disagree": 5
+  },
+  "f39r": {
+   "columns": 598,
+   "classes": {
+    "agree": 515,
+    "disagree": 63,
+    "granularity": 2,
+    "unscorable": 18
+   },
+   "zl_uncertain": 8,
+   "gated": 571,
+   "gated_disagree": 57,
+   "gated_rate": 0.099825,
+   "word_break_disagree": 15
+  },
+  "f40v": {
+   "columns": 413,
+   "classes": {
+    "agree": 363,
+    "disagree": 32,
+    "granularity": 1,
+    "unknown": 1,
+    "unscorable": 16
+   },
+   "zl_uncertain": 2,
+   "gated": 394,
+   "gated_disagree": 31,
+   "gated_rate": 0.07868,
+   "word_break_disagree": 8
+  },
+  "f41r": {
+   "columns": 456,
+   "classes": {
+    "agree": 363,
+    "disagree": 64,
+    "granularity": 3,
+    "unknown": 2,
+    "unscorable": 24
+   },
+   "zl_uncertain": 13,
+   "gated": 417,
+   "gated_disagree": 57,
+   "gated_rate": 0.136691,
+   "word_break_disagree": 15
+  },
+  "f41v": {
+   "columns": 298,
+   "classes": {
+    "agree": 265,
+    "disagree": 18,
+    "unscorable": 15
+   },
+   "zl_uncertain": 4,
+   "gated": 280,
+   "gated_disagree": 16,
+   "gated_rate": 0.057143,
+   "word_break_disagree": 6
+  },
+  "f42r": {
+   "columns": 510,
+   "classes": {
+    "agree": 466,
+    "disagree": 29,
+    "granularity": 5,
+    "unknown": 1,
+    "unscorable": 9
+   },
+   "zl_uncertain": 4,
+   "gated": 491,
+   "gated_disagree": 26,
+   "gated_rate": 0.052953,
+   "word_break_disagree": 4
+  },
+  "f43r": {
+   "columns": 635,
+   "classes": {
+    "agree": 533,
+    "disagree": 65,
+    "granularity": 7,
+    "unknown": 2,
+    "unscorable": 28
+   },
+   "zl_uncertain": 3,
+   "gated": 597,
+   "gated_disagree": 65,
+   "gated_rate": 0.108878,
+   "word_break_disagree": 13
+  },
+  "f43v": {
+   "columns": 632,
+   "classes": {
+    "agree": 503,
+    "disagree": 61,
+    "granularity": 38,
+    "unknown": 1,
+    "unscorable": 29
+   },
+   "zl_uncertain": 5,
+   "gated": 560,
+   "gated_disagree": 57,
+   "gated_rate": 0.101786,
+   "word_break_disagree": 12
+  },
+  "f44r": {
+   "columns": 298,
+   "classes": {
+    "agree": 275,
+    "disagree": 11,
+    "granularity": 2,
+    "unknown": 1,
+    "unscorable": 9
+   },
+   "zl_uncertain": 1,
+   "gated": 285,
+   "gated_disagree": 10,
+   "gated_rate": 0.035088,
+   "word_break_disagree": 10
+  },
+  "f44v": {
+   "columns": 346,
+   "classes": {
+    "agree": 309,
+    "disagree": 23,
+    "granularity": 2,
+    "unscorable": 12
+   },
+   "zl_uncertain": 1,
+   "gated": 331,
+   "gated_disagree": 22,
+   "gated_rate": 0.066465,
+   "word_break_disagree": 6
+  },
+  "f45r": {
+   "columns": 324,
+   "classes": {
+    "agree": 301,
+    "disagree": 9,
+    "granularity": 1,
+    "unscorable": 13
+   },
+   "zl_uncertain": 1,
+   "gated": 309,
+   "gated_disagree": 8,
+   "gated_rate": 0.02589,
+   "word_break_disagree": 6
+  },
+  "f45v": {
+   "columns": 302,
+   "classes": {
+    "agree": 286,
+    "disagree": 12,
+    "unknown": 1,
+    "unscorable": 3
+   },
+   "zl_uncertain": 4,
+   "gated": 294,
+   "gated_disagree": 8,
+   "gated_rate": 0.027211,
+   "word_break_disagree": 6
+  },
+  "f46r": {
+   "columns": 624,
+   "classes": {
+    "agree": 541,
+    "disagree": 51,
+    "granularity": 1,
+    "unscorable": 31
+   },
+   "zl_uncertain": 9,
+   "gated": 584,
+   "gated_disagree": 44,
+   "gated_rate": 0.075342,
+   "word_break_disagree": 15
+  },
+  "f47r": {
+   "columns": 262,
+   "classes": {
+    "agree": 243,
+    "disagree": 9,
+    "granularity": 2,
+    "unscorable": 8
+   },
+   "zl_uncertain": 2,
+   "gated": 250,
+   "gated_disagree": 8,
+   "gated_rate": 0.032,
+   "word_break_disagree": 8
+  },
+  "f48v": {
+   "columns": 492,
+   "classes": {
+    "agree": 442,
+    "disagree": 34,
+    "granularity": 1,
+    "unscorable": 15
+   },
+   "zl_uncertain": 1,
+   "gated": 476,
+   "gated_disagree": 34,
+   "gated_rate": 0.071429,
+   "word_break_disagree": 7
+  },
+  "f49v": {
+   "columns": 592,
+   "classes": {
+    "agree": 542,
+    "disagree": 21,
+    "granularity": 9,
+    "unknown": 10,
+    "unscorable": 10
+   },
+   "zl_uncertain": 3,
+   "gated": 560,
+   "gated_disagree": 18,
+   "gated_rate": 0.032143,
+   "word_break_disagree": 17
+  },
+  "f50r": {
+   "columns": 390,
+   "classes": {
+    "agree": 332,
+    "disagree": 43,
+    "granularity": 3,
+    "unscorable": 12
+   },
+   "zl_uncertain": 8,
+   "gated": 370,
+   "gated_disagree": 40,
+   "gated_rate": 0.108108,
+   "word_break_disagree": 4
+  },
+  "f50v": {
+   "columns": 409,
+   "classes": {
+    "agree": 353,
+    "disagree": 38,
+    "granularity": 2,
+    "unscorable": 16
+   },
+   "zl_uncertain": 6,
+   "gated": 386,
+   "gated_disagree": 34,
+   "gated_rate": 0.088083,
+   "word_break_disagree": 6
+  },
+  "f51r": {
+   "columns": 380,
+   "classes": {
+    "agree": 332,
+    "disagree": 27,
+    "granularity": 2,
+    "unknown": 1,
+    "unscorable": 18
+   },
+   "zl_uncertain": 11,
+   "gated": 352,
+   "gated_disagree": 20,
+   "gated_rate": 0.056818,
+   "word_break_disagree": 7
+  },
+  "f51v": {
+   "columns": 337,
+   "classes": {
+    "agree": 309,
+    "disagree": 15,
+    "granularity": 2,
+    "unscorable": 11
+   },
+   "zl_uncertain": 8,
+   "gated": 319,
+   "gated_disagree": 11,
+   "gated_rate": 0.034483,
+   "word_break_disagree": 4
+  },
+  "f52r": {
+   "columns": 269,
+   "classes": {
+    "agree": 253,
+    "disagree": 5,
+    "granularity": 1,
+    "unscorable": 10
+   },
+   "zl_uncertain": 5,
+   "gated": 255,
+   "gated_disagree": 4,
+   "gated_rate": 0.015686,
+   "word_break_disagree": 4
+  },
+  "f52v": {
+   "columns": 288,
+   "classes": {
+    "agree": 261,
+    "disagree": 16,
+    "granularity": 3,
+    "unscorable": 8
+   },
+   "zl_uncertain": 7,
+   "gated": 270,
+   "gated_disagree": 9,
+   "gated_rate": 0.033333,
+   "word_break_disagree": 4
+  },
+  "f53r": {
+   "columns": 230,
+   "classes": {
+    "agree": 207,
+    "disagree": 10,
+    "granularity": 3,
+    "unscorable": 10
+   },
+   "zl_uncertain": 7,
+   "gated": 213,
+   "gated_disagree": 6,
+   "gated_rate": 0.028169,
+   "word_break_disagree": 2
+  },
+  "f53v": {
+   "columns": 301,
+   "classes": {
+    "agree": 252,
+    "disagree": 32,
+    "granularity": 2,
+    "unscorable": 15
+   },
+   "zl_uncertain": 2,
+   "gated": 282,
+   "gated_disagree": 30,
+   "gated_rate": 0.106383,
+   "word_break_disagree": 7
+  },
+  "f54v": {
+   "columns": 340,
+   "classes": {
+    "agree": 301,
+    "disagree": 25,
+    "granularity": 5,
+    "unknown": 2,
+    "unscorable": 7
+   },
+   "zl_uncertain": 2,
+   "gated": 325,
+   "gated_disagree": 24,
+   "gated_rate": 0.073846,
+   "word_break_disagree": 4
+  },
+  "f55r": {
+   "columns": 451,
+   "classes": {
+    "agree": 380,
+    "disagree": 44,
+    "granularity": 6,
+    "unknown": 2,
+    "unscorable": 19
+   },
+   "zl_uncertain": 9,
+   "gated": 416,
+   "gated_disagree": 36,
+   "gated_rate": 0.086538,
+   "word_break_disagree": 8
+  },
+  "f55v": {
+   "columns": 377,
+   "classes": {
+    "agree": 322,
+    "disagree": 37,
+    "granularity": 2,
+    "unknown": 3,
+    "unscorable": 13
+   },
+   "zl_uncertain": 8,
+   "gated": 353,
+   "gated_disagree": 33,
+   "gated_rate": 0.093484,
+   "word_break_disagree": 8
+  },
+  "f56r": {
+   "columns": 379,
+   "classes": {
+    "agree": 357,
+    "disagree": 10,
+    "granularity": 2,
+    "unscorable": 10
+   },
+   "zl_uncertain": 3,
+   "gated": 366,
+   "gated_disagree": 9,
+   "gated_rate": 0.02459,
+   "word_break_disagree": 11
+  },
+  "f56v": {
+   "columns": 332,
+   "classes": {
+    "agree": 302,
+    "disagree": 20,
+    "granularity": 2,
+    "unscorable": 8
+   },
+   "zl_uncertain": 3,
+   "gated": 321,
+   "gated_disagree": 19,
+   "gated_rate": 0.05919,
+   "word_break_disagree": 6
+  },
+  "f57r": {
+   "columns": 383,
+   "classes": {
+    "agree": 291,
+    "disagree": 64,
+    "granularity": 5,
+    "unknown": 4,
+    "unscorable": 19
+   },
+   "zl_uncertain": 6,
+   "gated": 350,
+   "gated_disagree": 59,
+   "gated_rate": 0.168571,
+   "word_break_disagree": 5
+  },
+  "f57v": {
+   "columns": 431,
+   "classes": {
+    "agree": 338,
+    "disagree": 46,
+    "unknown": 20,
+    "unscorable": 27
+   },
+   "zl_uncertain": 11,
+   "gated": 374,
+   "gated_disagree": 43,
+   "gated_rate": 0.114973,
+   "word_break_disagree": 8
+  },
+  "f58r": {
+   "columns": 1644,
+   "classes": {
+    "agree": 1485,
+    "disagree": 75,
+    "granularity": 28,
+    "unknown": 3,
+    "unscorable": 53
+   },
+   "zl_uncertain": 9,
+   "gated": 1552,
+   "gated_disagree": 69,
+   "gated_rate": 0.044459,
+   "word_break_disagree": 13
+  },
+  "f58v": {
+   "columns": 1546,
+   "classes": {
+    "agree": 1411,
+    "disagree": 73,
+    "unknown": 1,
+    "unscorable": 61
+   },
+   "zl_uncertain": 11,
+   "gated": 1474,
+   "gated_disagree": 69,
+   "gated_rate": 0.046811,
+   "word_break_disagree": 9
+  },
+  "f65r": {
+   "columns": 12,
+   "classes": {
+    "agree": 12
+   },
+   "zl_uncertain": 0,
+   "gated": 12,
+   "gated_disagree": 0,
+   "gated_rate": 0.0,
+   "word_break_disagree": 0
+  },
+  "f65v": {
+   "columns": 171,
+   "classes": {
+    "agree": 149,
+    "disagree": 7,
+    "unknown": 1,
+    "unscorable": 14
+   },
+   "zl_uncertain": 6,
+   "gated": 152,
+   "gated_disagree": 4,
+   "gated_rate": 0.026316,
+   "word_break_disagree": 1
+  },
+  "f66r": {
+   "columns": 1401,
+   "classes": {
+    "agree": 1227,
+    "disagree": 89,
+    "granularity": 3,
+    "unknown": 5,
+    "unscorable": 77
+   },
+   "zl_uncertain": 7,
+   "gated": 1311,
+   "gated_disagree": 84,
+   "gated_rate": 0.064073,
+   "word_break_disagree": 7
+  },
+  "f66v": {
+   "columns": 496,
+   "classes": {
+    "agree": 427,
+    "disagree": 42,
+    "granularity": 5,
+    "unknown": 2,
+    "unscorable": 20
+   },
+   "zl_uncertain": 9,
+   "gated": 462,
+   "gated_disagree": 39,
+   "gated_rate": 0.084416,
+   "word_break_disagree": 10
+  },
+  "f67r1": {
+   "columns": 661,
+   "classes": {
+    "agree": 569,
+    "disagree": 57,
+    "unknown": 1,
+    "unscorable": 34
+   },
+   "zl_uncertain": 6,
+   "gated": 621,
+   "gated_disagree": 55,
+   "gated_rate": 0.088567,
+   "word_break_disagree": 11
+  },
+  "f67r2": {
+   "columns": 749,
+   "classes": {
+    "agree": 633,
+    "disagree": 77,
+    "unknown": 7,
+    "unscorable": 32
+   },
+   "zl_uncertain": 10,
+   "gated": 695,
+   "gated_disagree": 69,
+   "gated_rate": 0.099281,
+   "word_break_disagree": 13
+  },
+  "f67v2": {
+   "columns": 283,
+   "classes": {
+    "agree": 217,
+    "disagree": 44,
+    "unknown": 6,
+    "unscorable": 16
+   },
+   "zl_uncertain": 5,
+   "gated": 251,
+   "gated_disagree": 40,
+   "gated_rate": 0.159363,
+   "word_break_disagree": 8
+  },
+  "f67v1": {
+   "columns": 343,
+   "classes": {
+    "agree": 281,
+    "disagree": 43,
+    "unknown": 2,
+    "unscorable": 17
+   },
+   "zl_uncertain": 2,
+   "gated": 322,
+   "gated_disagree": 43,
+   "gated_rate": 0.13354,
+   "word_break_disagree": 5
+  },
+  "f68r1": {
+   "columns": 318,
+   "classes": {
+    "agree": 278,
+    "disagree": 20,
+    "granularity": 1,
+    "unknown": 1,
+    "unscorable": 18
+   },
+   "zl_uncertain": 1,
+   "gated": 298,
+   "gated_disagree": 20,
+   "gated_rate": 0.067114,
+   "word_break_disagree": 1
+  },
+  "f68r3": {
+   "columns": 480,
+   "classes": {
+    "agree": 411,
+    "disagree": 49,
+    "unknown": 4,
+    "unscorable": 16
+   },
+   "zl_uncertain": 1,
+   "gated": 459,
+   "gated_disagree": 48,
+   "gated_rate": 0.104575,
+   "word_break_disagree": 3
+  },
+  "f68v3": {
+   "columns": 696,
+   "classes": {
+    "agree": 605,
+    "disagree": 59,
+    "unknown": 3,
+    "unscorable": 29
+   },
+   "zl_uncertain": 6,
+   "gated": 660,
+   "gated_disagree": 56,
+   "gated_rate": 0.084848,
+   "word_break_disagree": 5
+  },
+  "f68v2": {
+   "columns": 452,
+   "classes": {
+    "agree": 397,
+    "disagree": 27,
+    "granularity": 2,
+    "unknown": 1,
+    "unscorable": 25
+   },
+   "zl_uncertain": 7,
+   "gated": 418,
+   "gated_disagree": 25,
+   "gated_rate": 0.059809,
+   "word_break_disagree": 2
+  },
+  "f68v1": {
+   "columns": 385,
+   "classes": {
+    "agree": 320,
+    "disagree": 34,
+    "unknown": 1,
+    "unscorable": 30
+   },
+   "zl_uncertain": 6,
+   "gated": 349,
+   "gated_disagree": 29,
+   "gated_rate": 0.083095,
+   "word_break_disagree": 3
+  },
+  "f69r": {
+   "columns": 607,
+   "classes": {
+    "agree": 548,
+    "disagree": 35,
+    "granularity": 2,
+    "unscorable": 22
+   },
+   "zl_uncertain": 7,
+   "gated": 576,
+   "gated_disagree": 30,
+   "gated_rate": 0.052083,
+   "word_break_disagree": 7
+  },
+  "f69v": {
+   "columns": 540,
+   "classes": {
+    "agree": 475,
+    "disagree": 42,
+    "unknown": 2,
+    "unscorable": 21
+   },
+   "zl_uncertain": 6,
+   "gated": 512,
+   "gated_disagree": 39,
+   "gated_rate": 0.076172,
+   "word_break_disagree": 10
+  },
+  "f70r1": {
+   "columns": 495,
+   "classes": {
+    "agree": 434,
+    "disagree": 39,
+    "unknown": 5,
+    "unscorable": 17
+   },
+   "zl_uncertain": 2,
+   "gated": 471,
+   "gated_disagree": 37,
+   "gated_rate": 0.078556,
+   "word_break_disagree": 1
+  },
+  "f70v2": {
+   "columns": 588,
+   "classes": {
+    "agree": 510,
+    "disagree": 46,
+    "unknown": 4,
+    "unscorable": 28
+   },
+   "zl_uncertain": 3,
+   "gated": 553,
+   "gated_disagree": 46,
+   "gated_rate": 0.083183,
+   "word_break_disagree": 6
+  },
+  "f70v1": {
+   "columns": 407,
+   "classes": {
+    "agree": 361,
+    "disagree": 31,
+    "unknown": 1,
+    "unscorable": 14
+   },
+   "zl_uncertain": 3,
+   "gated": 389,
+   "gated_disagree": 28,
+   "gated_rate": 0.071979,
+   "word_break_disagree": 0
+  },
+  "f71r": {
+   "columns": 425,
+   "classes": {
+    "agree": 378,
+    "disagree": 35,
+    "unscorable": 12
+   },
+   "zl_uncertain": 4,
+   "gated": 410,
+   "gated_disagree": 34,
+   "gated_rate": 0.082927,
+   "word_break_disagree": 2
+  },
+  "f71v": {
+   "columns": 422,
+   "classes": {
+    "agree": 369,
+    "disagree": 29,
+    "unknown": 7,
+    "unscorable": 17
+   },
+   "zl_uncertain": 1,
+   "gated": 398,
+   "gated_disagree": 29,
+   "gated_rate": 0.072864,
+   "word_break_disagree": 1
+  },
+  "f72r1": {
+   "columns": 452,
+   "classes": {
+    "agree": 409,
+    "disagree": 32,
+    "unknown": 1,
+    "unscorable": 10
+   },
+   "zl_uncertain": 3,
+   "gated": 438,
+   "gated_disagree": 30,
+   "gated_rate": 0.068493,
+   "word_break_disagree": 5
+  },
+  "f72r2": {
+   "columns": 471,
+   "classes": {
+    "agree": 420,
+    "disagree": 30,
+    "unknown": 3,
+    "unscorable": 18
+   },
+   "zl_uncertain": 2,
+   "gated": 448,
+   "gated_disagree": 30,
+   "gated_rate": 0.066964,
+   "word_break_disagree": 5
+  },
+  "f72r3": {
+   "columns": 735,
+   "classes": {
+    "agree": 611,
+    "disagree": 69,
+    "unknown": 17,
+    "unscorable": 38
+   },
+   "zl_uncertain": 6,
+   "gated": 674,
+   "gated_disagree": 66,
+   "gated_rate": 0.097923,
+   "word_break_disagree": 9
+  },
+  "f72v3": {
+   "columns": 589,
+   "classes": {
+    "agree": 433,
+    "disagree": 99,
+    "unknown": 22,
+    "unscorable": 35
+   },
+   "zl_uncertain": 3,
+   "gated": 530,
+   "gated_disagree": 98,
+   "gated_rate": 0.184906,
+   "word_break_disagree": 9
+  },
+  "f72v2": {
+   "columns": 528,
+   "classes": {
+    "agree": 419,
+    "disagree": 77,
+    "unknown": 9,
+    "unscorable": 23
+   },
+   "zl_uncertain": 5,
+   "gated": 491,
+   "gated_disagree": 72,
+   "gated_rate": 0.14664,
+   "word_break_disagree": 6
+  },
+  "f72v1": {
+   "columns": 488,
+   "classes": {
+    "agree": 415,
+    "disagree": 36,
+    "unknown": 8,
+    "unscorable": 29
+   },
+   "zl_uncertain": 4,
+   "gated": 449,
+   "gated_disagree": 34,
+   "gated_rate": 0.075724,
+   "word_break_disagree": 2
+  },
+  "f73r": {
+   "columns": 444,
+   "classes": {
+    "agree": 361,
+    "disagree": 48,
+    "unknown": 2,
+    "unscorable": 33
+   },
+   "zl_uncertain": 6,
+   "gated": 404,
+   "gated_disagree": 44,
+   "gated_rate": 0.108911,
+   "word_break_disagree": 3
+  },
+  "f73v": {
+   "columns": 451,
+   "classes": {
+    "agree": 383,
+    "disagree": 45,
+    "unknown": 1,
+    "unscorable": 22
+   },
+   "zl_uncertain": 3,
+   "gated": 425,
+   "gated_disagree": 42,
+   "gated_rate": 0.098824,
+   "word_break_disagree": 4
+  },
+  "f75r": {
+   "columns": 1726,
+   "classes": {
+    "agree": 1435,
+    "disagree": 165,
+    "granularity": 49,
+    "unknown": 12,
+    "unscorable": 65
+   },
+   "zl_uncertain": 3,
+   "gated": 1598,
+   "gated_disagree": 163,
+   "gated_rate": 0.102003,
+   "word_break_disagree": 21
+  },
+  "f75v": {
+   "columns": 1461,
+   "classes": {
+    "agree": 1287,
+    "disagree": 88,
+    "granularity": 18,
+    "unknown": 3,
+    "unscorable": 65
+   },
+   "zl_uncertain": 1,
+   "gated": 1374,
+   "gated_disagree": 87,
+   "gated_rate": 0.063319,
+   "word_break_disagree": 16
+  },
+  "f76r": {
+   "columns": 2220,
+   "classes": {
+    "agree": 1810,
+    "disagree": 153,
+    "granularity": 156,
+    "unknown": 3,
+    "unscorable": 98
+   },
+   "zl_uncertain": 11,
+   "gated": 1955,
+   "gated_disagree": 148,
+   "gated_rate": 0.075703,
+   "word_break_disagree": 20
+  },
+  "f76v": {
+   "columns": 1700,
+   "classes": {
+    "agree": 1492,
+    "disagree": 88,
+    "granularity": 2,
+    "unknown": 3,
+    "unscorable": 115
+   },
+   "zl_uncertain": 4,
+   "gated": 1578,
+   "gated_disagree": 86,
+   "gated_rate": 0.054499,
+   "word_break_disagree": 13
+  },
+  "f77v": {
+   "columns": 1445,
+   "classes": {
+    "agree": 1291,
+    "disagree": 85,
+    "granularity": 14,
+    "unknown": 2,
+    "unscorable": 53
+   },
+   "zl_uncertain": 7,
+   "gated": 1370,
+   "gated_disagree": 80,
+   "gated_rate": 0.058394,
+   "word_break_disagree": 20
+  },
+  "f78r": {
+   "columns": 1231,
+   "classes": {
+    "agree": 1053,
+    "disagree": 116,
+    "granularity": 3,
+    "unknown": 2,
+    "unscorable": 57
+   },
+   "zl_uncertain": 6,
+   "gated": 1166,
+   "gated_disagree": 113,
+   "gated_rate": 0.096913,
+   "word_break_disagree": 20
+  },
+  "f78v": {
+   "columns": 1165,
+   "classes": {
+    "agree": 1027,
+    "disagree": 87,
+    "granularity": 5,
+    "unscorable": 46
+   },
+   "zl_uncertain": 2,
+   "gated": 1114,
+   "gated_disagree": 87,
+   "gated_rate": 0.078097,
+   "word_break_disagree": 19
+  },
+  "f79r": {
+   "columns": 1542,
+   "classes": {
+    "agree": 1319,
+    "disagree": 104,
+    "granularity": 40,
+    "unknown": 8,
+    "unscorable": 71
+   },
+   "zl_uncertain": 9,
+   "gated": 1416,
+   "gated_disagree": 99,
+   "gated_rate": 0.069915,
+   "word_break_disagree": 34
+  },
+  "f79v": {
+   "columns": 1518,
+   "classes": {
+    "agree": 1287,
+    "disagree": 120,
+    "granularity": 11,
+    "unknown": 7,
+    "unscorable": 93
+   },
+   "zl_uncertain": 3,
+   "gated": 1406,
+   "gated_disagree": 119,
+   "gated_rate": 0.084637,
+   "word_break_disagree": 17
+  },
+  "f80r": {
+   "columns": 1842,
+   "classes": {
+    "agree": 1581,
+    "disagree": 146,
+    "granularity": 32,
+    "unknown": 6,
+    "unscorable": 77
+   },
+   "zl_uncertain": 10,
+   "gated": 1721,
+   "gated_disagree": 140,
+   "gated_rate": 0.081348,
+   "word_break_disagree": 23
+  },
+  "f80v": {
+   "columns": 1543,
+   "classes": {
+    "agree": 1385,
+    "disagree": 100,
+    "granularity": 5,
+    "unscorable": 53
+   },
+   "zl_uncertain": 2,
+   "gated": 1484,
+   "gated_disagree": 100,
+   "gated_rate": 0.067385,
+   "word_break_disagree": 25
+  },
+  "f81v": {
+   "columns": 1026,
+   "classes": {
+    "agree": 829,
+    "disagree": 105,
+    "granularity": 43,
+    "unknown": 6,
+    "unscorable": 43
+   },
+   "zl_uncertain": 6,
+   "gated": 931,
+   "gated_disagree": 102,
+   "gated_rate": 0.10956,
+   "word_break_disagree": 14
+  },
+  "f82r": {
+   "columns": 1281,
+   "classes": {
+    "agree": 1113,
+    "disagree": 84,
+    "granularity": 14,
+    "unknown": 1,
+    "unscorable": 69
+   },
+   "zl_uncertain": 5,
+   "gated": 1193,
+   "gated_disagree": 80,
+   "gated_rate": 0.067058,
+   "word_break_disagree": 15
+  },
+  "f82v": {
+   "columns": 1408,
+   "classes": {
+    "agree": 1250,
+    "disagree": 91,
+    "granularity": 27,
+    "unscorable": 40
+   },
+   "zl_uncertain": 1,
+   "gated": 1340,
+   "gated_disagree": 90,
+   "gated_rate": 0.067164,
+   "word_break_disagree": 26
+  },
+  "f83v": {
+   "columns": 1158,
+   "classes": {
+    "agree": 1002,
+    "disagree": 62,
+    "granularity": 44,
+    "unknown": 3,
+    "unscorable": 47
+   },
+   "zl_uncertain": 2,
+   "gated": 1064,
+   "gated_disagree": 62,
+   "gated_rate": 0.058271,
+   "word_break_disagree": 14
+  },
+  "f84v": {
+   "columns": 1410,
+   "classes": {
+    "agree": 1194,
+    "disagree": 120,
+    "granularity": 29,
+    "unknown": 2,
+    "unscorable": 65
+   },
+   "zl_uncertain": 1,
+   "gated": 1313,
+   "gated_disagree": 119,
+   "gated_rate": 0.090632,
+   "word_break_disagree": 14
+  },
+  "f85r1": {
+   "columns": 1465,
+   "classes": {
+    "agree": 1240,
+    "disagree": 103,
+    "granularity": 50,
+    "unscorable": 72
+   },
+   "zl_uncertain": 8,
+   "gated": 1336,
+   "gated_disagree": 99,
+   "gated_rate": 0.074102,
+   "word_break_disagree": 8
+  },
+  "f85r2": {
+   "columns": 647,
+   "classes": {
+    "agree": 582,
+    "disagree": 41,
+    "unknown": 3,
+    "unscorable": 21
+   },
+   "zl_uncertain": 4,
+   "gated": 620,
+   "gated_disagree": 39,
+   "gated_rate": 0.062903,
+   "word_break_disagree": 4
+  },
+  "fRos": {
+   "columns": 2279,
+   "classes": {
+    "agree": 1845,
+    "disagree": 227,
+    "unknown": 18,
+    "unscorable": 189
+   },
+   "zl_uncertain": 36,
+   "gated": 0,
+   "gated_disagree": 0,
+   "gated_rate": null,
+   "word_break_disagree": 18
+  },
+  "f86v4": {
+   "columns": 768,
+   "classes": {
+    "agree": 656,
+    "disagree": 61,
+    "granularity": 4,
+    "unknown": 11,
+    "unscorable": 36
+   },
+   "zl_uncertain": 5,
+   "gated": 713,
+   "gated_disagree": 58,
+   "gated_rate": 0.081346,
+   "word_break_disagree": 13
+  },
+  "f86v5": {
+   "columns": 1470,
+   "classes": {
+    "agree": 1299,
+    "disagree": 61,
+    "granularity": 47,
+    "unknown": 1,
+    "unscorable": 62
+   },
+   "zl_uncertain": 1,
+   "gated": 1360,
+   "gated_disagree": 61,
+   "gated_rate": 0.044853,
+   "word_break_disagree": 19
+  },
+  "f86v3": {
+   "columns": 1190,
+   "classes": {
+    "agree": 1030,
+    "disagree": 89,
+    "unknown": 3,
+    "unscorable": 68
+   },
+   "zl_uncertain": 9,
+   "gated": 1114,
+   "gated_disagree": 84,
+   "gated_rate": 0.075404,
+   "word_break_disagree": 7
+  },
+  "f87r": {
+   "columns": 420,
+   "classes": {
+    "agree": 383,
+    "disagree": 16,
+    "unscorable": 21
+   },
+   "zl_uncertain": 3,
+   "gated": 396,
+   "gated_disagree": 13,
+   "gated_rate": 0.032828,
+   "word_break_disagree": 11
+  },
+  "f88v": {
+   "columns": 670,
+   "classes": {
+    "agree": 614,
+    "disagree": 35,
+    "granularity": 2,
+    "unknown": 1,
+    "unscorable": 18
+   },
+   "zl_uncertain": 5,
+   "gated": 646,
+   "gated_disagree": 34,
+   "gated_rate": 0.052632,
+   "word_break_disagree": 6
+  },
+  "f89r1": {
+   "columns": 578,
+   "classes": {
+    "agree": 476,
+    "disagree": 46,
+    "granularity": 42,
+    "unknown": 2,
+    "unscorable": 12
+   },
+   "zl_uncertain": 1,
+   "gated": 521,
+   "gated_disagree": 46,
+   "gated_rate": 0.088292,
+   "word_break_disagree": 5
+  },
+  "f89r2": {
+   "columns": 956,
+   "classes": {
+    "agree": 811,
+    "disagree": 88,
+    "granularity": 6,
+    "unknown": 10,
+    "unscorable": 41
+   },
+   "zl_uncertain": 2,
+   "gated": 897,
+   "gated_disagree": 86,
+   "gated_rate": 0.095875,
+   "word_break_disagree": 19
+  },
+  "f89v2": {
+   "columns": 693,
+   "classes": {
+    "agree": 560,
+    "disagree": 87,
+    "granularity": 6,
+    "unknown": 12,
+    "unscorable": 28
+   },
+   "zl_uncertain": 2,
+   "gated": 646,
+   "gated_disagree": 86,
+   "gated_rate": 0.133127,
+   "word_break_disagree": 14
+  },
+  "f89v1": {
+   "columns": 643,
+   "classes": {
+    "agree": 577,
+    "disagree": 45,
+    "granularity": 3,
+    "unknown": 1,
+    "unscorable": 17
+   },
+   "zl_uncertain": 2,
+   "gated": 622,
+   "gated_disagree": 45,
+   "gated_rate": 0.072347,
+   "word_break_disagree": 11
+  },
+  "f90r1": {
+   "columns": 304,
+   "classes": {
+    "agree": 273,
+    "disagree": 21,
+    "unknown": 1,
+    "unscorable": 9
+   },
+   "zl_uncertain": 2,
+   "gated": 292,
+   "gated_disagree": 19,
+   "gated_rate": 0.065068,
+   "word_break_disagree": 3
+  },
+  "f90r2": {
+   "columns": 171,
+   "classes": {
+    "agree": 156,
+    "disagree": 10,
+    "granularity": 1,
+    "unscorable": 4
+   },
+   "zl_uncertain": 1,
+   "gated": 165,
+   "gated_disagree": 9,
+   "gated_rate": 0.054545,
+   "word_break_disagree": 6
+  },
+  "f90v2": {
+   "columns": 270,
+   "classes": {
+    "agree": 220,
+    "disagree": 23,
+    "granularity": 1,
+    "unknown": 2,
+    "unscorable": 24
+   },
+   "zl_uncertain": 5,
+   "gated": 240,
+   "gated_disagree": 22,
+   "gated_rate": 0.091667,
+   "word_break_disagree": 2
+  },
+  "f93r": {
+   "columns": 599,
+   "classes": {
+    "agree": 545,
+    "disagree": 33,
+    "granularity": 6,
+    "unknown": 1,
+    "unscorable": 14
+   },
+   "zl_uncertain": 1,
+   "gated": 577,
+   "gated_disagree": 32,
+   "gated_rate": 0.055459,
+   "word_break_disagree": 19
+  },
+  "f93v": {
+   "columns": 373,
+   "classes": {
+    "agree": 336,
+    "disagree": 24,
+    "unknown": 2,
+    "unscorable": 11
+   },
+   "zl_uncertain": 4,
+   "gated": 358,
+   "gated_disagree": 23,
+   "gated_rate": 0.064246,
+   "word_break_disagree": 4
+  },
+  "f94v": {
+   "columns": 394,
+   "classes": {
+    "agree": 344,
+    "disagree": 34,
+    "granularity": 1,
+    "unknown": 1,
+    "unscorable": 14
+   },
+   "zl_uncertain": 0,
+   "gated": 378,
+   "gated_disagree": 34,
+   "gated_rate": 0.089947,
+   "word_break_disagree": 5
+  },
+  "f95r1": {
+   "columns": 409,
+   "classes": {
+    "agree": 347,
+    "disagree": 30,
+    "granularity": 23,
+    "unknown": 1,
+    "unscorable": 8
+   },
+   "zl_uncertain": 1,
+   "gated": 377,
+   "gated_disagree": 30,
+   "gated_rate": 0.079576,
+   "word_break_disagree": 1
+  },
+  "f95r2": {
+   "columns": 316,
+   "classes": {
+    "agree": 280,
+    "disagree": 22,
+    "unscorable": 14
+   },
+   "zl_uncertain": 0,
+   "gated": 302,
+   "gated_disagree": 22,
+   "gated_rate": 0.072848,
+   "word_break_disagree": 4
+  },
+  "f95v2": {
+   "columns": 252,
+   "classes": {
+    "agree": 201,
+    "disagree": 22,
+    "granularity": 20,
+    "unscorable": 9
+   },
+   "zl_uncertain": 1,
+   "gated": 222,
+   "gated_disagree": 21,
+   "gated_rate": 0.094595,
+   "word_break_disagree": 6
+  },
+  "f95v1": {
+   "columns": 496,
+   "classes": {
+    "agree": 430,
+    "disagree": 55,
+    "unknown": 1,
+    "unscorable": 10
+   },
+   "zl_uncertain": 0,
+   "gated": 485,
+   "gated_disagree": 55,
+   "gated_rate": 0.113402,
+   "word_break_disagree": 6
+  },
+  "f96v": {
+   "columns": 255,
+   "classes": {
+    "agree": 224,
+    "disagree": 22,
+    "unknown": 2,
+    "unscorable": 7
+   },
+   "zl_uncertain": 0,
+   "gated": 246,
+   "gated_disagree": 22,
+   "gated_rate": 0.089431,
+   "word_break_disagree": 6
+  },
+  "f99r": {
+   "columns": 795,
+   "classes": {
+    "agree": 682,
+    "disagree": 51,
+    "granularity": 1,
+    "unknown": 5,
+    "unscorable": 56
+   },
+   "zl_uncertain": 2,
+   "gated": 732,
+   "gated_disagree": 50,
+   "gated_rate": 0.068306,
+   "word_break_disagree": 11
+  },
+  "f100v": {
+   "columns": 395,
+   "classes": {
+    "agree": 358,
+    "disagree": 16,
+    "granularity": 1,
+    "unscorable": 20
+   },
+   "zl_uncertain": 0,
+   "gated": 374,
+   "gated_disagree": 16,
+   "gated_rate": 0.042781,
+   "word_break_disagree": 3
+  },
+  "f101r": {
+   "columns": 835,
+   "classes": {
+    "agree": 622,
+    "disagree": 86,
+    "granularity": 69,
+    "unknown": 8,
+    "unscorable": 50
+   },
+   "zl_uncertain": 4,
+   "gated": 707,
+   "gated_disagree": 86,
+   "gated_rate": 0.121641,
+   "word_break_disagree": 15
+  },
+  "f101v": {
+   "columns": 870,
+   "classes": {
+    "agree": 632,
+    "disagree": 65,
+    "granularity": 64,
+    "unknown": 72,
+    "unscorable": 37
+   },
+   "zl_uncertain": 5,
+   "gated": 695,
+   "gated_disagree": 64,
+   "gated_rate": 0.092086,
+   "word_break_disagree": 26
+  },
+  "f102r1": {
+   "columns": 504,
+   "classes": {
+    "agree": 443,
+    "disagree": 33,
+    "granularity": 3,
+    "unknown": 2,
+    "unscorable": 23
+   },
+   "zl_uncertain": 1,
+   "gated": 476,
+   "gated_disagree": 33,
+   "gated_rate": 0.069328,
+   "word_break_disagree": 6
+  },
+  "f102r2": {
+   "columns": 582,
+   "classes": {
+    "agree": 472,
+    "disagree": 42,
+    "granularity": 20,
+    "unknown": 19,
+    "unscorable": 29
+   },
+   "zl_uncertain": 2,
+   "gated": 501,
+   "gated_disagree": 39,
+   "gated_rate": 0.077844,
+   "word_break_disagree": 10
+  },
+  "f102v2": {
+   "columns": 724,
+   "classes": {
+    "agree": 586,
+    "disagree": 71,
+    "granularity": 6,
+    "unknown": 12,
+    "unscorable": 49
+   },
+   "zl_uncertain": 9,
+   "gated": 651,
+   "gated_disagree": 67,
+   "gated_rate": 0.102919,
+   "word_break_disagree": 15
+  },
+  "f102v1": {
+   "columns": 552,
+   "classes": {
+    "agree": 495,
+    "disagree": 31,
+    "unknown": 4,
+    "unscorable": 22
+   },
+   "zl_uncertain": 5,
+   "gated": 517,
+   "gated_disagree": 27,
+   "gated_rate": 0.052224,
+   "word_break_disagree": 6
+  },
+  "f103r": {
+   "columns": 2271,
+   "classes": {
+    "agree": 1914,
+    "disagree": 168,
+    "granularity": 28,
+    "unknown": 42,
+    "unscorable": 119
+   },
+   "zl_uncertain": 9,
+   "gated": 2077,
+   "gated_disagree": 164,
+   "gated_rate": 0.07896,
+   "word_break_disagree": 31
+  },
+  "f104r": {
+   "columns": 1945,
+   "classes": {
+    "agree": 1708,
+    "disagree": 92,
+    "granularity": 51,
+    "unknown": 6,
+    "unscorable": 88
+   },
+   "zl_uncertain": 4,
+   "gated": 1797,
+   "gated_disagree": 89,
+   "gated_rate": 0.049527,
+   "word_break_disagree": 14
+  },
+  "f104v": {
+   "columns": 1991,
+   "classes": {
+    "agree": 1780,
+    "disagree": 86,
+    "granularity": 8,
+    "unknown": 6,
+    "unscorable": 111
+   },
+   "zl_uncertain": 7,
+   "gated": 1863,
+   "gated_disagree": 85,
+   "gated_rate": 0.045625,
+   "word_break_disagree": 19
+  },
+  "f105r": {
+   "columns": 1567,
+   "classes": {
+    "agree": 1326,
+    "disagree": 83,
+    "granularity": 43,
+    "unknown": 3,
+    "unscorable": 112
+   },
+   "zl_uncertain": 8,
+   "gated": 1404,
+   "gated_disagree": 80,
+   "gated_rate": 0.05698,
+   "word_break_disagree": 16
+  },
+  "f105v": {
+   "columns": 1600,
+   "classes": {
+    "agree": 1418,
+    "disagree": 74,
+    "granularity": 6,
+    "unscorable": 102
+   },
+   "zl_uncertain": 5,
+   "gated": 1488,
+   "gated_disagree": 71,
+   "gated_rate": 0.047715,
+   "word_break_disagree": 14
+  },
+  "f106r": {
+   "columns": 1906,
+   "classes": {
+    "agree": 1712,
+    "disagree": 90,
+    "granularity": 3,
+    "unknown": 1,
+    "unscorable": 100
+   },
+   "zl_uncertain": 7,
+   "gated": 1797,
+   "gated_disagree": 86,
+   "gated_rate": 0.047858,
+   "word_break_disagree": 18
+  },
+  "f106v": {
+   "columns": 1907,
+   "classes": {
+    "agree": 1684,
+    "disagree": 125,
+    "granularity": 3,
+    "unknown": 2,
+    "unscorable": 93
+   },
+   "zl_uncertain": 5,
+   "gated": 1807,
+   "gated_disagree": 123,
+   "gated_rate": 0.068069,
+   "word_break_disagree": 28
+  },
+  "f107r": {
+   "columns": 1990,
+   "classes": {
+    "agree": 1744,
+    "disagree": 127,
+    "granularity": 26,
+    "unscorable": 93
+   },
+   "zl_uncertain": 5,
+   "gated": 1868,
+   "gated_disagree": 124,
+   "gated_rate": 0.066381,
+   "word_break_disagree": 28
+  },
+  "f107v": {
+   "columns": 1934,
+   "classes": {
+    "agree": 1730,
+    "disagree": 105,
+    "granularity": 31,
+    "unscorable": 68
+   },
+   "zl_uncertain": 3,
+   "gated": 1832,
+   "gated_disagree": 102,
+   "gated_rate": 0.055677,
+   "word_break_disagree": 19
+  },
+  "f108v": {
+   "columns": 2473,
+   "classes": {
+    "agree": 2166,
+    "disagree": 131,
+    "granularity": 3,
+    "unknown": 1,
+    "unscorable": 172
+   },
+   "zl_uncertain": 13,
+   "gated": 2289,
+   "gated_disagree": 128,
+   "gated_rate": 0.05592,
+   "word_break_disagree": 30
+  },
+  "f111r": {
+   "columns": 2612,
+   "classes": {
+    "agree": 2196,
+    "disagree": 209,
+    "granularity": 20,
+    "unknown": 7,
+    "unscorable": 180
+   },
+   "zl_uncertain": 7,
+   "gated": 2401,
+   "gated_disagree": 206,
+   "gated_rate": 0.085798,
+   "word_break_disagree": 40
+  },
+  "f111v": {
+   "columns": 2267,
+   "classes": {
+    "agree": 1952,
+    "disagree": 210,
+    "granularity": 12,
+    "unknown": 4,
+    "unscorable": 89
+   },
+   "zl_uncertain": 16,
+   "gated": 2153,
+   "gated_disagree": 201,
+   "gated_rate": 0.093358,
+   "word_break_disagree": 25
+  },
+  "f112v": {
+   "columns": 1746,
+   "classes": {
+    "agree": 1483,
+    "disagree": 133,
+    "granularity": 2,
+    "unknown": 7,
+    "unscorable": 121
+   },
+   "zl_uncertain": 13,
+   "gated": 1607,
+   "gated_disagree": 126,
+   "gated_rate": 0.078407,
+   "word_break_disagree": 10
+  },
+  "f113r": {
+   "columns": 2221,
+   "classes": {
+    "agree": 1998,
+    "disagree": 113,
+    "granularity": 10,
+    "unknown": 2,
+    "unscorable": 98
+   },
+   "zl_uncertain": 6,
+   "gated": 2106,
+   "gated_disagree": 110,
+   "gated_rate": 0.052232,
+   "word_break_disagree": 20
+  },
+  "f114r": {
+   "columns": 1962,
+   "classes": {
+    "agree": 1762,
+    "disagree": 90,
+    "granularity": 11,
+    "unknown": 6,
+    "unscorable": 93
+   },
+   "zl_uncertain": 11,
+   "gated": 1845,
+   "gated_disagree": 85,
+   "gated_rate": 0.04607,
+   "word_break_disagree": 12
+  },
+  "f114v": {
+   "columns": 1656,
+   "classes": {
+    "agree": 1499,
+    "disagree": 82,
+    "granularity": 2,
+    "unknown": 6,
+    "unscorable": 67
+   },
+   "zl_uncertain": 6,
+   "gated": 1580,
+   "gated_disagree": 82,
+   "gated_rate": 0.051899,
+   "word_break_disagree": 16
+  },
+  "f115v": {
+   "columns": 1804,
+   "classes": {
+    "agree": 1600,
+    "disagree": 121,
+    "granularity": 4,
+    "unknown": 4,
+    "unscorable": 75
+   },
+   "zl_uncertain": 7,
+   "gated": 1717,
+   "gated_disagree": 120,
+   "gated_rate": 0.069889,
+   "word_break_disagree": 26
+  },
+  "f116r": {
+   "columns": 2061,
+   "classes": {
+    "agree": 1735,
+    "disagree": 168,
+    "granularity": 39,
+    "unknown": 20,
+    "unscorable": 99
+   },
+   "zl_uncertain": 9,
+   "gated": 1897,
+   "gated_disagree": 164,
+   "gated_rate": 0.086452,
+   "word_break_disagree": 39
+  },
+  "f116v": {
+   "columns": 7,
+   "classes": {
+    "unscorable": 7
+   },
+   "zl_uncertain": 0,
+   "gated": 0,
+   "gated_disagree": 0,
+   "gated_rate": null,
+   "word_break_disagree": 0
+  }
+ },
+ "sections": {
+  "illustration": {
+   "A": {
+    "columns": 3388,
+    "classes": {
+     "agree": 2889,
+     "disagree": 307,
+     "granularity": 3,
+     "unknown": 17,
+     "unscorable": 172
+    },
+    "zl_uncertain": 33,
+    "gated": 3162,
+    "gated_disagree": 289,
+    "gated_rate": 0.091398
+   },
+   "B": {
+    "columns": 21416,
+    "classes": {
+     "agree": 18895,
+     "disagree": 1330,
+     "granularity": 207,
+     "unknown": 32,
+     "unscorable": 952
+    },
+    "zl_uncertain": 62,
+    "gated": 20186,
+    "gated_disagree": 1301,
+    "gated_rate": 0.064451
+   },
+   "C": {
+    "columns": 7936,
+    "classes": {
+     "agree": 6730,
+     "disagree": 683,
+     "granularity": 6,
+     "unknown": 71,
+     "unscorable": 446
+    },
+    "zl_uncertain": 91,
+    "gated": 5291,
+    "gated_disagree": 426,
+    "gated_rate": 0.080514
+   },
+   "H": {
+    "columns": 34998,
+    "classes": {
+     "agree": 31807,
+     "disagree": 1772,
+     "granularity": 146,
+     "unknown": 77,
+     "unscorable": 1196
+    },
+    "zl_uncertain": 290,
+    "gated": 33365,
+    "gated_disagree": 1618,
+    "gated_rate": 0.048494
+   },
+   "P": {
+    "columns": 8797,
+    "classes": {
+     "agree": 7328,
+     "disagree": 696,
+     "granularity": 223,
+     "unknown": 148,
+     "unscorable": 402
+    },
+    "zl_uncertain": 40,
+    "gated": 7985,
+    "gated_disagree": 679,
+    "gated_rate": 0.085034
+   },
+   "S": {
+    "columns": 39103,
+    "classes": {
+     "agree": 34303,
+     "disagree": 2355,
+     "granularity": 330,
+     "unknown": 121,
+     "unscorable": 1994
+    },
+    "zl_uncertain": 161,
+    "gated": 36554,
+    "gated_disagree": 2284,
+    "gated_rate": 0.062483
+   },
+   "T": {
+    "columns": 7312,
+    "classes": {
+     "agree": 6284,
+     "disagree": 432,
+     "granularity": 223,
+     "unknown": 25,
+     "unscorable": 348
+    },
+    "zl_uncertain": 32,
+    "gated": 6692,
+    "gated_disagree": 416,
+    "gated_rate": 0.062164
+   },
+   "Z": {
+    "columns": 6000,
+    "classes": {
+     "agree": 5069,
+     "disagree": 577,
+     "unknown": 75,
+     "unscorable": 279
+    },
+    "zl_uncertain": 43,
+    "gated": 5609,
+    "gated_disagree": 553,
+    "gated_rate": 0.098592
+   }
+  },
+  "currier_language": {
+   "?": {
+    "columns": 12630,
+    "classes": {
+     "agree": 10736,
+     "disagree": 1156,
+     "granularity": 5,
+     "unknown": 129,
+     "unscorable": 604
+    },
+    "zl_uncertain": 119,
+    "gated": 11779,
+    "gated_disagree": 1091,
+    "gated_rate": 0.092622
+   },
+   "A": {
+    "columns": 36162,
+    "classes": {
+     "agree": 32670,
+     "disagree": 1677,
+     "granularity": 289,
+     "unknown": 220,
+     "unscorable": 1306
+    },
+    "zl_uncertain": 233,
+    "gated": 34169,
+    "gated_disagree": 1562,
+    "gated_rate": 0.045714
+   },
+   "B": {
+    "columns": 80158,
+    "classes": {
+     "agree": 69899,
+     "disagree": 5319,
+     "granularity": 844,
+     "unknown": 217,
+     "unscorable": 3879
+    },
+    "zl_uncertain": 400,
+    "gated": 72896,
+    "gated_disagree": 4913,
+    "gated_rate": 0.067397
+   }
+  },
+  "hand": {
+   "1": {
+    "columns": 33403,
+    "classes": {
+     "agree": 30112,
+     "disagree": 1575,
+     "granularity": 261,
+     "unknown": 236,
+     "unscorable": 1219
+    },
+    "zl_uncertain": 224,
+    "gated": 31517,
+    "gated_disagree": 1467,
+    "gated_rate": 0.046546
+   },
+   "2": {
+    "columns": 36575,
+    "classes": {
+     "agree": 32007,
+     "disagree": 2431,
+     "granularity": 486,
+     "unknown": 66,
+     "unscorable": 1585
+    },
+    "zl_uncertain": 181,
+    "gated": 34305,
+    "gated_disagree": 2333,
+    "gated_rate": 0.068008
+   },
+   "3": {
+    "columns": 41160,
+    "classes": {
+     "agree": 36066,
+     "disagree": 2525,
+     "granularity": 374,
+     "unknown": 125,
+     "unscorable": 2070
+    },
+    "zl_uncertain": 169,
+    "gated": 38482,
+    "gated_disagree": 2450,
+    "gated_rate": 0.063666
+   },
+   "4": {
+    "columns": 14288,
+    "classes": {
+     "agree": 12082,
+     "disagree": 1330,
+     "granularity": 5,
+     "unknown": 126,
+     "unscorable": 745
+    },
+    "zl_uncertain": 138,
+    "gated": 11241,
+    "gated_disagree": 1044,
+    "gated_rate": 0.092874
+   },
+   "5": {
+    "columns": 3524,
+    "classes": {
+     "agree": 3038,
+     "disagree": 291,
+     "granularity": 12,
+     "unknown": 13,
+     "unscorable": 170
+    },
+    "zl_uncertain": 40,
+    "gated": 3299,
+    "gated_disagree": 272,
+    "gated_rate": 0.082449
+   }
+  }
+ }
+}

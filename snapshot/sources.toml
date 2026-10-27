@@ -87,3 +87,7 @@ url = "https://www.voynich.nu/data/sta/STA1_def.pdf"
 [[source]]
 path = "docs/IVTFF_format.pdf"
 url = "https://mail.voynich.nu/software/ivtt/IVTFF_format.pdf"
+
+[[source]]
+path = "ivtt/ivtt.c"
+url = "https://mail.voynich.nu/software/ivtt/ivtt.c"
