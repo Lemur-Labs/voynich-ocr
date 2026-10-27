@@ -59,6 +59,13 @@ def test_source_that_never_writes_a_competing_code_is_masked():
     assert cols[1].tier == 3
 
 
+def test_source_is_masked_only_by_readings_that_differ_from_its_own():
+    codes = {"ZL": frozenset({"A1", "B1"}), "IT": frozenset({"A1", "B1"}), "GC": ALL}
+    cols, _ = _columns({"ZL": _g("A1B1"), "IT": _g("A1B1"), "GC": _g("AkB1")}, codes)
+    assert cols[0].contributing == ("ZL", "IT", "GC")
+    assert cols[0].cls == "agree"
+
+
 def test_column_left_with_one_source_after_the_mask_is_unscorable_not_agreement():
     codes = {"ZL": frozenset({"A1", "B1"}), "IT": frozenset({"A1", "B1"}), "GC": ALL}
     cols, _ = _columns({"ZL": _g("A1B1"), "IT": _g("A1B1"), "GC": _g("A1Q1")}, codes)
