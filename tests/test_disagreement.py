@@ -115,3 +115,10 @@ def test_gated_columns_need_three_contributing_sources_after_the_mask():
     assert (cols[1].tier, cols[1].contributing, cols[1].cls) == (3, ("ZL", "GC"), "agree")
     assert not cols[1].gated
     assert cols[0].gated
+
+
+def test_published_row_carries_the_gated_flag_and_no_transliteration_text():
+    cols, _ = _columns({"ZL": _g("A1Q1"), "IT": _g("A1Q1"), "GC": _g("A1B1")})
+    fields = d.published_row(cols[1]).split("\t")
+    assert fields == ["f1r.1", "1", "3", "disagree", "", "ZL,IT,GC", "gated"]
+    assert len(d.PUBLISHED_HEADER.split("\t")) == len(fields)
