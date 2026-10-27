@@ -2,23 +2,23 @@
  "determinism": {
   "identical": true,
   "files": {
-   "columns/ZL-IT-GC.tsv": "b1a7dfc9e43786e3a53528eb340c112bbbf0a50b769aeb90606006b328a2ecad",
-   "columns/full.tsv": "32ee6aecf22ae1097ac54cfb9d7011c24174762cb4037f5e1ac1ac860838abf8",
-   "columns/leave-CD-out.tsv": "d0853e3adc8273de93acdb7def3a956eb6f396f6a82abc006cd1ef68fd2d9037",
-   "columns/leave-FG-out.tsv": "28601578b82590e6cea3275609a37088442f684d3115b252412166f1d3e59813",
-   "columns/leave-GC-out.tsv": "b487f5fc1438a3b579e967a719a6751b356b9d3eaa449163be4d817788932fb9",
-   "columns/leave-IT-out.tsv": "79b776b193374c8dedf9436166a1f25de86565ac7fe84cce6cbe773ae102090b",
-   "columns/leave-ZL-IT-out.tsv": "42e2dd1ebd0aa40fb6e0c1d66330c566062da55e71d52e81c9d85953bc61eecd",
-   "columns/leave-ZL-out.tsv": "02df08ba792c36705a5bcd4685a1a60d8eb7a4236807ba7f448840180933334b",
-   "published/ZL-IT-GC.tsv": "6bda4dee5b60be90b6e8f87641866c4a5885ae984a8a873ab26e98f366e63a92",
-   "published/full.tsv": "4919c4036b8d303dd5e9d2da944586b763f470bdaddb4cb2599b768fefdc8b69",
-   "published/leave-CD-out.tsv": "6c2315793dc82cd944388a13452954e54669cf806912bdb7ca133cfcf3811af7",
-   "published/leave-FG-out.tsv": "f2c44c925b1374d9136746803ce944dfd7e61fd512937f8a9d4f633a7f98b386",
-   "published/leave-GC-out.tsv": "335e3b8d6eef3ac34801523757aa21857d9bd4d948abf78f91614d3cd17be8eb",
-   "published/leave-IT-out.tsv": "a1d33ef4eea5756514b8e5c7492ae0e3dfda20359ade0eec5eab7872139f7d0f",
-   "published/leave-ZL-IT-out.tsv": "5f193dd404a0519c5612d98bb7c66d516d6852d34e4e07421d984ba69022604e",
-   "published/leave-ZL-out.tsv": "7de588ab2e8fbc242ad1b0dc0f2ab92a354e4c6a70d305c79823a75904ec45d8",
-   "summary.json": "56cd459e269e430cfe1ec2ebd46b938e6e8c716243a77116fa16b185b2da0f4a"
+   "columns/ZL-IT-GC.tsv": "fffece6499782c899ca1c8c23dd71d3618c5160d38e82b8a57c56d6816309461",
+   "columns/full.tsv": "4f50dac5215edc5b0bede6ccef02995410512356f73a8cbdde3ace67b581bdd5",
+   "columns/leave-CD-out.tsv": "73df80cf0569399ea4e9591884f6adf5e9b4f91205ecd3a2278fd6b639230fed",
+   "columns/leave-FG-out.tsv": "66ee718def308863393efc6658d1798d823cca9cd4af33467f50e82df14e6ee4",
+   "columns/leave-GC-out.tsv": "f8942fdf7d6dee98ef2cd46df5a32633ccbedac7977a2e8d01e1cdab415258f1",
+   "columns/leave-IT-out.tsv": "0ada017d6a529597651445b7f77e7fa7ac30d58a25cfadf08675832a958e8747",
+   "columns/leave-ZL-IT-out.tsv": "31f538e1885ae6354a26f39f8c48a51d035c32068c2ab6f3bbe7024b252befcc",
+   "columns/leave-ZL-out.tsv": "ec4972b02ea1f3da7c42d39dad7246f868308ed7570e8235c38cd8158dc96d45",
+   "published/ZL-IT-GC.tsv": "c2e6874978b88830a08cc63fc6e8ab9813d4883715789a4eb14ea8e5642ba248",
+   "published/full.tsv": "f9bb4eeb5948f6732f5ef131a82b33108c6aad45ddc834bd4a1f308fffc7eab5",
+   "published/leave-CD-out.tsv": "5339588fa1e3a4ae61a5a3abbe50e442746776b2b6c947aad5df4367209dc5cc",
+   "published/leave-FG-out.tsv": "487f635c05fbe6f7d9df55f2aa2984cec424c3010bfb49fbf565cd8b4b818fcd",
+   "published/leave-GC-out.tsv": "344ad055c8f3a5ea9e7488315ef3915ea72c4f27550a0b12015aae59b8aa3500",
+   "published/leave-IT-out.tsv": "dff522206ce055a909f09cfd88acd0b461b9c0df1ad8bb1415453b869a839f3f",
+   "published/leave-ZL-IT-out.tsv": "85ddbeb7255180ea08246d9765a3c7e4d0b5ad1b87b6f7eeaecd7321aa85f7a0",
+   "published/leave-ZL-out.tsv": "2effd7f7c5df6f698837545003408f2c5412e97454b8938cb24e4305dd8a85fd",
+   "summary.json": "febede30b15feb7a9cec8d66bfb09646671665d4aafaca4cbe8639e61a765f03"
   }
  },
  "parser": {
@@ -66,29 +66,31 @@
  },
  "perturbation": {
   "seed": 20261031,
+  "shared_codes": 31,
   "disputed_on_unperturbed": 0,
-  "injected": 19320,
-  "recovered": 19320,
+  "masked_on_unperturbed": 0,
+  "injected": 18885,
+  "recovered": 18885,
   "spurious": 0,
   "passed": true
  },
  "outcome": "pass",
  "coverage": {
   "seed": 20261031,
-  "glyphs": 118603,
+  "glyphs": 122859,
   "pages": 185,
-  "within_type_all_nontest": 0.9952,
-  "within_page_all_nontest": 0.9022,
+  "within_type_all_nontest": 0.9921,
+  "within_page_all_nontest": 0.9034,
   "40_page_draws_from_162_eligible": {
    "within_type_p5_p50_p95": [
-    0.8245,
-    0.9209,
-    0.9265
+    0.8137,
+    0.9146,
+    0.9211
    ],
    "within_page_p5_p50_p95": [
-    0.8275,
-    0.8939,
-    0.9392
+    0.8301,
+    0.8948,
+    0.9402
    ]
   }
  }
