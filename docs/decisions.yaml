@@ -9,3 +9,43 @@
   by: brian
   decision: Not onboarded to the kit for now. The planning pattern (gated phases, trade studies, pre-registration) is meant for reuse on other projects, so the repository is built in the house's standard shape; the onboarding question stays open to the challenge in docs/plan.md section 7.
   source: owner, planning session 2026-10-26
+- id: VO-003
+  date: "2026-10-26"
+  by: brian
+  decision: Each phase is driven by a fresh Claude Code session launched by the owner with one line. The agent opens pull requests, CI and the red-team check gate them, and the agent merges on green. The owner reviews at gates only, and launch minutes count toward owner hours.
+  source: owner accepted R1, docs/plan.md section 8, 2026-10-26
+- id: VO-004
+  date: "2026-10-26"
+  by: brian
+  decision: Formulation (F0) runs on weekday agent time; the four weekends bound compute and the owner's calendar, not agent work.
+  source: owner accepted R2, docs/plan.md section 8, 2026-10-26
+- id: VO-005
+  date: "2026-10-26"
+  by: brian
+  decision: The recognizer's output alphabet is decided by a pre-registered rule, not by the owner - STA-AAA if spike S1 shows a deterministic mapping from all five sources, else basic Eva.
+  source: owner accepted R3, docs/plan.md section 8, 2026-10-26
+- id: VO-006
+  date: "2026-10-26"
+  by: brian
+  decision: The owner sends all outreach (reviewer invitations, forum posts, buyer-test messages) from his own accounts, in one batch after G1, from agent drafts. AI assistance is disclosed in the post and the writeup. No agent posts or emails as the owner.
+  source: owner accepted R4, docs/plan.md section 8, 2026-10-26
+- id: VO-007
+  date: "2026-10-26"
+  by: brian
+  decision: A reusable research-bet template is built after G4 from the lessons-learned, as a kit-compatible template; not before.
+  source: owner accepted R5, docs/plan.md section 8, 2026-10-26
+- id: VO-008
+  date: "2026-10-26"
+  by: brian
+  decision: The pre-registration restates the calibration kill criterion (pass when the page-bootstrapped AUROC 95% interval lies above 0.5; kill when it includes 0.5), adds an ECE calibration measure, and requires the recognizer claim to hold on the leave-ZL-out disagreement map as well as the full one.
+  source: owner accepted R6, docs/plan.md sections 1 (K-5, K-6), 3 and 8, 2026-10-26
+- id: VO-009
+  date: "2026-10-26"
+  by: brian
+  decision: The repository stays private until G1, then goes public with the map post. Code is MIT; the writeup, the map and other generated outputs are CC BY 4.0. Third-party transliterations and images are fetched by script and checked against a SHA-256 manifest, never committed.
+  source: owner accepted R7, docs/plan.md section 8, 2026-10-26
+- id: VO-010
+  date: "2026-10-27"
+  by: claude
+  decision: Spike S1 found deterministic published mappings from all five sources into STA (bitrans rules files) and a deterministic forward function STA to STA-AAA (STA-aaa.bit, many-to-one). Under VO-005 the recognizer outputs STA-AAA. STA-aaa.bit is pinned by SHA-256 because its definition page is not yet final.
+  source: docs/spikes/S1-sta-mapping.md; rule VO-005
