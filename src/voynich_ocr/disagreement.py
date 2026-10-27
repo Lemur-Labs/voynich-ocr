@@ -28,7 +28,7 @@ MAPS = {
     "leave-ZL-IT-out": ("GC", "FG", "CD"),
     "ZL-IT-GC": ("ZL", "IT", "GC"),
 }
-# Section rates use the fixed set {ZL, IT, GC, FG}, which is the leave-CD-out map.
+# Section rates use the fixed set {ZL, IT, GC, FG}: the leave-CD-out map, on loci all four cover.
 SECTION_MAP = "leave-CD-out"
 SECTION_VARIABLES = {"I": "illustration", "L": "currier_language", "H": "hand"}
 GATED_TIER = 3
@@ -234,17 +234,22 @@ def _rate(columns: list[Column]) -> dict:
         "gated": len(gated),
         "gated_disagree": n_dis,
         "gated_rate": round(n_dis / len(gated), 6) if gated else None,
+        "gated_by_contributors": {
+            str(k): [sum(c.cls == "disagree" for c in g), len(g)]
+            for k in sorted({len(c.contributing) for c in gated})
+            for g in [[c for c in gated if len(c.contributing) == k]]
+        },
     }
 
 
 def pairwise(columns: list[Column], names: tuple[str, ...], top: int = 15) -> dict:
-    """Per pair, over columns both contribute to (no `?`, no ZL alternative): how often their readings differ,
-    and the commonest differing pairs."""
+    """Per pair, over gated columns both contribute to: how often their readings differ, and the commonest
+    differing pairs."""
     out = {}
     for a, b in combinations(names, 2):
         n, confusions = 0, Counter()
         for c in columns:
-            if c.cls == "unknown" or c.zl_uncertain or a not in c.contributing or b not in c.contributing:
+            if not c.gated or a not in c.contributing or b not in c.contributing:
                 continue
             n += 1
             if c.readings[a] != c.readings[b]:
@@ -259,8 +264,22 @@ def pairwise(columns: list[Column], names: tuple[str, ...], top: int = 15) -> di
     return out
 
 
-def summarize(maps: dict[str, tuple[list[Column], list[Boundary]]], loci: list[Locus], test: set[str]) -> dict:
+def unplaced_unknowns(columns: list[Column], inputs: Inputs, names: tuple[str, ...], test: set[str]) -> dict:
+    """`?` that a wildcard run left out because it covered fewer columns than it had."""
+    shown = {lo.id for lo in inputs.loci if lo.page not in test}
+    out = {}
+    for s in names:
+        written = sum(
+            g.code == sta.UNKNOWN for k, gs in inputs.sources[s].loci.items() if k in shown for g in gs
+        )
+        placed = sum(c.readings[s].count(UNKNOWN) for c in columns if c.locus in shown and s in c.readings)
+        out[s] = {"written": written, "unplaced": written - placed}
+    return out
+
+
+def summarize(maps: dict[str, tuple[list[Column], list[Boundary]]], inputs: Inputs, test: set[str]) -> dict:
     """Published figures. Test pages are withheld (VO-019), so nothing here is computed on them."""
+    loci = inputs.loci
     pages_meta = {}
     for lo in loci:
         pages_meta.setdefault(lo.page, lo.variables)
@@ -277,6 +296,7 @@ def summarize(maps: dict[str, tuple[list[Column], list[Boundary]]], loci: list[L
         }
     columns = [c for c in maps["full"][0] if c.page not in test]
     summary["pairwise"] = pairwise(columns, ORDER)
+    summary["unplaced_unknowns"] = unplaced_unknowns(maps["full"][0], inputs, ORDER, test)
     by_page: dict[str, list[Column]] = {}
     for c in columns:
         by_page.setdefault(c.page, []).append(c)
@@ -284,7 +304,7 @@ def summarize(maps: dict[str, tuple[list[Column], list[Boundary]]], loci: list[L
     summary["pages"] = {
         p: {**_rate(cs), "word_break_disagree": breaks_by_page[p]} for p, cs in by_page.items()
     }
-    section_columns = [c for c in maps[SECTION_MAP][0] if c.page not in test]
+    section_columns = [c for c in maps[SECTION_MAP][0] if c.page not in test and c.tier == len(MAPS[SECTION_MAP])]
     summary["sections"] = {}
     for var, label in SECTION_VARIABLES.items():
         groups: dict[str, list[Column]] = {}
@@ -307,7 +327,7 @@ def write(out: Path, inputs: Inputs, maps: dict[str, tuple[list[Column], list[Bo
         (out / "columns" / f"{name}.tsv").write_text("\n".join(rows) + "\n")
         shown = [COLUMN_HEADER] + [column_row(c) for c in columns if c.page not in test]
         (out / "published" / f"{name}.tsv").write_text("\n".join(shown) + "\n")
-    summary = summarize(maps, inputs.loci, test)
+    summary = summarize(maps, inputs, test)
     (out / "summary.json").write_text(json.dumps(summary, indent=1, sort_keys=False) + "\n")
 
 

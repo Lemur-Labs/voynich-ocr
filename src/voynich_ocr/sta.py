@@ -32,6 +32,8 @@ def load_aaa(text: str) -> dict[str, str]:
 
 def _scan(text: str, alternative: bool, out: list[Glyph]) -> None:
     i = 0
+    # An alternative whose first option is empty (`[:A2]`) emits nothing; its neighbour carries the flag.
+    pending = False
     while i < len(text):
         c = text[i]
         if c in ".,-":
@@ -41,10 +43,17 @@ def _scan(text: str, alternative: bool, out: list[Glyph]) -> None:
             i += 1
         elif c == "[":
             end = text.index("]", i)
+            before = len(out)
             _scan(text[i + 1 : end].split(":")[0], True, out)
+            if len(out) == before:
+                if out:
+                    out[-1] = Glyph(out[-1].code, True, out[-1].space_after)
+                else:
+                    pending = True
             i = end + 1
         elif _CODE.fullmatch(text, i, i + 2):
-            out.append(Glyph(text[i : i + 2], alternative, ""))
+            out.append(Glyph(text[i : i + 2], alternative or pending, ""))
+            pending = False
             i += 2
         else:
             raise ValueError(f"unexpected {c!r} at {i} in {text!r}")

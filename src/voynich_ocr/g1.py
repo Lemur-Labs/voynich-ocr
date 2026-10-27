@@ -3,6 +3,7 @@ import json
 import subprocess
 import sys
 import tempfile
+from collections import Counter
 from pathlib import Path
 
 import numpy as np
@@ -35,11 +36,9 @@ def _hashes(directory: Path) -> dict[str, str]:
 
 def determinism() -> dict:
     runs = []
-    with tempfile.TemporaryDirectory() as tmp:
-        for k in range(2):
-            out = Path(tmp) / str(k)
-            subprocess.run([sys.executable, "-m", "voynich_ocr.disagreement", "--out", str(out)], check=True)
-            runs.append(_hashes(out))
+    for _ in range(2):
+        subprocess.run(["make", "map"], cwd=ROOT, check=True, capture_output=True)
+        runs.append(_hashes(ROOT / "build" / "map"))
     return {"identical": runs[0] == runs[1], "files": runs[0]}
 
 
@@ -83,64 +82,78 @@ def fixture() -> dict:
 
 
 def _edit(glyphs: list[Glyph], rng: np.random.Generator, codes: list[str], aaa: dict[str, str]):
-    """One copy of the line with substitutions, deletions and insertions at least three glyphs apart, each
-    differing from its neighbours so that no edit joins an identical run. Returns the copy and the edit count."""
+    """One copy of the line with substitutions, deletions and insertions at least three glyphs apart, away from
+    identical runs (where a position is ambiguous by construction) and joining none, and each using only `codes` so that
+    no source is masked out of the edited column. Returns the copy and the expected (ZL, copy) readings of
+    the disputed columns."""
     tokens = [d.token(g.code, aaa) for g in glyphs]
     out = list(glyphs)
-    edits = 0
+    expected: Counter = Counter()
     for i in range(len(glyphs) - 2, 0, -4):
-        if d.UNKNOWN in tokens[i - 1 : i + 2] or rng.random() < 0.5:
-            continue
         left, right = tokens[i - 1], tokens[i + 1]
+        if d.UNKNOWN in (left, tokens[i], right) or tokens[i] in (left, right) or glyphs[i].code not in codes:
+            continue
+        if rng.random() < 0.5:
+            continue
         kind = rng.integers(3)
-        if kind == 1 and tokens[i] not in (left, right) and left != right:
+        choices = [c for c in codes if aaa[c] not in (left, right, tokens[i])]
+        new = Glyph(choices[rng.integers(len(choices))], False, "")
+        if kind == 1 and left != right:
             del out[i]
+            expected[((tokens[i],), ())] += 1
+        elif kind == 0:
+            out[i] = new
+            expected[((tokens[i],), (aaa[new.code],))] += 1
         else:
-            choices = [c for c in codes if aaa[c] not in (left, right, tokens[i])]
-            new = Glyph(choices[rng.integers(len(choices))], False, "")
-            if kind == 0:
-                out[i] = new
-            else:
-                out.insert(i + 1, new)
-        edits += 1
-    return out, edits
+            out.insert(i + 1, new)
+            expected[((), (aaa[new.code],))] += 1
+    return out, expected
 
 
-def _disputed(locus: d.Locus, texts: dict[str, list[Glyph]], codes: frozenset[str], aaa: dict[str, str]) -> int:
-    sources = {s: d.Source({locus.id: g}, codes) for s, g in texts.items()}
-    cols, _ = d.locus_columns(locus, d.Inputs(sources, [locus], aaa), d.ORDER)
-    return sum(c.cls in ("disagree", "granularity") for c in cols)
+def _columns(locus: d.Locus, texts: dict[str, list[Glyph]], inputs: d.Inputs) -> list[d.Column]:
+    sources = {s: d.Source({locus.id: g}, inputs.sources[s].codes) for s, g in texts.items()}
+    return d.locus_columns(locus, d.Inputs(sources, [locus], inputs.aaa), d.ORDER)[0]
+
+
+def _disputed(cols: list[d.Column], target: str) -> Counter:
+    return Counter(
+        (c.readings["ZL"], c.readings[target]) for c in cols if c.cls in ("disagree", "granularity")
+    )
 
 
 def perturbation() -> dict:
-    """Five copies of each ZL line must agree everywhere; perturbing one copy must yield one disputed column
-    per edit and nothing else."""
+    """Five copies of each ZL line, each source keeping its own expressible codes, must agree everywhere with
+    no source masked;
+    perturbing one copy must yield exactly the edited readings as disputed columns and nothing else."""
     inputs = d.load()
     zl = inputs.sources["ZL"].loci
-    codes = sorted(c for c in inputs.sources["ZL"].codes if c != "Z1")
-    everything = frozenset(inputs.aaa)
+    shared = sorted(frozenset.intersection(*(inputs.sources[s].codes for s in d.ORDER)) - {"Z1"})
     rng = np.random.default_rng(PERTURBATION_SEED)
-    clean_disputed, injected, recovered, extra = 0, 0, 0, 0
+    clean_disputed, clean_masked, injected, recovered, extra = 0, 0, 0, 0, 0
     for locus in inputs.loci:
         if locus.id not in zl or not zl[locus.id]:
             continue
         line = zl[locus.id]
         copies = {s: list(line) for s in d.ORDER}
         target = d.ORDER[1 + rng.integers(len(d.ORDER) - 1)]
-
-        clean_disputed += _disputed(locus, copies, everything, inputs.aaa)
-        copies[target], n = _edit(line, rng, codes, inputs.aaa)
-        found = _disputed(locus, copies, everything, inputs.aaa)
-        injected += n
-        recovered += min(found, n)
-        extra += max(found - n, 0)
+        clean = _columns(locus, copies, inputs)
+        clean_disputed += sum(_disputed(clean, target).values())
+        clean_masked += sum(len(c.contributing) < c.tier for c in clean)
+        copies[target], expected = _edit(line, rng, shared, inputs.aaa)
+        found = _disputed(_columns(locus, copies, inputs), target)
+        matched = sum((expected & found).values())
+        injected += sum(expected.values())
+        recovered += matched
+        extra += sum(found.values()) - matched
     return {
         "seed": PERTURBATION_SEED,
+        "shared_codes": len(shared),
         "disputed_on_unperturbed": clean_disputed,
+        "masked_on_unperturbed": clean_masked,
         "injected": injected,
         "recovered": recovered,
         "spurious": extra,
-        "passed": clean_disputed == 0 and recovered == injected and extra == 0,
+        "passed": clean_disputed == 0 and clean_masked == 0 and recovered == injected and extra == 0,
     }
 
 
