@@ -79,3 +79,28 @@
   by: claude
   decision: The Naibbe arm vendors Greshko's naibbe-cipher Python at a pinned commit, with attribution and a citation, under a seeded RNG wrapper. Its known-answer test is the shipped ciphertext/plaintext pairs plus round-trips.
   source: docs/spikes/S6-naibbe.md
+- id: VO-017
+  date: "2026-10-27"
+  by: brian
+  decision: Supersedes VO-008's gated statistic. H3 gates on within-type AUROC (full and leave-ZL-out maps) and within-page AUROC (full map). The full-map within-type lower bound must also exceed the within-type AUROC of the span-width and page-mean-confidence baselines. Pooled AUROC and the token-level baselines are reported, not gated.
+  source: owner approved KDP-F E1 with the baseline fix, 2026-10-27
+- id: VO-018
+  date: "2026-10-27"
+  by: brian
+  decision: No fixed 0.60 bar. The H3 gate voids, rather than kills, when too few gated glyphs fall in groups large enough to score; the coverage minimum is fixed at G1 from non-test pages by amendment, before any test inference.
+  source: owner approved KDP-F E2 with the underpower fix, 2026-10-27
+- id: VO-019
+  date: "2026-10-27"
+  by: brian
+  decision: Map v0 is published with the 40 test pages' rows withheld until G3.
+  source: owner approved KDP-F E3, 2026-10-27
+- id: VO-020
+  date: "2026-10-27"
+  by: brian
+  decision: The leave-{ZL, IT}-out arm is reported, not gated. The writeup may say "independent of ZL" only if its within-type lower bound exceeds 0.5.
+  source: owner approved KDP-F E4, 2026-10-27
+- id: VO-021
+  date: "2026-10-27"
+  by: brian
+  decision: docs/prereg.md is frozen with sha256 9d33cd8e1bb90ca3fb1eeabc6ea4cc003a18da4889744f81b39ba9b6456bc06d. Later changes are appended amendments only.
+  source: owner approved KDP-F E5, 2026-10-27

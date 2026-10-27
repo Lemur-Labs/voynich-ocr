@@ -2,7 +2,20 @@
 
 2026-10-27 · Owner review target: 15 min · On approval, W1 starts Oct 31 (launch: "run W1 per docs/plan.md and docs/prereg.md")
 
-## Your calls
+## Outcome (2026-10-27)
+
+Owner: "approve with fixes". E1 approved with the baseline fix (VO-017), E2 with the underpower fix (VO-018), E3–E5 as
+recommended (VO-019–VO-021). `docs/prereg.md` frozen, sha256 `9d33cd8e…6bc06d`. Owner hours: not reported at this gate.
+
+The two fixes, raised after the packet was written:
+
+- **E1:** a pooled AUROC above the pooled token baselines asks whether confidence beats the token prior alone, not
+  whether it adds to it, and would likely false-kill. Within-type already removes B1–B3; the remaining confound is
+  span width, which varies within a type. The bar is now within-type confidence above within-type B4/B5.
+- **E2:** `within_group_auroc` returns 0.5 when no group qualifies, so an underpowered test set would read as a kill.
+  It now voids below a coverage minimum fixed at G1 on non-test pages.
+
+## Your calls (as presented)
 
 | # | Decision | Recommendation |
 |---|---|---|
