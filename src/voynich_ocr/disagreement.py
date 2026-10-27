@@ -135,10 +135,12 @@ def _runs(tokens: list[list[str | None]]) -> list[tuple[int, int]]:
 def classify(
     readings: dict[str, tuple[str, ...]], codes: dict[str, tuple[str, ...]], expressible: dict[str, frozenset[str]]
 ) -> tuple[tuple[str, ...], str]:
-    """Contributing sources and the column's class. A source is dropped where another reads an STA code its
-    file never produces."""
+    """Contributing sources and the column's class. A source is dropped where a competing reading, one that
+    differs from its own, uses an STA code its file never produces."""
     contributing = tuple(
-        s for s in readings if all(set(codes[t]) <= expressible[s] for t in readings if t != s)
+        s
+        for s in readings
+        if all(set(codes[t]) <= expressible[s] for t in readings if readings[t] != readings[s])
     )
     if any(UNKNOWN in r for r in readings.values()):
         return contributing, "unknown"
