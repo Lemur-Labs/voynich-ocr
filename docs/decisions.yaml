@@ -134,3 +134,8 @@
   by: claude
   decision: docs/prereg.md with A1 and A2 appended has sha256 62e1ed1c04d7ec09ca7d2d8c10a1d5031a09782b7eb99efc2e3ed8ad238f6904.
   source: docs/prereg.md Amendments
+- id: VO-028
+  date: "2026-10-27"
+  by: brian
+  decision: Supersedes VO-026's release contents. Release map-v0 carries per-column class, tier, flag, contributing sources and the gated flag, without readings or codes, plus summary.json. Outreach asks the transliteration authors whether the full files may be published later.
+  source: owner chose "strip text" at G1-7, 2026-10-27

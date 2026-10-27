@@ -10,14 +10,14 @@
    "columns/leave-IT-out.tsv": "0ada017d6a529597651445b7f77e7fa7ac30d58a25cfadf08675832a958e8747",
    "columns/leave-ZL-IT-out.tsv": "31f538e1885ae6354a26f39f8c48a51d035c32068c2ab6f3bbe7024b252befcc",
    "columns/leave-ZL-out.tsv": "ec4972b02ea1f3da7c42d39dad7246f868308ed7570e8235c38cd8158dc96d45",
-   "published/ZL-IT-GC.tsv": "c2e6874978b88830a08cc63fc6e8ab9813d4883715789a4eb14ea8e5642ba248",
-   "published/full.tsv": "f9bb4eeb5948f6732f5ef131a82b33108c6aad45ddc834bd4a1f308fffc7eab5",
-   "published/leave-CD-out.tsv": "5339588fa1e3a4ae61a5a3abbe50e442746776b2b6c947aad5df4367209dc5cc",
-   "published/leave-FG-out.tsv": "487f635c05fbe6f7d9df55f2aa2984cec424c3010bfb49fbf565cd8b4b818fcd",
-   "published/leave-GC-out.tsv": "344ad055c8f3a5ea9e7488315ef3915ea72c4f27550a0b12015aae59b8aa3500",
-   "published/leave-IT-out.tsv": "dff522206ce055a909f09cfd88acd0b461b9c0df1ad8bb1415453b869a839f3f",
-   "published/leave-ZL-IT-out.tsv": "85ddbeb7255180ea08246d9765a3c7e4d0b5ad1b87b6f7eeaecd7321aa85f7a0",
-   "published/leave-ZL-out.tsv": "2effd7f7c5df6f698837545003408f2c5412e97454b8938cb24e4305dd8a85fd",
+   "published/ZL-IT-GC.tsv": "226be6ab4df7f55eb8aef5ac20ca896137ac080623401d165b225458ffe2fb2b",
+   "published/full.tsv": "e9fa4f6009d8aa3187138b3e932ee1bad35da549d7903bd6ddb52c14d5e04148",
+   "published/leave-CD-out.tsv": "3cacc745de7d6eccd473fc429994af204f0a47691614382ba8b2ce2df90dca2d",
+   "published/leave-FG-out.tsv": "683fc2a04fde94dcba67c4488ba28b17b97454bfac59e03d6dea8d8095911056",
+   "published/leave-GC-out.tsv": "21dd62bf25b532d38024cf65b96ed457f5f63f30f5ae430645bc8b4ea59c7c42",
+   "published/leave-IT-out.tsv": "845abb530c4c304e3e6b56eba5843a06abec141cdde586ec716e0e25cab99e65",
+   "published/leave-ZL-IT-out.tsv": "0d32b991f17292698b29f4e1d9cfaeed5807378494be119dd828d33f8e1d5a14",
+   "published/leave-ZL-out.tsv": "574c102a82af015d3373f23b8ab5012636bccb2b5074897cd5bd7d3193d069b2",
    "summary.json": "df901b5705b3bfcf154dae74b40e24f30b1ba3339f9b2062b70e6c316350f275"
   }
  },
@@ -91,7 +91,8 @@
     0.7924,
     0.8734,
     0.9242
-   ]
+   ],
+   "void_share_at_0.72": 0.045
   }
  }
 }
