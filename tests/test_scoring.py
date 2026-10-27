@@ -148,18 +148,43 @@ def test_attrition_beyond_a_quarter_voids_the_gate():
     assert scoring.void_for_attrition(kept=29, total=40)
 
 
+def test_glyph_width_alone_is_caught_by_the_within_type_width_baseline():
+    rng, pages, tokens = _glyphs()
+    width = rng.integers(2, 12, pages.size).astype(float)
+    disagree = rng.random(pages.size) < 0.05 + 0.04 * width
+    confidence = np.clip(0.95 - 0.02 * width + rng.normal(0, 0.01, pages.size), 0, 1)
+    conf_wt = _ci(scoring.within_type_auroc(1 - confidence, disagree, tokens), pages)
+    width_wt = scoring.within_type_auroc(width, disagree, tokens)(np.arange(pages.size))
+    wp = _ci(scoring.within_page_auroc(1 - confidence, disagree, pages), pages)
+    assert conf_wt.lo > 0.5
+    assert scoring.decide_recognizer(conf_wt, conf_wt, wp, width_wt) == "kill"
+
+
+def test_coverage_is_the_share_of_glyphs_in_scorable_groups():
+    disagree = np.array([1] * 20 + [0] * 20 + [1] * 5 + [0] * 15, dtype=bool)
+    tokens = np.array([0] * 40 + [1] * 20)
+    assert scoring.within_type_coverage(disagree, tokens) == pytest.approx(40 / 60)
+
+
+def test_underpower_voids_and_an_unset_threshold_refuses_to_decide():
+    assert scoring.void_for_underpower(0.3, minimum=0.5)
+    assert not scoring.void_for_underpower(0.6, minimum=0.5)
+    with pytest.raises(RuntimeError):
+        scoring.void_for_underpower(0.6, minimum=None)
+
+
 GOOD, WEAK = Interval(0.62, 0.56, 0.68), Interval(0.52, 0.47, 0.57)
 
 
 @pytest.mark.parametrize(
-    ("wt_full", "wt_loo", "wp_full", "pooled", "baseline", "verdict"),
+    ("wt_full", "wt_loo", "wp_full", "baseline", "verdict"),
     [
-        (GOOD, GOOD, GOOD, GOOD, 0.55, "pass"),
-        (GOOD, WEAK, GOOD, GOOD, 0.55, "narrow"),
-        (GOOD, GOOD, WEAK, GOOD, 0.55, "kill"),
-        (GOOD, GOOD, GOOD, GOOD, 0.60, "kill"),
-        (WEAK, GOOD, GOOD, GOOD, 0.55, "kill"),
+        (GOOD, GOOD, GOOD, 0.53, "pass"),
+        (GOOD, WEAK, GOOD, 0.53, "narrow"),
+        (GOOD, GOOD, WEAK, 0.53, "kill"),
+        (GOOD, GOOD, GOOD, 0.58, "kill"),
+        (WEAK, GOOD, GOOD, 0.40, "kill"),
     ],
 )
-def test_recognizer_gate_rule(wt_full, wt_loo, wp_full, pooled, baseline, verdict):
-    assert scoring.decide_recognizer(wt_full, wt_loo, wp_full, pooled, baseline) == verdict
+def test_recognizer_gate_rule(wt_full, wt_loo, wp_full, baseline, verdict):
+    assert scoring.decide_recognizer(wt_full, wt_loo, wp_full, baseline) == verdict

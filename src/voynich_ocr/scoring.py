@@ -178,12 +178,36 @@ def within_group_auroc(
     return statistic
 
 
+TYPE_MIN_POS, TYPE_MIN_NEG = 20, 20
+PAGE_MIN_POS, PAGE_MIN_NEG = 10, 1
+
+
 def within_type_auroc(scores: np.ndarray, disagree: np.ndarray, tokens: np.ndarray):
-    return within_group_auroc(scores, disagree, tokens, min_pos=20, min_neg=20, weighted=True)
+    return within_group_auroc(scores, disagree, tokens, TYPE_MIN_POS, TYPE_MIN_NEG, weighted=True)
 
 
 def within_page_auroc(scores: np.ndarray, disagree: np.ndarray, pages: np.ndarray):
-    return within_group_auroc(scores, disagree, pages, min_pos=10, min_neg=1, weighted=False)
+    return within_group_auroc(scores, disagree, pages, PAGE_MIN_POS, PAGE_MIN_NEG, weighted=False)
+
+
+def group_coverage(disagree: np.ndarray, groups: np.ndarray, min_pos: int, min_neg: int) -> float:
+    """Share of glyphs in groups with enough of both classes to be scored."""
+    disagree = np.asarray(disagree, dtype=bool)
+    covered = 0
+    for key in np.unique(groups):
+        m = groups == key
+        pos = int(disagree[m].sum())
+        if pos >= min_pos and m.sum() - pos >= min_neg:
+            covered += int(m.sum())
+    return covered / disagree.size
+
+
+def within_type_coverage(disagree: np.ndarray, tokens: np.ndarray) -> float:
+    return group_coverage(disagree, tokens, TYPE_MIN_POS, TYPE_MIN_NEG)
+
+
+def within_page_coverage(disagree: np.ndarray, pages: np.ndarray) -> float:
+    return group_coverage(disagree, pages, PAGE_MIN_POS, PAGE_MIN_NEG)
 
 
 MAX_TEST_ATTRITION = 0.25
@@ -191,6 +215,16 @@ MAX_TEST_ATTRITION = 0.25
 
 def void_for_attrition(kept: int, total: int) -> bool:
     return kept < (1 - MAX_TEST_ATTRITION) * total
+
+
+# Set at G1 from non-test pages, by a dated pre-registration amendment, before any test inference.
+MIN_GROUP_COVERAGE: float | None = None
+
+
+def void_for_underpower(coverage: float, minimum: float | None = MIN_GROUP_COVERAGE) -> bool:
+    if minimum is None:
+        raise RuntimeError("MIN_GROUP_COVERAGE must be fixed from non-test pages before the gate runs")
+    return coverage < minimum
 
 
 def decide_clusters(within_token_gap: Interval, null_975: float, control_point: float) -> str:
@@ -203,13 +237,12 @@ def decide_recognizer(
     within_type_full: Interval,
     within_type_leave_zl_out: Interval,
     within_page_full: Interval,
-    pooled_full: Interval,
-    best_baseline_point: float,
+    best_within_type_baseline_point: float,
 ) -> str:
-    """Full-map pass requires within-type and within-page signal and a pooled AUROC above every trivial baseline."""
-    full_ok = (
-        within_type_full.lo > 0.5 and within_page_full.lo > 0.5 and pooled_full.lo > best_baseline_point
-    )
+    """Full-map pass requires within-page signal, and within-type signal above chance and above the best baseline
+    that varies within a type (span width, page-mean confidence)."""
+    type_bar = max(0.5, best_within_type_baseline_point)
+    full_ok = within_type_full.lo > type_bar and within_page_full.lo > 0.5
     loo_ok = within_type_leave_zl_out.lo > 0.5
     if full_ok and loo_ok:
         return "pass"

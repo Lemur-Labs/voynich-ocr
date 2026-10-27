@@ -1,8 +1,8 @@
 # Pre-registration
 
-Status: **draft for KDP-F**. It already includes the red-team amendments (`docs/gates/KDP-F.md`). At approval, the
-SHA-256 of this file is recorded in `docs/decisions.yaml`. After that a change is an appended amendment (date,
-section, reason), never an edit. Gate outcomes are computed by the functions named here, in
+Status: **frozen at KDP-F, 2026-10-27**, with E1–E5 as approved (`docs/gates/KDP-F.md`). The SHA-256 of this file
+as frozen is recorded in `docs/decisions.yaml` (VO-021). A change is an appended amendment (date, section, reason),
+never an edit. Gate outcomes are computed by the functions named here, in
 `src/voynich_ocr/scoring.py`, and not judged.
 
 ## Inputs
@@ -133,21 +133,26 @@ section, reason), never an edit. Gate outcomes are computed by the functions nam
   Test loci containing alternatives are kept.
 - **Statistics,** all bootstrapped by page:
   - **within-type AUROC** of 1 − confidence, `scoring.within_type_auroc`, on the full map and the leave-ZL-out map;
-  - **within-page AUROC**, `scoring.within_page_auroc`, on the full map;
-  - **pooled AUROC**, `scoring.auroc_statistic`, on the full map.
-- **Baselines,** each scored with `scoring.auroc_statistic` on the same glyphs:
+  - **within-page AUROC**, `scoring.within_page_auroc`, on the full map.
+- **Baselines** on the same glyphs:
   - B1: the token's disagreement rate on non-test pages;
   - B2: −log of the token's frequency in the training labels;
   - B3: the token's stroke count;
   - B4: span width in frames;
   - B5: the page's mean confidence.
+  - B4 and B5 vary within a token and are scored with `scoring.within_type_auroc` on the full map; the larger point
+    estimate is the **within-type baseline bar**. B1–B3 are constant within a token and are reported pooled only.
 - **Gate:** `scoring.decide_recognizer`.
-  - **Pass:** the within-type lower bounds on the full and leave-ZL-out maps are >0.5, the within-page lower bound is
-    >0.5, and the pooled lower bound exceeds the best baseline's point estimate.
+  - **Pass:** the full-map within-type lower bound exceeds both 0.5 and the within-type baseline bar, the
+    leave-ZL-out within-type lower bound is >0.5, and the within-page lower bound is >0.5.
   - **Narrow:** the full-map conditions hold, but the leave-ZL-out condition does not.
   - **Kill:** anything else.
-  - **Void:** when `scoring.void_for_attrition` holds.
+  - **Void:** when `scoring.void_for_attrition` holds, or when `scoring.void_for_underpower` holds for either
+    `scoring.within_type_coverage` or `scoring.within_page_coverage` on the gated set.
+  - **Coverage minimum:** `scoring.MIN_GROUP_COVERAGE` is fixed at G1 from non-test pages, by an appended amendment,
+    before any test-page inference. Until then the gate refuses to run.
 - **Reported, not gated:**
+  - the pooled AUROC, `scoring.auroc_statistic`, beside each baseline's pooled AUROC;
   - the leave-{ZL, IT}-out within-type AUROC;
   - `scoring.ece` of top-1 confidence against agreement with the leave-{ZL, IT}-out column majority, with 15 bins;
   - CER against ZL and against the column majority.
