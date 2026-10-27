@@ -1,0 +1,89 @@
+# Every third-party input. `make snapshot` fetches these into data/raw/; manifest.sha256 pins their bytes.
+
+[[source]]
+path = "transliterations/native/ZL3b-n.txt"
+url = "https://www.voynich.nu/data/ZL3b-n.txt"
+
+[[source]]
+path = "transliterations/native/IT2a-n.txt"
+url = "https://www.voynich.nu/data/IT2a-n.txt"
+
+[[source]]
+path = "transliterations/native/CD2a-n.txt"
+url = "https://www.voynich.nu/data/CD2a-n.txt"
+
+[[source]]
+path = "transliterations/native/GC2a-n.txt"
+url = "https://www.voynich.nu/data/GC2a-n.txt"
+
+[[source]]
+path = "transliterations/native/FG2a-n.txt"
+url = "https://www.voynich.nu/data/FG2a-n.txt"
+
+[[source]]
+path = "transliterations/sta/ZL3b.txt"
+url = "https://www.voynich.nu/data/sta/ZL3b.txt"
+
+[[source]]
+path = "transliterations/sta/IT2a.txt"
+url = "https://www.voynich.nu/data/sta/IT2a.txt"
+
+[[source]]
+path = "transliterations/sta/CD2a_0.txt"
+url = "https://www.voynich.nu/data/sta/CD2a_0.txt"
+
+[[source]]
+path = "transliterations/sta/CD2a_1.txt"
+url = "https://www.voynich.nu/data/sta/CD2a_1.txt"
+
+[[source]]
+path = "transliterations/sta/GC2a_0.txt"
+url = "https://www.voynich.nu/data/sta/GC2a_0.txt"
+
+[[source]]
+path = "transliterations/sta/GC2a_1.txt"
+url = "https://www.voynich.nu/data/sta/GC2a_1.txt"
+
+[[source]]
+path = "transliterations/sta/FG2a.txt"
+url = "https://www.voynich.nu/data/sta/FG2a.txt"
+
+[[source]]
+path = "bitrans/bitrans.c"
+url = "https://www.voynich.nu/software/bitrans/bitrans.c"
+
+[[source]]
+path = "bitrans/Bitrans_manual.pdf"
+url = "https://www.voynich.nu/software/bitrans/Bitrans_manual.pdf"
+
+[[source]]
+path = "bitrans/STA-Eva_def.bit"
+url = "https://www.voynich.nu/software/bitrans/STA-Eva_def.bit"
+
+[[source]]
+path = "bitrans/STA-EvaT_def.bit"
+url = "https://www.voynich.nu/software/bitrans/STA-EvaT_def.bit"
+
+[[source]]
+path = "bitrans/STA-v101_def.bit"
+url = "https://www.voynich.nu/software/bitrans/STA-v101_def.bit"
+
+[[source]]
+path = "bitrans/STA-Curr_def.bit"
+url = "https://www.voynich.nu/software/bitrans/STA-Curr_def.bit"
+
+[[source]]
+path = "bitrans/STA-FSG_def.bit"
+url = "https://www.voynich.nu/software/bitrans/STA-FSG_def.bit"
+
+[[source]]
+path = "bitrans/STA-aaa.bit"
+url = "https://www.voynich.nu/software/bitrans/STA-aaa.bit"
+
+[[source]]
+path = "docs/STA1_def.pdf"
+url = "https://www.voynich.nu/data/sta/STA1_def.pdf"
+
+[[source]]
+path = "docs/IVTFF_format.pdf"
+url = "https://mail.voynich.nu/software/ivtt/IVTFF_format.pdf"
