@@ -1,0 +1,25 @@
+{
+  "unknown": "?",
+  "loci": [
+    {"name": "identical", "sources": ["abc", "abc", "abc", "abc", "abc"],
+     "columns": ["abc", "abc", "abc", "abc", "abc"]},
+    {"name": "substitution", "sources": ["abc", "axc", "abc", "abc", "ayc"],
+     "columns": ["abc", "axc", "abc", "abc", "ayc"]},
+    {"name": "deletion lands leftmost in a repeat", "sources": ["aiiib", "aiib", "aiiib", "aib", "aiiib"],
+     "columns": ["aiiib", "a-iib", "aiiib", "a--ib", "aiiib"]},
+    {"name": "insertion opens a column, which a tied unknown covers", "sources": ["ab", "axb", "ab", "ab", "a?b"],
+     "columns": ["a-b", "axb", "a-b", "a-b", "a?b"]},
+    {"name": "a later source fills a gap-majority column", "sources": ["axb", "ab", "ab", "ab", "ayb"],
+     "columns": ["axb", "a-b", "a-b", "a-b", "ayb"]},
+    {"name": "a tie between a reading and a gap goes to the earlier source", "sources": ["ab", "axb", "axb", "ab", "ab"],
+     "columns": ["a-b", "axb", "axb", "a-b", "a-b"]},
+    {"name": "unknown run covers as many columns as it has", "sources": ["abcd", "a??d", "abcd", "abcd", "abcd"],
+     "columns": ["abcd", "a??d", "abcd", "abcd", "abcd"]},
+    {"name": "unknown run longer than the columns it can cover", "sources": ["abd", "a???d", "abd", "abd", "abd"],
+     "columns": ["abd", "a?d", "abd", "abd", "abd"]},
+    {"name": "unknown run covers nothing", "sources": ["ad", "a?d", "ad", "ad", "ad"],
+     "columns": ["ad", "ad", "ad", "ad", "ad"]},
+    {"name": "missing source and swapped pair", "sources": ["ab", "ba", "ab", null, "ab"],
+     "columns": ["ab", "ba", "ab", null, "ab"]}
+  ]
+}

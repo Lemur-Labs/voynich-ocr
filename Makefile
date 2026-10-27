@@ -1,4 +1,4 @@
-.PHONY: snapshot snapshot-verify snapshot-push snapshot-pull test lint
+.PHONY: snapshot snapshot-verify snapshot-push snapshot-pull test lint map g1
 
 BUCKET := gs://lemur-voynich-ocr-snapshot
 
@@ -21,3 +21,11 @@ test:
 
 lint:
 	uv run ruff check .
+
+map: snapshot-verify
+	uv run python -m voynich_ocr.disagreement --out build/map
+	mkdir -p results/map-v0
+	cp build/map/summary.json results/map-v0/summary.json
+
+g1: map
+	uv run python -m voynich_ocr.g1

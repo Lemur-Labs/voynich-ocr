@@ -1,0 +1,97 @@
+{
+ "determinism": {
+  "identical": true,
+  "files": {
+   "columns/ZL-IT-GC.tsv": "fffece6499782c899ca1c8c23dd71d3618c5160d38e82b8a57c56d6816309461",
+   "columns/full.tsv": "4f50dac5215edc5b0bede6ccef02995410512356f73a8cbdde3ace67b581bdd5",
+   "columns/leave-CD-out.tsv": "73df80cf0569399ea4e9591884f6adf5e9b4f91205ecd3a2278fd6b639230fed",
+   "columns/leave-FG-out.tsv": "66ee718def308863393efc6658d1798d823cca9cd4af33467f50e82df14e6ee4",
+   "columns/leave-GC-out.tsv": "f8942fdf7d6dee98ef2cd46df5a32633ccbedac7977a2e8d01e1cdab415258f1",
+   "columns/leave-IT-out.tsv": "0ada017d6a529597651445b7f77e7fa7ac30d58a25cfadf08675832a958e8747",
+   "columns/leave-ZL-IT-out.tsv": "31f538e1885ae6354a26f39f8c48a51d035c32068c2ab6f3bbe7024b252befcc",
+   "columns/leave-ZL-out.tsv": "ec4972b02ea1f3da7c42d39dad7246f868308ed7570e8235c38cd8158dc96d45",
+   "published/ZL-IT-GC.tsv": "c2e6874978b88830a08cc63fc6e8ab9813d4883715789a4eb14ea8e5642ba248",
+   "published/full.tsv": "f9bb4eeb5948f6732f5ef131a82b33108c6aad45ddc834bd4a1f308fffc7eab5",
+   "published/leave-CD-out.tsv": "5339588fa1e3a4ae61a5a3abbe50e442746776b2b6c947aad5df4367209dc5cc",
+   "published/leave-FG-out.tsv": "487f635c05fbe6f7d9df55f2aa2984cec424c3010bfb49fbf565cd8b4b818fcd",
+   "published/leave-GC-out.tsv": "344ad055c8f3a5ea9e7488315ef3915ea72c4f27550a0b12015aae59b8aa3500",
+   "published/leave-IT-out.tsv": "dff522206ce055a909f09cfd88acd0b461b9c0df1ad8bb1415453b869a839f3f",
+   "published/leave-ZL-IT-out.tsv": "85ddbeb7255180ea08246d9765a3c7e4d0b5ad1b87b6f7eeaecd7321aa85f7a0",
+   "published/leave-ZL-out.tsv": "2effd7f7c5df6f698837545003408f2c5412e97454b8938cb24e4305dd8a85fd",
+   "summary.json": "febede30b15feb7a9cec8d66bfb09646671665d4aafaca4cbe8639e61a765f03"
+  }
+ },
+ "parser": {
+  "identical": true,
+  "files": {
+   "ZL": {
+    "loci": 5385,
+    "not_in_manuscript": [],
+    "ivtt_lines": 5385,
+    "identical": true
+   },
+   "IT": {
+    "loci": 5215,
+    "not_in_manuscript": [
+     "f89v2.26"
+    ],
+    "ivtt_lines": 5214,
+    "identical": true
+   },
+   "CD": {
+    "loci": 2196,
+    "not_in_manuscript": [],
+    "ivtt_lines": 2196,
+    "identical": true
+   },
+   "GC": {
+    "loci": 5367,
+    "not_in_manuscript": [
+     "f89v2.26"
+    ],
+    "ivtt_lines": 5366,
+    "identical": true
+   },
+   "FG": {
+    "loci": 4060,
+    "not_in_manuscript": [],
+    "ivtt_lines": 4060,
+    "identical": true
+   }
+  }
+ },
+ "fixture": {
+  "passed": true,
+  "pytest": "12 passed in 0.01s"
+ },
+ "perturbation": {
+  "seed": 20261031,
+  "shared_codes": 31,
+  "disputed_on_unperturbed": 0,
+  "masked_on_unperturbed": 0,
+  "injected": 18885,
+  "recovered": 18885,
+  "spurious": 0,
+  "passed": true
+ },
+ "outcome": "pass",
+ "coverage": {
+  "seed": 20261031,
+  "glyphs": 122859,
+  "pages": 185,
+  "within_type_all_nontest": 0.9921,
+  "within_page_all_nontest": 0.9034,
+  "40_page_draws_from_162_eligible": {
+   "within_type_p5_p50_p95": [
+    0.8137,
+    0.9146,
+    0.9211
+   ],
+   "within_page_p5_p50_p95": [
+    0.8301,
+    0.8948,
+    0.9402
+   ]
+  }
+ }
+}

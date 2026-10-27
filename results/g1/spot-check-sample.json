@@ -1,0 +1,606 @@
+[
+ {
+  "locus": "f102r2.10",
+  "native": {
+   "ZL": "shockhy.qockhey.sol.eeey.dol.cheol.doaiin.qkeeey.cthey",
+   "IT": "shockhy.qockhey.sol.eeey.dol.cheol.doaiin.qkeeey.cthey",
+   "GC": "2oH9.4oHc9.soe.d9.8oe.1coe,7o.am.4hd9.?Kc9",
+   "FG": "CCG.8OE.TCOE.8OAM.4DCCG.HZCG"
+  },
+  "disputed_columns": [
+   {
+    "column": 21,
+    "readings": {
+     "ZL": "d0",
+     "IT": "d0",
+     "GC": "d5",
+     "FG": "d0"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f104r.4",
+  "native": {
+   "ZL": "o,l,sheedy.qokeedy.chedal.qodaiin.qodaiin.chry",
+   "IT": "ol.sheedy.qokeedy.chedal.qodaiin.qodaiiin.chry",
+   "GC": "oe.5C89.4ohcc79.1c8ae.4o8am.4o8cIm.1y9",
+   "FG": "OE.SCC8G.4ODCC8G.TC8AE.4O8AM.4O8AM.TRG"
+  },
+  "disputed_columns": [
+   {
+    "column": 2,
+    "readings": {
+     "ZL": "c2:v3:c1",
+     "IT": "c2:v3:c1",
+     "GC": "c2:c1:v0",
+     "FG": "c2:v3:c1"
+    }
+   },
+   {
+    "column": 10,
+    "readings": {
+     "ZL": "d0",
+     "IT": "d0",
+     "GC": "d5",
+     "FG": "d0"
+    }
+   },
+   {
+    "column": 25,
+    "readings": {
+     "ZL": "a0",
+     "IT": "a0",
+     "GC": "c0",
+     "FG": "a0"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f112v.44",
+  "native": {
+   "ZL": "qokchal.qokey.qaiin.otol.teol.okal.otedar.epalchdy.alpchdy",
+   "IT": "qokchal.qokey.qaiin.otol.teol.okal.otedar.opalchdy.alpchdy",
+   "GC": "4oh1oe.4ohc9.4am.okoe.kcoe.ohae.okc7ay.og,ae189.aeg189",
+   "FG": "4ODTAE.4ODCG.4AM.OHOE.HCOE.ODAE.OHC8AR.OPAET8G.AEPT8G"
+  },
+  "disputed_columns": [
+   {
+    "column": 4,
+    "readings": {
+     "ZL": "a0",
+     "IT": "a0",
+     "GC": "o0",
+     "FG": "a0"
+    }
+   },
+   {
+    "column": 29,
+    "readings": {
+     "ZL": "d0",
+     "IT": "d0",
+     "GC": "d5",
+     "FG": "d0"
+    }
+   },
+   {
+    "column": 32,
+    "readings": {
+     "ZL": "c0",
+     "IT": "o0",
+     "GC": "o0",
+     "FG": "o0"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f15v.7",
+  "native": {
+   "ZL": "{co}y.choiin.sho.?.chy.s.chy.tor.ols",
+   "IT": "coy.choiin.sho.s.chy.s.chy.tor.ols",
+   "CD": "CO9.SOM.ZO.?.S9.2.S9.POR.OER",
+   "GC": "Eo9.1oZ.#o.@161;.19.s.19.koy.oes",
+   "FG": "TOG.TOM.SO.?.TG.2TG.HOR.OE2"
+  },
+  "disputed_columns": [
+   {
+    "column": 0,
+    "readings": {
+     "ZL": "-",
+     "IT": "-",
+     "GC": "c2",
+     "FG": "c2:c1",
+     "CD": "c0"
+    }
+   },
+   {
+    "column": 1,
+    "readings": {
+     "ZL": "c2:o1",
+     "IT": "c2:o1",
+     "GC": "o0",
+     "FG": "o0",
+     "CD": "o0"
+    }
+   },
+   {
+    "column": 19,
+    "readings": {
+     "ZL": "c0:t0",
+     "IT": "c0:t0",
+     "GC": "c0:t0",
+     "FG": "c0:t0",
+     "CD": "i0:t0"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f28r.5",
+  "native": {
+   "ZL": "oksho.otorchy.kchoror.chodaiin.sho,cthody.okoy",
+   "IT": "oksho.otor.chy.kchoror.chodaiin.sho.cthody.okoy",
+   "CD": "OFZO.OPOR.S9.FSOROR.SO8AM.ZO.QO89.OFO9",
+   "GC": "oh2o.okoy.19.h1oyoX.1o8am.2o.Ko89.oho9",
+   "FG": "ODSO.OHORTG.DTOR.OR.TO8AM.SO.HZO8G.ODOG"
+  },
+  "disputed_columns": [
+   {
+    "column": 14,
+    "readings": {
+     "ZL": "i0:t0",
+     "IT": "i0:t0",
+     "GC": "i4:t0",
+     "FG": "i0:t0",
+     "CD": "i0:t0"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f30r.2",
+  "native": {
+   "ZL": "ychody.chey.chkeey.ksho.keeor.cheor.shey.she.keeodol.sy",
+   "IT": "ychody.chey.chkeey.ksho.keeor.cheor.shey.she.keeodol.sy",
+   "CD": "9SO89.SC9.SFCC9.FZO.FCCOR.SCOR.ZC9.ZCFCCO8OE.29",
+   "GC": "91o89.1c9.1hC9.h#o.kccoy.1coy.3c9.3c.hccA8oe.s9",
+   "FG": "GTO8G.TCG.TDCCG.DSO.DCCOR.TCOR.SCG.TC.DCCO8OE.2G"
+  },
+  "disputed_columns": [
+   {
+    "column": 15,
+    "readings": {
+     "ZL": "l2:p1",
+     "IT": "l2:p1",
+     "GC": "q2:p1",
+     "FG": "l2:p1",
+     "CD": "l2:p1"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f42r.20",
+  "native": {
+   "ZL": "shol.chol.shoky.okol.sho.chol.shol.chal",
+   "IT": "shol.chol.shoky.okol.sho.chol.chol.chal",
+   "CD": "ZOE.SOE.ZOF9.OFOE.ZO.SOE.ZOE.SAE",
+   "GC": "2oe.1oe.2oh9.ohoe.2o.1oe.2oe.1ae",
+   "FG": "SOE.TOE.SODG.ODOE.SO.TOE.SOE.TAE"
+  },
+  "disputed_columns": [
+   {
+    "column": 19,
+    "readings": {
+     "ZL": "c2:v3:c1",
+     "IT": "c2:c1",
+     "GC": "c2:v3:c1",
+     "FG": "c2:v3:c1",
+     "CD": "c2:v3:c1"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f51v.1",
+  "native": {
+   "ZL": "poshody.qokodar.shodaiin.qotal.dscheey.saiin,dy",
+   "IT": "poshody.qokodar.seodaiin.qotal.dscheey.saiindy",
+   "CD": "BOZO89.4OFO8AR.ZO8AM.4OPAE.82SCC9.2AM.89",
+   "GC": "go2o89.4oho8ay.2o8am.4okae.8s1C9.sam89",
+   "FG": "POSO8G.4ODO8AR.2CO8AM.4OHAE.82TCCG.2AM.8G"
+  },
+  "disputed_columns": [
+   {
+    "column": 13,
+    "readings": {
+     "ZL": "-",
+     "IT": "c0:t0",
+     "GC": "-",
+     "FG": "c0:t0",
+     "CD": "-"
+    }
+   },
+   {
+    "column": 14,
+    "readings": {
+     "ZL": "c2:v3:c1",
+     "IT": "c0",
+     "GC": "c2:v3:c1",
+     "FG": "c0",
+     "CD": "c2:v3:c1"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f52v.1",
+  "native": {
+   "ZL": "pchor.chcphol.cphaiiin.otcheor.ytor,kol.chocphar",
+   "IT": "pchor.chcphol.cphaiin.otcheor.ytor.kol.chocphor",
+   "CD": "BSOR.SWOE.WA3.OPSCOR.9POR.FOE.SOWAR",
+   "GC": "g1oy.1Joe.JaM.ok1coy.9koy,hoe.1oJos",
+   "FG": "PTOR.TPZOE.PZAM.OHTCOR.GHOR.DOE.TOPZOR"
+  },
+  "disputed_columns": [
+   {
+    "column": 10,
+    "readings": {
+     "ZL": "i0~i0~i0~i0:b0",
+     "IT": "i0~i0~i0:b0",
+     "GC": "i0~i0~i0~i0:b0",
+     "FG": "i0~i0~i0:b0",
+     "CD": "i0~i0~i0~i0:b0"
+    }
+   },
+   {
+    "column": 28,
+    "readings": {
+     "ZL": "i0:t0",
+     "IT": "i0:t0",
+     "GC": "c0:t0",
+     "FG": "i0:t0",
+     "CD": "i0:t0"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f68r1.4",
+  "native": {
+   "ZL": "dchor.okaiiin",
+   "IT": "dchor.okaiin",
+   "GC": "81ot.oham",
+   "FG": "8TOR.ODAM"
+  },
+  "disputed_columns": [
+   {
+    "column": 7,
+    "readings": {
+     "ZL": "i0~i0~i0~i0:b0",
+     "IT": "i0~i0~i0:b0",
+     "GC": "i0~i0~i0:b0",
+     "FG": "i0~i0~i0:b0"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f68v1.4",
+  "native": {
+   "ZL": "sair.aroyser",
+   "IT": "sair.arolsas",
+   "GC": "saiy.ayo(yay"
+  },
+  "disputed_columns": [
+   {
+    "column": 8,
+    "readings": {
+     "ZL": "c0",
+     "IT": "a0",
+     "GC": "a0"
+    }
+   },
+   {
+    "column": 9,
+    "readings": {
+     "ZL": "i0:t0",
+     "IT": "c0:t0",
+     "GC": "i0:t0"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f69r.3",
+  "native": {
+   "ZL": "sheos,aiin.{c@178;}ar.choetey.okal.chy.ykar.ytchey.cheotam",
+   "IT": "sheosaiin.ctar.choetey.okal.chy.ykar.ytchey.cheotam",
+   "GC": "2cos,am.@150;ay.1ockc9.ohae.19.9hay.9k1c9.1cokap",
+   "FG": "SCO2AM.HZAR.TCHCG.ODAE.TG.GDAR.GHTCG.TCOHAK"
+  },
+  "disputed_columns": [
+   {
+    "column": 6,
+    "readings": {
+     "ZL": "-",
+     "IT": "c2",
+     "GC": "-",
+     "FG": "-"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f70v1.6",
+  "native": {
+   "ZL": "otaly",
+   "IT": "otyly",
+   "GC": "okae9"
+  },
+  "disputed_columns": [
+   {
+    "column": 2,
+    "readings": {
+     "ZL": "a0",
+     "IT": "y0",
+     "GC": "a0"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f71r.12",
+  "native": {
+   "ZL": "oteody.oteos.o{ckhh}y.oteeschey.lsheotey.okalody.shs.shey.oteey.otechar.chekal.okody.eeedy.oteodal.eeokol.lkchol.daiin.okeeees.ykees.al.okeey.otey.oteo,shaly.o",
+   "IT": "oteody.oteos.ockhey.oteesaey.lsheotey.okalody.shs.shey.oteey.otechar.chekal.okody.eeedy.oteodal.okol.lkchol.daiin.okeeees.ykees.al.okchy.otey.oteoshaly.o",
+   "GC": "okco89.okcos.ol9.okccs1c9.e3cokc9.ohaeo79.2s.5c9.okcc9.okc1ay.1chae.oho89.d89.okoco7ae.1ohoe.eh1oe.8am.oh@210;s.9hCs.ae.ohC9.okc9.okco,2ae9.o"
+  },
+  "disputed_columns": [
+   {
+    "column": 12,
+    "readings": {
+     "ZL": "-",
+     "IT": "c2:l3:p3:c1",
+     "GC": "-"
+    }
+   },
+   {
+    "column": 13,
+    "readings": {
+     "ZL": "c2:l3:p3:c3:c1",
+     "IT": "c0",
+     "GC": "c2:l3:p3:c3:c1"
+    }
+   },
+   {
+    "column": 19,
+    "readings": {
+     "ZL": "c2:c1",
+     "IT": "a0",
+     "GC": "c2:c1"
+    }
+   },
+   {
+    "column": 34,
+    "readings": {
+     "ZL": "d0",
+     "IT": "d0",
+     "GC": "d5"
+    }
+   },
+   {
+    "column": 38,
+    "readings": {
+     "ZL": "c2:v3:c1",
+     "IT": "c2:v3:c1",
+     "GC": "c2:c1:v0"
+    }
+   },
+   {
+    "column": 66,
+    "readings": {
+     "ZL": "-",
+     "IT": "-",
+     "GC": "o0"
+    }
+   },
+   {
+    "column": 69,
+    "readings": {
+     "ZL": "d0",
+     "IT": "d0",
+     "GC": "d5"
+    }
+   },
+   {
+    "column": 72,
+    "readings": {
+     "ZL": "c0~c0",
+     "IT": "-",
+     "GC": "c2:c1"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f71v.13",
+  "native": {
+   "ZL": "ofa{if}om",
+   "IT": "ofacfom",
+   "GC": "ofaEfop"
+  },
+  "disputed_columns": [
+   {
+    "column": 3,
+    "readings": {
+     "ZL": "-",
+     "IT": "c2",
+     "GC": "c2"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f78r.21",
+  "native": {
+   "ZL": "lchedy.qokain.cheeky.lokedy",
+   "IT": "qchedy.qokain.cheeky.lokeedy",
+   "CD": "ESC89.4OFAN.SCCF9.EOFA89",
+   "GC": "e1c79.4ohan.1cch9.eohc69",
+   "FG": "4TC8G.4ODAN.TCCDG.EODCC8G"
+  },
+  "disputed_columns": [
+   {
+    "column": 0,
+    "readings": {
+     "ZL": "e0",
+     "IT": "g0",
+     "GC": "e0",
+     "FG": "g0",
+     "CD": "e0"
+    }
+   },
+   {
+    "column": 3,
+    "readings": {
+     "ZL": "d0",
+     "IT": "d0",
+     "GC": "d5",
+     "FG": "d0",
+     "CD": "d0"
+    }
+   },
+   {
+    "column": 17,
+    "readings": {
+     "ZL": "c0",
+     "IT": "c0~c0",
+     "GC": "c0",
+     "FG": "c0~c0",
+     "CD": "a0"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f79v.30",
+  "native": {
+   "ZL": "qokain.sheeky.okar,okey.qokey.tedy.skain.oteedy,qoky",
+   "IT": "qokain.sheeky.okar.okey.qokey.tedy.skain.oteedy.qoky",
+   "CD": "4OFAN.ZCCF9.OFAR.OFC9.4OFC9.PC89.2FAN.OPCC89.4OF9",
+   "GC": "4ohan.2Ch9.ohay.ohc9.4ohc9.kc89.shan.okC89.4ok9",
+   "FG": "4ODAM.SCCDG.ODAR.ODCG.4ODCG.HC8G.2DAM.OHCC8G.4ODG"
+  },
+  "disputed_columns": [
+   {
+    "column": 4,
+    "readings": {
+     "ZL": "i0~i0:b0",
+     "IT": "i0~i0:b0",
+     "GC": "i0~i0:b0",
+     "FG": "i0~i0~i0:b0",
+     "CD": "i0~i0:b0"
+    }
+   },
+   {
+    "column": 29,
+    "readings": {
+     "ZL": "i0~i0:b0",
+     "IT": "i0~i0:b0",
+     "GC": "i0~i0:b0",
+     "FG": "i0~i0~i0:b0",
+     "CD": "i0~i0:b0"
+    }
+   },
+   {
+    "column": 37,
+    "readings": {
+     "ZL": "l2:p1",
+     "IT": "l2:p1",
+     "GC": "q2:p1",
+     "FG": "l2:p1",
+     "CD": "l2:p1"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f82r.29",
+  "native": {
+   "ZL": "d,cheey.lchedy.qokeedy.lchedy.rchedy.ok{chh}y.qotedy.qoty.qoty",
+   "IT": "dcheey.lchedy.qokeedy.lchedy.rchedy.okchhy.qotedy.qoty.qoty",
+   "CD": "8SCC9.ESC89.4OFCC89.ESC89.RSC89.OFSC9.4OPC89.4OP9.4OP9",
+   "GC": "8,1C9.e1c79.4ohC89.e1c89.y1c89.ohc19.4okc89.4ok9.4ok9",
+   "FG": "8TCCG.ETC8G.4ODCC8G.ETC8G.RTC8G.ODTG.4OHC8G.4OHG.4OHG"
+  },
+  "disputed_columns": [
+   {
+    "column": 7,
+    "readings": {
+     "ZL": "d0",
+     "IT": "d0",
+     "GC": "d5",
+     "FG": "d0",
+     "CD": "d0"
+    }
+   },
+   {
+    "column": 27,
+    "readings": {
+     "ZL": "-",
+     "IT": "c2:c1",
+     "GC": "c0",
+     "FG": "-",
+     "CD": "-"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f82v.45",
+  "native": {
+   "ZL": "okoldy",
+   "IT": "otoldy",
+   "GC": "okoe89"
+  },
+  "disputed_columns": [
+   {
+    "column": 1,
+    "readings": {
+     "ZL": "l2:p1",
+     "IT": "q2:p1",
+     "GC": "q2:p1"
+    }
+   }
+  ]
+ },
+ {
+  "locus": "f86v3.31",
+  "native": {
+   "ZL": "tchedy.chy.tchey.otchedy.qokal.oeedy.lkam",
+   "IT": "tchedy.chy.tchey.otchedy.qokal.oeedy.lkam",
+   "GC": "k1c79.19.k1c9.ok1c89.4ohae.occ79.ehap"
+  },
+  "disputed_columns": [
+   {
+    "column": 3,
+    "readings": {
+     "ZL": "d0",
+     "IT": "d0",
+     "GC": "d5"
+    }
+   },
+   {
+    "column": 24,
+    "readings": {
+     "ZL": "d0",
+     "IT": "d0",
+     "GC": "d5"
+    }
+   }
+  ]
+ }
+]
