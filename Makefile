@@ -1,4 +1,4 @@
-.PHONY: snapshot snapshot-verify snapshot-push snapshot-pull test lint map g1
+.PHONY: snapshot snapshot-verify snapshot-push snapshot-pull test lint map g1 seg lines
 
 BUCKET := gs://lemur-voynich-ocr-snapshot
 
@@ -29,3 +29,9 @@ map: snapshot-verify
 
 g1: map
 	uv run python -m voynich_ocr.g1
+
+seg: snapshot-verify
+	uv run python -m voynich_ocr.segment
+
+lines: seg
+	uv run python -m voynich_ocr.lines
