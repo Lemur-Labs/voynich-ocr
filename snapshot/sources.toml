@@ -91,3 +91,721 @@ url = "https://mail.voynich.nu/software/ivtt/IVTFF_format.pdf"
 [[source]]
 path = "ivtt/ivtt.c"
 url = "https://mail.voynich.nu/software/ivtt/ivtt.c"
+
+# Beinecke MS 408 page images (public domain), one per IVTFF page with its own IIIF canvas.
+[[source]]
+path = "images/manifest.json"
+url = "https://collections.library.yale.edu/manifests/2002046"
+
+[[source]]
+path = "images/f1r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006076/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f1v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006077/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f2r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006078/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f2v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006079/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f3r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006080/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f3v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006081/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f4r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006082/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f4v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006083/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f5r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006084/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f5v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006085/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f6r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006086/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f6v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006087/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f7r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006088/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f7v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006089/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f8r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006090/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f8v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006091/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f9r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006092/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f9v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006093/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f10r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006094/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f10v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006095/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f11r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006096/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f11v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006097/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f13r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006098/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f13v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006099/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f14r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006100/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f14v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006101/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f15r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006102/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f15v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006103/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f16r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006104/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f16v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006105/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f17r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006106/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f17v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006107/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f18r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006108/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f18v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006109/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f19r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006110/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f19v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006111/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f20r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006112/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f20v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006113/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f21r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006114/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f21v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006115/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f22r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006116/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f22v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006117/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f23r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006118/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f23v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006119/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f24r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006120/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f24v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006121/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f25r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006122/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f25v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006123/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f26r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006124/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f26v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006125/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f27r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006126/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f27v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006127/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f28r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006128/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f28v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006129/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f29r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006130/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f29v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006131/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f30r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006132/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f30v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006133/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f31r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006134/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f31v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006135/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f32r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006136/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f32v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006137/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f33r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006138/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f33v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006139/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f34r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006140/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f34v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006141/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f35r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006142/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f35v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006143/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f36r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006144/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f36v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006145/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f37r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006146/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f37v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006147/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f38r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006148/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f38v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006149/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f39r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006150/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f39v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006151/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f40r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006152/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f40v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006153/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f41r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006154/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f41v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006155/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f42r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006156/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f42v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006157/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f43r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006158/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f43v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006159/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f44r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006160/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f44v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006161/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f45r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006162/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f45v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006163/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f46r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006164/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f46v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006165/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f47r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006166/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f47v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006167/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f48r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006168/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f48v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006169/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f49r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006170/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f49v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006171/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f50r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006172/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f50v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006173/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f51r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006174/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f51v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006175/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f52r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006176/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f52v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006177/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f53r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006178/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f53v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006179/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f54r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006180/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f54v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006181/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f55r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006182/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f55v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006183/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f56r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006184/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f56v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006185/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f57r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006186/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f57v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006187/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f58r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006188/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f58v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006189/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f65r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006190/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f65v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006191/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f66r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006192/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f66v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006193/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f69r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006198/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f71r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006202/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f73r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006206/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f73v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006207/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f75r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006208/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f75v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006209/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f76r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006210/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f76v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006211/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f77r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006212/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f77v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006213/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f78r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006214/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f78v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006215/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f79r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006216/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f79v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006217/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f80r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006218/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f80v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006219/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f81r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006220/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f81v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006221/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f82r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006222/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f82v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006223/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f83r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006224/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f83v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006225/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f84r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006226/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f84v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006227/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f87r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006232/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f87v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1043429/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f88r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1037112/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f93r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006238/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f93v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006239/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f94r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006240/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f96r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006244/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f96v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006245/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f99r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006246/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f99v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006247/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f100r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006248/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f103r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006254/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f103v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006255/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f104r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006256/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f104v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006257/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f105r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006258/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f105v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006259/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f106r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006260/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f106v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006261/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f107r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006262/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f107v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006263/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f108r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006264/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f108v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006265/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f111r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006266/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f111v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006267/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f112r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006268/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f112v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006269/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f113r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006270/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f113v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006271/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f114r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006272/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f114v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006273/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f115r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006274/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f115v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006275/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f116r.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006276/full/max/0/default.jpg"
+
+[[source]]
+path = "images/f116v.jpg"
+url = "https://collections.library.yale.edu/iiif/2/1006277/full/max/0/default.jpg"
+
+# DINOv2 ViT-S/14 weights (Apache-2.0), timm conversion, pinned to a Hugging Face commit.
+[[source]]
+path = "models/vit_small_patch14_dinov2.lvd142m.safetensors"
+url = "https://huggingface.co/timm/vit_small_patch14_dinov2.lvd142m/resolve/4610ca143709d58a633b6397a74412c2c3842454/model.safetensors"
