@@ -1564,6 +1564,7 @@ source = { editable = "." }
 dependencies = [
     { name = "kraken" },
     { name = "numpy" },
+    { name = "shapely" },
     { name = "timm" },
 ]
 
@@ -1577,6 +1578,7 @@ dev = [
 requires-dist = [
     { name = "kraken", specifier = "==7.1.1" },
     { name = "numpy", specifier = ">=2.4,<2.5" },
+    { name = "shapely", specifier = "~=2.1.2" },
     { name = "timm", specifier = "==1.0.30" },
 ]
 

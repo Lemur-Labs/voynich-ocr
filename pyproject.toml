@@ -7,6 +7,7 @@ requires-python = ">=3.12,<3.13"
 dependencies = [
     "kraken==7.1.1",
     "numpy>=2.4,<2.5",
+    "shapely~=2.1.2",
     "timm==1.0.30",
 ]
 

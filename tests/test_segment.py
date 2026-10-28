@@ -33,3 +33,9 @@ def test_rows_pair_with_loci_only_when_the_counts_match():
     rows = sg.page_lines([_line(100, 2000, 300), _line(100, 2000, 400)], 4000)
     assert sg.assign(rows, ["f1r.1", "f1r.2"]) == {"f1r.1": rows[0], "f1r.2": rows[1]}
     assert sg.assign(rows, ["f1r.1", "f1r.2", "f1r.3"]) is None
+
+
+def test_merged_baseline_never_runs_backwards():
+    rows = sg.page_lines([_line(100, 1100, 100), _line(1080, 2000, 102), _line(100, 2000, 200)], 1000)
+    xs = [p[0] for p in rows[0]["baseline"]]
+    assert xs == sorted(xs)

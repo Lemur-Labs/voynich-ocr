@@ -1,6 +1,7 @@
 #!/bin/bash
 # Startup script for one training VM. Reads its parameters from instance metadata, trains, uploads, deletes itself.
 set -euxo pipefail
+export HOME=/root
 md() { curl -sf -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/$1"; }
 COMMIT=$(md attributes/commit)
 SEED=$(md attributes/seed)
@@ -14,7 +15,7 @@ finish() {
   gcloud compute instances delete "$NAME" --zone "$ZONE" --quiet
 }
 trap finish EXIT
-exec > >(tee /var/log/train.log) 2>&1
+exec > /var/log/train.log 2>&1
 
 curl -LsSf https://astral.sh/uv/0.9.17/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh
 git clone https://github.com/Lemur-Labs/voynich-ocr.git /work && cd /work && git checkout "$COMMIT"

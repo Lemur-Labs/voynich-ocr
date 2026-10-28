@@ -62,7 +62,8 @@ def _spacing(lines: list[dict]) -> float:
 
 def _merge(a: dict, b: dict) -> dict:
     hull = MultiPoint([tuple(p) for p in a["boundary"] + b["boundary"]]).convex_hull
-    return {"baseline": a["baseline"] + b["baseline"], "boundary": [list(p) for p in hull.exterior.coords[:-1]]}
+    tail = [p for p in b["baseline"] if p[0] > a["baseline"][-1][0]]
+    return {"baseline": a["baseline"] + tail, "boundary": [list(p) for p in hull.exterior.coords[:-1]]}
 
 
 def page_lines(lines: list[dict], height: int) -> list[dict]:

@@ -57,7 +57,7 @@ def launch(seed: int) -> str:
     lines = f"{BUCKET}/lines/{tar.name}"
     subprocess.run(["gcloud", "storage", "cp", "--no-clobber", str(tar), lines], check=True)
     run = f"{BUCKET}/runs/{commit[:12]}-{digest[:12]}-{seed}"
-    name = f"train-{seed}"
+    name = f"train-{seed}-{digest[:8]}"
     for zone in ZONES:
         r = subprocess.run(
             [
@@ -75,7 +75,9 @@ def launch(seed: int) -> str:
         )  # fmt: skip
         if r.returncode == 0:
             return run
-        print(f"{zone}: {r.stderr.strip().splitlines()[-1]}", file=sys.stderr)
+        if "RESOURCE_POOL_EXHAUSTED" not in r.stderr and "enough resources" not in r.stderr:
+            raise SystemExit(r.stderr)
+        print(f"{zone}: no capacity", file=sys.stderr)
     raise SystemExit("no zone had capacity")
 
 
