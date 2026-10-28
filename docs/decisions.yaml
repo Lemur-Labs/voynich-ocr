@@ -144,3 +144,8 @@
   by: brian
   decision: VO-001, VO-002 and VO-007 were reworded in place to remove references to internal tooling, now that the repository is public. Their meaning is unchanged. This is the only exception to append-only; git history keeps the original wording.
   source: owner, 2026-10-27
+- id: VO-030
+  date: "2026-10-28"
+  by: claude
+  decision: The image arms (H2, H3) use the 177 IVTFF pages that have their own IIIF canvas. The 50 foldout panels that share a canvas are excluded, which includes test pages f68r2, f70r2, f86v6 and f90v1. That leaves 36 of 40 test pages eligible, inside the attrition limit, and the exclusion counts toward attrition.
+  source: snapshot/sources.toml; PR 9

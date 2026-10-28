@@ -5,7 +5,9 @@ description = "Calibrated glyph recognition for the Voynich manuscript, scored a
 license = "MIT"
 requires-python = ">=3.12,<3.13"
 dependencies = [
-    "numpy>=2.5.4",
+    "kraken==7.1.1",
+    "numpy>=2.4,<2.5",
+    "timm==1.0.30",
 ]
 
 [dependency-groups]
