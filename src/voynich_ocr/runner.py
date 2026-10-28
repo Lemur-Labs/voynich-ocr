@@ -64,7 +64,7 @@ def launch(seed: int) -> str:
                 "gcloud", "compute", "instances", "create", name, f"--project={PROJECT}", f"--zone={zone}",
                 f"--machine-type={MACHINE}", "--accelerator=type=nvidia-l4,count=1",
                 f"--image-project={IMAGE[0]}", f"--image-family={IMAGE[1]}", "--boot-disk-size=100GB",
-                "--provisioning-model=SPOT", "--instance-termination-action=DELETE",
+                "--provisioning-model=STANDARD", "--instance-termination-action=DELETE",
                 f"--max-run-duration={MAX_HOURS}h", "--scopes=storage-rw,compute-rw",
                 f"--metadata=install-nvidia-driver=True,commit={commit},seed={seed},lines={lines},run={run}",
                 f"--metadata-from-file=startup-script={ROOT / 'vm' / 'train.sh'}",
