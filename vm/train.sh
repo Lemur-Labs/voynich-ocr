@@ -22,6 +22,8 @@ git clone https://github.com/Lemur-Labs/voynich-ocr.git /work && cd /work && git
 uv sync --frozen
 gcloud storage cp "$LINES" /tmp/lines.tar && mkdir -p build/lines && tar -xf /tmp/lines.tar -C build/lines
 nvidia-smi
+mkdir -p "build/model/$SEED"
+(while sleep 900; do gcloud storage rsync "build/model/$SEED" "$RUN/$SEED" || true; done) &
 uv run python -m voynich_ocr.runner train --seed "$SEED"
 gcloud storage cp --recursive "build/model/$SEED" "$RUN/"
 echo done | gcloud storage cp - "$RUN/DONE"

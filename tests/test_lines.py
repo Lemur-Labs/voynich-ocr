@@ -26,3 +26,7 @@ def test_early_stopping_pages_are_a_seeded_share_of_training_pages():
 
 def test_file_stems_have_no_dots_so_kraken_finds_the_label_file():
     assert ln.stem("f103r.12") == "f103r_12"
+
+
+def test_line_images_much_taller_than_their_page_median_are_dropped():
+    assert ln.single_row([100, 110, 105, 170, 95]) == [True, True, True, False, True]
