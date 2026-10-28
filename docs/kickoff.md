@@ -4,7 +4,7 @@ Oct 26, 2026 · @Brian
 
 ## Charter
 
-The bet: the Dark Factory ships a public research repo with a scored result and a community-reviewed writeup by 2026-11-23, using under four owner hours in total. Voynich is the test case, not the venture. It is low-stakes and fully public, and it has an outside community (voynich.ninja, Zandbergen) that will review the work for free.
+The bet: an agent-driven workflow ships a public research repo with a scored result and a community-reviewed writeup by 2026-11-23, using under four owner hours in total. Voynich is the test case for the workflow. It is low-stakes and fully public, and it has an outside community (voynich.ninja, Zandbergen) that will review the work for free.
 
 **Deliverables**
 
@@ -21,7 +21,7 @@ The bet: the Dark Factory ships a public research repo with a scored result and 
 - Hand-labeling glyphs.
 - Owner-run training loops.
 
-**Time box:** four weekends of Factory time and four owner hours in total. GPU work runs on a GCP VM, never on owner time.
+**Time box:** four weekends of agent time and four owner hours in total. GPU work runs on a GCP VM, never on owner time.
 
 **Kill criteria** (any one ends it):
 
@@ -30,20 +30,9 @@ The bet: the Dark Factory ships a public research repo with a scored result and 
 - Calibration is no better than chance against the disagreement map. Concretely: per-glyph confidence predicts transcriber disagreement with an AUROC whose bootstrap 95% interval stays above 0.5.
 - No outside reviewer engages with the writeup.
 
-**Buyer test (to make it a Feeder, not a hobby).** Calibrated transcription of unknown or contested scripts has an audience that pays in grants: digital-humanities labs, archives with undeciphered or damaged holdings, and their funders (NEH, Horizon Europe cultural-heritage calls). A Seller task with a threshold: ten contacts, three replies, one named lab that would cite or reuse the disagreement-map method.
+**Buyer test.** Calibrated transcription of unknown or contested scripts has an audience that pays in grants: digital-humanities labs, archives with undeciphered or damaged holdings, and their funders (NEH, Horizon Europe cultural-heritage calls). Threshold: ten contacts, three replies, one named lab that would cite or reuse the disagreement-map method.
 
-**Playbook score**
-
-| Dimension | As first written | Reframed |
-| --- | --- | --- |
-| Ceiling | 1 | 1 |
-| Mission fit | 1 | 1 |
-| Edge | 2 | 3 |
-| Attention cost | 1 | 5 |
-| Reversibility | 5 | 5 |
-| Evidence speed | 5 | 5 |
-
-As first written it Folds: 30 to 40 owner hours against a budget of two a week. Reframed, it earns Feeder: a public, reviewed proof that the Factory can run a research project unattended.
+As first written it wasn't worth doing: 30 to 40 owner hours against a budget of two a week. Reframed around four owner hours in total, it is a public, reviewed proof that an agent-driven workflow can run a research project unattended.
 
 ## Background
 
@@ -95,7 +84,7 @@ Stack: Python, Kraken for line segmentation (and possibly recognition), PyTorch 
 
 ## Phases, gates and kill criteria
 
-One Factory phase per weekend, with owner hours checked at every gate. Each gate either passes, narrows the scope, or ends the project early.
+One phase per weekend, with owner hours checked at every gate. Each gate either passes, narrows the scope, or ends the project early.
 
 &#91;embedded content: roadmap · 4 weekends, 3 gates, kill date\]
 
@@ -107,13 +96,13 @@ The biggest risk is owner hours creeping past four; the second is scope creep in
 
 | Risk | Effect | Mitigation |
 | --- | --- | --- |
-| Owner gets pulled into debugging or reviewing | The four-hour budget is gone in week 1 | Owner hours logged at every gate; the Factory escalates only at gates |
+| Owner gets pulled into debugging or reviewing | The four-hour budget is gone in week 1 | Owner hours logged at every gate; the agent escalates only at gates |
 | Drift into "let's just try to decipher it" | The time box disappears | Decipherment stays a non-goal; the Naibbe arm is the only cipher work in scope |
 | Transliterations use different alphabets | The disagreement map compares unlike symbols | Convert all five files to Zandbergen's STA unified alphabet before comparing |
 | Calibration test still rests on human labels | A weaker claim than true ground truth | Report it as agreement-with-disagreement; the Naibbe arm is the true-ground-truth check |
 | Synthetic hand is too clean | Known-answer accuracy overstates real performance | Present it as a ceiling, not an estimate |
 | Line segmentation fails where lines overlap or wrap around drawings | Bad crops and misaligned labels | Start with text-only pages (recipes section) |
-| No lab replies to the buyer test | Stays a hobby, not a Feeder | Fold the buyer test; the Factory claim still stands on its own |
+| No lab replies to the buyer test | No evidence of a paying audience | Drop the buyer test; the workflow claim still stands on its own |
 | Yale or voynich.nu access changes | Pipeline breaks | Snapshot images and transliteration files on day one |
 
 **Open questions**

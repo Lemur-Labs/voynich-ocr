@@ -2,12 +2,12 @@
 - id: VO-001
   date: "2026-10-26"
   by: brian
-  decision: Voynich OCR is a standalone research repository in Lemur-Labs. It is not a bridge tenant and not factory work, and its documents live in this repository.
+  decision: Voynich OCR is a standalone research repository in Lemur-Labs, and its documents live in this repository.
   source: owner, planning session 2026-10-26
 - id: VO-002
   date: "2026-10-26"
   by: brian
-  decision: Not onboarded to the kit for now. The planning pattern (gated phases, trade studies, pre-registration) is meant for reuse on other projects, so the repository is built in the house's standard shape; the onboarding question stays open to the challenge in docs/plan.md section 7.
+  decision: Not onboarded to shared project tooling for now; that question stays open until after G4. The planning pattern (gated phases, trade studies, pre-registration) is meant for reuse on other projects, so the repository is built in a reusable shape.
   source: owner, planning session 2026-10-26
 - id: VO-003
   date: "2026-10-26"
@@ -32,7 +32,7 @@
 - id: VO-007
   date: "2026-10-26"
   by: brian
-  decision: A reusable research-bet template is built after G4 from the lessons-learned, as a kit-compatible template; not before.
+  decision: A reusable research-bet template is built after G4 from the lessons-learned; not before.
   source: owner accepted R5, docs/plan.md section 8, 2026-10-26
 - id: VO-008
   date: "2026-10-26"
@@ -139,3 +139,8 @@
   by: brian
   decision: Supersedes VO-026's release contents. Release map-v0 carries per-column class, tier, flag, contributing sources and the gated flag, without readings or codes, plus summary.json. Outreach asks the transliteration authors whether the full files may be published later.
   source: owner chose "strip text" at G1-7, 2026-10-27
+- id: VO-029
+  date: "2026-10-27"
+  by: brian
+  decision: VO-001, VO-002 and VO-007 were reworded in place to remove references to internal tooling, now that the repository is public. Their meaning is unchanged. This is the only exception to append-only; git history keeps the original wording.
+  source: owner, 2026-10-27
