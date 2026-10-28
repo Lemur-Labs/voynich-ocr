@@ -4,12 +4,15 @@ import sys
 from pathlib import Path
 
 import numpy as np
+from PIL import Image
 
 from voynich_ocr import disagreement as d
 from voynich_ocr import ivtff, segment, sta
 from voynich_ocr.snapshot import RAW, ROOT
 
 OUT = ROOT / "build" / "lines"
+# A line image this many times its page's median height holds two text rows (a doubled blla baseline).
+TALL = 1.5
 EARLY_STOPPING_SHARE = 0.1
 EARLY_STOPPING_SEED = 20261027
 SPACE = " "
@@ -29,6 +32,11 @@ def tokens(glyphs: list[sta.Glyph], aaa: dict[str, str]) -> list[str] | None:
         if g.space_after and i < len(glyphs) - 1:
             out.append(SPACE)
     return out
+
+
+def single_row(heights: list[int]) -> list[bool]:
+    median = float(np.median(heights))
+    return [h <= TALL * median for h in heights]
 
 
 def early_stopping_pages(pages: list[str]) -> list[str]:
@@ -96,6 +104,11 @@ def main(argv: list[str] | None = None) -> int:
         target = args.out / page
         target.mkdir(exist_ok=True)
         extract(page, {k: rows[k] for k in labelled[page]}, target)
+        heights = [Image.open(target / f"{stem(k)}.png").size[1] for k in labelled[page]]
+        for k, keep in zip(list(labelled[page]), single_row(heights), strict=True):
+            if not keep:
+                (target / f"{stem(k)}.png").unlink()
+                del labelled[page][k]
         for k, ts in labelled[page].items():
             (target / f"{stem(k)}.gt.txt").write_text("".join(table[t] for t in ts) + "\n")
             manifests["eval" if page in held else "train"].append(str((target / f"{stem(k)}.png").relative_to(ROOT)))

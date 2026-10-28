@@ -14,7 +14,7 @@ ZONES = ("us-central1-a", "us-central1-b", "us-central1-c")
 MACHINE = "g2-standard-4"
 IMAGE = ("deeplearning-platform-release", "common-cu129-ubuntu-2204-nvidia-580")
 # Hard cap per VM: GCE deletes it at this age whatever the training state, which bounds spend per run.
-MAX_HOURS = 6
+MAX_HOURS = 10
 SEEDS = (20261027, 20261028, 20261029)
 MODELS = ROOT / "build" / "model"
 
@@ -24,7 +24,7 @@ def ketos_args(seed: int, out: Path) -> list[str]:
         "ketos", "-d", "cuda:0", "--precision", "32-true", "-s", str(seed), "-r",
         "train", "--arch", "vgsl", "-f", "path", "--no-reorder",
         "-t", str(LINES / "train.txt"), "-e", str(LINES / "eval.txt"),
-        "-q", "early", "--lag", "10", "-o", str(out),
+        "-q", "early", "--min-epochs", "30", "--lag", "20", "--augment", "-o", str(out),
     ]  # fmt: skip
 
 
