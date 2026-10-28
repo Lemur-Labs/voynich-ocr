@@ -7,7 +7,7 @@
 - id: VO-002
   date: "2026-10-26"
   by: brian
-  decision: No shared project tooling is adopted for now. The planning pattern (gated phases, trade studies, pre-registration) is meant for reuse on other projects, so the repository is built in a reusable shape.
+  decision: Not onboarded to shared project tooling for now; that question stays open until after G4. The planning pattern (gated phases, trade studies, pre-registration) is meant for reuse on other projects, so the repository is built in a reusable shape.
   source: owner, planning session 2026-10-26
 - id: VO-003
   date: "2026-10-26"
@@ -32,7 +32,7 @@
 - id: VO-007
   date: "2026-10-26"
   by: brian
-  decision: A reusable research-bet template is built after G4 from the lessons-learned, as a template; not before.
+  decision: A reusable research-bet template is built after G4 from the lessons-learned; not before.
   source: owner accepted R5, docs/plan.md section 8, 2026-10-26
 - id: VO-008
   date: "2026-10-26"

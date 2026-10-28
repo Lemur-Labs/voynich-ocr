@@ -32,7 +32,7 @@ The bet: an agent-driven workflow ships a public research repo with a scored res
 
 **Buyer test.** Calibrated transcription of unknown or contested scripts has an audience that pays in grants: digital-humanities labs, archives with undeciphered or damaged holdings, and their funders (NEH, Horizon Europe cultural-heritage calls). Threshold: ten contacts, three replies, one named lab that would cite or reuse the disagreement-map method.
 
-As first written it needed 30 to 40 owner hours against a budget of two a week. Reframed, it is a public, reviewed proof that an agent-driven workflow can run a research project unattended.
+As first written it wasn't worth doing: 30 to 40 owner hours against a budget of two a week. Reframed around four owner hours in total, it is a public, reviewed proof that an agent-driven workflow can run a research project unattended.
 
 ## Background
 
@@ -102,7 +102,7 @@ The biggest risk is owner hours creeping past four; the second is scope creep in
 | Calibration test still rests on human labels | A weaker claim than true ground truth | Report it as agreement-with-disagreement; the Naibbe arm is the true-ground-truth check |
 | Synthetic hand is too clean | Known-answer accuracy overstates real performance | Present it as a ceiling, not an estimate |
 | Line segmentation fails where lines overlap or wrap around drawings | Bad crops and misaligned labels | Start with text-only pages (recipes section) |
-| No lab replies to the buyer test | No evidence the method gets reused | Drop the buyer test; the workflow claim still stands on its own |
+| No lab replies to the buyer test | No evidence of a paying audience | Drop the buyer test; the workflow claim still stands on its own |
 | Yale or voynich.nu access changes | Pipeline breaks | Snapshot images and transliteration files on day one |
 
 **Open questions**
