@@ -9,7 +9,7 @@ Three proven pieces, each doing a job the others don't:
 | Piece | Source | Job here |
 |---|---|---|
 | Tailored R&T lifecycle with Key Decision Points | NASA NPR 7120.8 (R&T projects; tailoring is expected), SE engine from NPR 7123.1 / SP-2016-6105 | Phases, gates, and the rule that a gate can only pass, narrow, or kill |
-| Trade studies: must-criteria filter → weighted Pugh vs a datum → decision record with reversal cost | NPR 7123.1 Decision Analysis process | Every stack/design decision lands as a row in `docs/decisions.yaml` (kit row format, `VO-` prefix), citing its trade study |
+| Trade studies: must-criteria filter → weighted Pugh vs a datum → decision record with reversal cost | NPR 7123.1 Decision Analysis process | Every stack/design decision lands as a row in `docs/decisions.yaml` (`VO-` prefix), citing its trade study |
 | Pre-registered analysis plan, frozen and hashed before data is scored | Registered-reports practice (psych/ML eval) | Makes "automated decisions" legitimate: the rule is fixed before the evidence, so an agent applying it isn't choosing |
 
 Inside each phase the loop is CRISP-ML(Q)-style build → measure → learn, with the eval harness built first (scorers exist before models). The NASA mapping, compressed:
@@ -40,7 +40,7 @@ Fix these before anything is built. Each is a fact I checked, not an opinion.
 | K-8 | Naibbe "gives us synthetic text" | The reference implementation is **Excel workbooks on Zenodo**, plus 20 reference ciphertexts (forum-gated Dropbox). No code repo | Port to Python. The 20 reference ciphertexts serve as the port's known-answer test |
 | K-9 | "What's new is per-glyph mapping" | Novelty holds. Closest 2026 work: Rozanova & Temerev, arXiv 2608.17096 (Aug 2026), does pixel morphometry with per-folio bounding boxes, but on ZL only, and its uncertainty analysis covers blanks, not glyphs | Cite it. Check whether their `voynichese_boxes` can stand in for segmentation (D4) |
 | K-10 | Kraken | Current release is 7.1.1 (Sept 2026) | Pin it |
-| K-11 | "Four weekends of Factory time"; "the Dark Factory ships" | Standalone repo, not a bridge tenant or a kit product (VO-001, VO-002). F0 runs on weekdays this week | Agent time on weekdays costs no owner hours (R2). The "factory can run research unattended" claim becomes "an agent-driven pattern can", and the pattern is what gets reused |
+| K-11 | "Four weekends of agent time" | Standalone repo (VO-001, VO-002). F0 runs on weekdays this week | Agent time on weekdays costs no owner hours (R2). The claim is that an agent-driven pattern can run research unattended, and the pattern is what gets reused |
 
 ## 2. Roadmap
 
@@ -225,8 +225,8 @@ GCP g2 (L4) **spot** instances for W2–W4 training/inference, at most a few ten
 | C | **Red-team reviewer**, a fresh Opus agent handed only the claim and artifacts (not our reasoning), told to act as a hostile domain reviewer: circularity, overclaiming, stats | Opus | Each gate + pre-post | 4–5 runs | Directly targets kill criterion #4 and the reputational downside. Catches K-5/K-6-class errors before outsiders do | **Do** |
 | D | **Gate packet**: a deterministic script compiles metrics + prereg pass/fail + hours + escalations into one page, with Sonnet adding ≤5 lines of narrative | script + Sonnet | Each gate | trivial | Keeps owner review ≤15 min per gate. This is what protects the 4h budget | **Do** |
 | E | **VM experiment runner**: scripted sweep with a budget cap; applies the pre-registered decision rule in code; the agent reads results only | code | W2–W4 | none beyond compute | Unattended training without an agent babysitting the GPU (owner-run loops are a non-goal) | **Do** |
-| F | **Outreach drafter**: researches 10 buyer-test contacts and 3–5 reviewer candidates; drafts personalized messages | Sonnet | after G1 | 1–2 runs | The Seller task without owner research time. Seed list: DECODE / Megyesi (Uppsala, cipher transcription), eScriptorium/Kraken team (EPHE/PSL), Zandbergen, Davis, Greshko, Rozanova–Temerev | **Do; you send (R4)** |
-| G | **Research-bet template**: encode F0 → prereg → Pugh/auto-decide → gated increments → red-team → closeout as a kit-compatible template (docs skeleton + issue types + agent prompts) | Opus once | After G4, from lessons-learned | one build | Every future research bet starts at F0 instead of a blank kickoff. This is the long-term saving | **Propose. New abstraction, so it needs your say-so (R5)** |
+| F | **Outreach drafter**: researches 10 buyer-test contacts and 3–5 reviewer candidates; drafts personalized messages | Sonnet | after G1 | 1–2 runs | The buyer test without owner research time. Seed list: DECODE / Megyesi (Uppsala, cipher transcription), eScriptorium/Kraken team (EPHE/PSL), Zandbergen, Davis, Greshko, Rozanova–Temerev | **Do; you send (R4)** |
+| G | **Research-bet template**: encode F0 → prereg → Pugh/auto-decide → gated increments → red-team → closeout as a template (docs skeleton + issue types + agent prompts) | Opus once | After G4, from lessons-learned | one build | Every future research bet starts at F0 instead of a blank kickoff. This is the long-term saving | **Propose. New abstraction, so it needs your say-so (R5)** |
 | ✗ | Long-lived multi-agent swarm; LLM-as-judge for metrics; Workflow fan-out per decision; standing up MLOps (MLflow/W&B) | — | — | high | Code scores metrics, scripts route, fresh per-task agents | **Don't** |
 
 ### Owner-hour budget (4.0h)
@@ -236,43 +236,17 @@ GCP g2 (L4) **spot** instances for W2–W4 training/inference, at most a few ten
 
 Each phase launch (a one-line "run W1 per docs/plan.md" to a fresh Claude Code session) is ~2 min and goes in the hours log. Five launches ≈ 10 min, taken from the reserve.
 
-## 7. Kit: the challenge
-
-You said Voynich won't onboard the kit. Here is the strongest case that it should, then my verdict.
-
-**For onboarding now**
-1. The bet's thesis is *unattended* research. With the bridge out, the kit is the only live unattended loop: issue → triage → implement → review check → merger, with coordinator approvals. Without it, the driver is Claude Code sessions you launch. That's owner attention, and it doesn't transfer to the next project.
-2. It would be the kit's **first non-TypeScript product**. Kit languages so far: kit-portal, live-otterly and jobs-otterly are all TS + HCL; `kit init` writes `package.json`/pnpm and Node CI templates; "a product is a repository whose root `package.json` depends on `@lemur-labs/kit`". A Python research repo is exactly the test of "supports more projects".
-3. Roadmap-as-issues, `decisions.yaml`, the owner persona and merge tiers are the house standard. Building outside them creates a second standard.
-
-**Against, inside this time box**
-1. **Owner-only steps no API covers** (kit K-032, onboarding "Order"): Terraform repo + identity apply, installing three apps, the package-access grant, the bootstrap merge, the ruleset flip, the Anthropic federation rule and the secrets. Estimate 45–90 min, which is 20–40% of the whole 4h budget, spent before the first Python-specific break.
-2. **First-of-kind breakage is unbounded.** The CI templates and `kit test-strength` assume a Node toolchain. Debugging the kit inside a 4-hour box is the charter's #1 risk.
-3. The kit loop has no concept of VM GPU runs or pre-registered gates, so those stay bespoke either way.
-4. The kit is moving fast (five merges on Oct 26–27 alone). Every bump lands as a PR someone has to read.
-
-**Verdict: build kit-shaped, onboard after G4 as its own short bet.** Kit-shaped means:
-- decisions in kit row format (`VO-` ids);
-- a root `AGENTS.md`;
-- founding by direct commits, then PRs only (kit K-010);
-- conventional-commit subjects;
-- gates expressible one-to-one as `roadmap` issues using the org types (Task, Decision).
-
-At G4, run `kit onboard check Lemur-Labs/voynich-ocr` and file each failure as a kit issue. That's the "supports more projects" result, measured, at zero risk to the time box. The first fixes will likely be Python CI templates and a non-Node `test-strength`.
-
-**What would flip me:** if the owner steps count as kit investment, outside the Voynich budget. Kit hardening is worth doing anyway, and the time box only protects Voynich hours. On that accounting, onboard during F0 and let Voynich be the kit's Python pilot. That's an accounting choice, so it's yours.
-
 ## 8. Recommendations on the open decisions
 
 Each becomes a `VO-` row once you say yes.
 
 | # | Decision | Recommendation | Why |
 |---|---|---|---|
-| R1 | Who drives | One fresh Claude Code session per phase, launched by you with one line. The agent opens PRs; CI + the red-team check gate them; the agent merges on green. You review at gates only | The cheapest unattended-enough driver without kit onboarding. Scheduled cloud routines would save the ~10 min of launches but cost more to set up than they save over 5 launches |
+| R1 | Who drives | One fresh Claude Code session per phase, launched by you with one line. The agent opens PRs; CI + the red-team check gate them; the agent merges on green. You review at gates only | The cheapest unattended-enough driver. Scheduled cloud routines would save the ~10 min of launches but cost more to set up than they save over 5 launches |
 | R2 | F0 on weekdays | Yes | "Four weekends" bounds compute and your calendar. Agent weekday time costs no owner hours, and skipping F0 means W1 starts without a pre-registration |
 | R3 | Output alphabet (D2) | Taken off your plate: pre-register the rule "STA-AAA if S1 shows a deterministic mapping from all five sources, else EVA basic" | It's an evidence question, not a preference. The rule is fixed before S1 reports |
-| R4 | Who sends outreach | **You**, from your own accounts, in one 45-min batch after G1, sending agent-drafted messages. Disclose AI assistance in the post and the writeup | voynich.ninja is saturated with AI "solved it" posts. A factory account, or an agent posting as you, risks the engagement kill criterion and is close to impersonation. Your name also lifts reply rates for the 3-reply threshold |
-| R5 | Research-bet template (§6 G) | Yes, but build it after G4 from the lessons-learned, as a kit-compatible template | Building it now would encode guesses. After G4 it encodes what worked |
+| R4 | Who sends outreach | **You**, from your own accounts, in one 45-min batch after G1, sending agent-drafted messages. Disclose AI assistance in the post and the writeup | voynich.ninja is saturated with AI "solved it" posts. A project account, or an agent posting as you, risks the engagement kill criterion and is close to impersonation. Your name also lifts reply rates for the 3-reply threshold |
+| R5 | Research-bet template (§6 G) | Yes, but build it after G4 from the lessons-learned, as a template | Building it now would encode guesses. After G4 it encodes what worked |
 | R6 | Stricter criteria (K-5 restatement, leave-ZL-out) | Accept | Reviewers will run the leave-ZL-out check themselves. A narrow we report beats a takedown they post. The inverted K-5 wording has to be fixed regardless |
 | R7 | Visibility and licensing | Private until G1, then public with the map post. Code MIT, writeup and map CC BY 4.0. Third-party transliterations and images are fetched by script with hash checks, never committed | The charter requires a public repo. The transliterations are free to use with attribution, but that isn't a license to redistribute them |
 
