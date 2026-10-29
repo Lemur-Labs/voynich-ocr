@@ -218,6 +218,7 @@ def _evaluate(reads: dict, key: str, temperature: float, inputs, loci: dict, l2c
 
 
 def run(model_path: Path, gate: bool, instances_dir: Path | None = None) -> dict:
+    store = instances_dir is None
     instances_dir = instances_dir or INSTANCES
     split = json.loads(d.SPLITS.read_text())
     eval_pages = sorted(split["test"] if gate else split["validation"])
@@ -233,7 +234,7 @@ def run(model_path: Path, gate: bool, instances_dir: Path | None = None) -> dict
         p: read(model, p, [lo.id for lo in loci[p]], instances_dir)
         for p in eval_pages if (instances_dir / f"{p}.json").exists()
     }  # fmt: skip
-    T = temperature(gate, lambda: fit_from(reads, inputs, table, codec), model_path)
+    T = temperature(gate, lambda: fit_from(reads, inputs, table, codec), model_path, store)
     b1, b1_pooled = disagreement_rates(instances_dir, b1_pages(instances_dir, set(split["test"]), eval_pages))
     b2 = surprisal(lines.OUT, tokens)
     label = "test" if gate else "validation (dry run, not a result)"
@@ -258,11 +259,14 @@ def temperature_record(fit: dict, model_path: Path) -> dict:
     return {**fit, "model": str(model_path), "model_sha256": sha256(model_path)}
 
 
-def temperature(gate: bool, fit, model_path: Path) -> float:
-    """The stored T at the gate, and in any dry run once the gate has run; otherwise `fit()` is run and stored."""
+def temperature(gate: bool, fit, model_path: Path, store: bool = True) -> float:
+    """The stored T at the gate, and in any dry run once the gate has run; otherwise `fit()` is run, and stored only
+    when `store`."""
     if gate or (OUT / "result.json").exists():
         return json.loads(TEMPERATURE.read_text())["temperature"]
     record = temperature_record(fit(), model_path)
+    if not store:
+        return record["temperature"]
     TEMPERATURE.parent.mkdir(parents=True, exist_ok=True)
     TEMPERATURE.write_text(json.dumps(record, indent=1) + "\n")
     return record["temperature"]

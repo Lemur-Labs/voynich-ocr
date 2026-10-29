@@ -144,7 +144,7 @@ def test_underpowered_coverage_voids_before_any_statistic(monkeypatch):
     monkeypatch.setattr(g3.g2, "attrition", lambda *a: {"void": False})
     monkeypatch.setattr(g3, "statistics", lambda *a: pytest.fail("scored"))
     out = g3.decide({name: metas for name in g3.MAPS}, ["f1r"], None, {}, 0.3, {})
-    assert out["outcome"] == "void" and out["coverage"]["within_type"] < 0.72
+    assert out["outcome"] == "void" and out["coverage"]["within_type"] < g3.scoring.MIN_GROUP_COVERAGE
 
 
 def test_attrition_voids_the_gate(monkeypatch):
@@ -275,3 +275,11 @@ def test_a_gate_run_that_crashes_still_counts_as_the_run(tmp_path, monkeypatch):
         g3.main([model, "--gate"])
     with pytest.raises(SystemExit):
         g3.main([model, "--gate"])
+
+
+def test_a_dry_run_on_other_pairs_fits_temperature_without_storing_it(monkeypatch, tmp_path):
+    monkeypatch.setattr(g3, "OUT", tmp_path / "results")
+    monkeypatch.setattr(g3, "TEMPERATURE", tmp_path / "temperature.json")
+    (tmp_path / "m").write_bytes(b"weights")
+    t = g3.temperature(False, lambda: {"temperature": 1.5}, tmp_path / "m", store=False)
+    assert t == 1.5 and not (tmp_path / "temperature.json").exists()
