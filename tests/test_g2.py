@@ -77,3 +77,26 @@ def test_load_of_pages_without_instances_is_empty_not_an_error(tmp_path, monkeyp
     monkeypatch.setattr(g2, "INSTANCES", tmp_path)
     metas, feats = g2._load(["f1r"])
     assert metas == [] and len(feats["dinov2"]) == 0
+
+
+def test_power_is_a_coin_flip_when_the_true_gap_sits_one_critical_value_above_the_null():
+    se = 0.05
+    assert g2.power(0.1 + 1.959964 * se, se, 0.1) == pytest.approx(0.5, abs=1e-3)
+
+
+def test_detectable_gap_has_the_requested_power():
+    se, null = 0.04, 0.06
+    assert g2.power(g2.detectable(se, null), se, null) == pytest.approx(0.8, abs=1e-6)
+
+
+@pytest.mark.parametrize("where", ["results/g2/seed", "results"])
+def test_reported_runs_refuse_any_directory_outside_build(where):
+    with pytest.raises(SystemExit, match="build"):
+        g2.main(["model.safetensors", "--report", str(g2.ROOT / where)])
+
+
+def test_power_reads_the_standard_error_from_the_distance_to_the_lower_bound():
+    se = 0.05
+    out = g2.gate_power({"gap": 0.3, "lo": 0.3 - 1.959964 * se, "hi": 0.9, "null_975": 0.1})
+    assert out["se"] == pytest.approx(se, abs=1e-6)
+    assert out["detectable_80"] == pytest.approx(g2.detectable(se, 0.1))

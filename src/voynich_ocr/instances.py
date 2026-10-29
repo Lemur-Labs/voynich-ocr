@@ -39,16 +39,30 @@ def pair_rows(
     return {k: kept[j] for k, j in by_text.items()}, "text"
 
 
-def page_instances(model, page: str, inputs: d.Inputs, loci: list[d.Locus], tokens: dict[str, str]) -> dict:
-    """Recognized glyphs of one page's paragraph rows, each tied to its map column through `pair_rows`."""
+def pair_rows_blind(sizes: list[tuple[int, int]], ids: list[str]) -> tuple[dict[str, int], str]:
+    """Loci to row indices in order when the page's single rows match its loci in number; no transliteration read."""
+    kept = [i for i, k in enumerate(lines.single_row([h for _, h in sizes])) if k]
+    if len(kept) != len(ids):
+        return {}, "blind"
+    return dict(zip(ids, kept, strict=True)), "blind"
+
+
+def page_instances(
+    model, page: str, inputs: d.Inputs, loci: list[d.Locus], tokens: dict[str, str], blind: bool = False
+) -> dict:
+    """Recognized glyphs of one page's paragraph rows, each tied to its map column through `pair_rows`, or
+    `pair_rows_blind` when `blind`."""
     rows = segment.page_lines(json.loads((segment.OUT / f"{page}.json").read_text()), segment.height(page))
     read = recognize.read_page(model, page, rows)
     decoded = [[tokens[g["char"]] for g in row if g["char"] != lines.SPACE] for row in read]
     sizes = [im.size for _, im in lines.line_images(page, {str(i): r for i, r in enumerate(rows)})]
     ids = [lo.id for lo in loci]
-    zl = inputs.sources["ZL"].loci
-    labels = {k: lines.tokens(zl.get(k, []), inputs.aaa) for k in ids}
-    pairs, rule = pair_rows(sizes, ids, labels, {k: zl_tokens(inputs, k) for k in ids}, decoded)
+    if blind:
+        pairs, rule = pair_rows_blind(sizes, ids)
+    else:
+        zl = inputs.sources["ZL"].loci
+        labels = {k: lines.tokens(zl.get(k, []), inputs.aaa) for k in ids}
+        pairs, rule = pair_rows(sizes, ids, labels, {k: zl_tokens(inputs, k) for k in ids}, decoded)
     out = []
     inserted = 0
     for locus in loci:
@@ -79,7 +93,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("pages", nargs="*", help="default: every segmented non-test page")
     p.add_argument("--test", action="store_true", help="also test pages (only once configs are frozen)")
     p.add_argument("--out", type=Path, default=OUT)
+    p.add_argument("--blind", action="store_true", help="pair rows to loci without reading any transliteration")
     args = p.parse_args(argv)
+    if args.blind and args.out == OUT:
+        raise SystemExit("blind pairing needs its own --out")
     if args.test:
         freeze.require(args.model)
     test = d.test_pages()
@@ -97,7 +114,7 @@ def main(argv: list[str] | None = None) -> int:
         loci = [by_id[k] for k in paragraph.get(page, []) if k in by_id]
         if not loci:
             continue
-        result = page_instances(model, page, inputs, loci, tokens)
+        result = page_instances(model, page, inputs, loci, tokens, args.blind)
         (args.out / f"{page}.json").write_text(json.dumps(result) + "\n")
     return 0
 

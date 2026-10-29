@@ -31,3 +31,15 @@ def test_text_pairing_reports_original_row_indices():
     pairs, rule = ins.pair_rows(sizes, IDS, LABELS, ZL, rows)
     assert rule == "text"
     assert pairs == {"f1r.1": 0, "f1r.2": 2, "f1r.3": 3, "f1r.4": 4, "f1r.5": 5, "f1r.6": 6}
+
+
+def test_blind_pairing_uses_only_line_heights_and_the_locus_count():
+    sizes = [(100, 10), (200, 10), (300, 30), (400, 10), (500, 10), (600, 10), (700, 10)]
+    pairs, rule = ins.pair_rows_blind(sizes, IDS)
+    assert rule == "blind"
+    assert pairs == {"f1r.1": 0, "f1r.2": 1, "f1r.3": 3, "f1r.4": 4, "f1r.5": 5, "f1r.6": 6}
+
+
+def test_blind_pairing_drops_a_page_whose_single_rows_do_not_match_its_loci():
+    pairs, _ = ins.pair_rows_blind([(100, 10)] * 5, IDS)
+    assert pairs == {}
