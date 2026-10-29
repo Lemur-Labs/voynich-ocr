@@ -57,7 +57,7 @@ def _arm(fit_x: np.ndarray, eval_x: np.ndarray, eval_metas: list[dict], k: int) 
     gated = np.array([m["gated"] for m in eval_metas], dtype=bool)
     if not gated.any() or len(fit_x) < k:
         return {"n": int(gated.sum())}
-    labels = clusters.fit(fit_x, k).predict(eval_x)
+    labels = clusters.fit(fit_x, k).predict(eval_x.astype(np.float64))
     return gap_test(labels[gated], [m for m, g in zip(eval_metas, gated, strict=True) if g])
 
 

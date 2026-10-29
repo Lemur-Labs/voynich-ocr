@@ -14,22 +14,31 @@ def zl_tokens(inputs: d.Inputs, locus: str) -> list[str]:
     return [d.token(g.code, inputs.aaa) for g in inputs.sources["ZL"].loci.get(locus, [])]
 
 
+def pair_rows(
+    sizes: list[tuple[float, float]], ids: list[str], zl: dict[str, list[str]], decoded: list[list[str]]
+) -> tuple[dict[str, int], str]:
+    """Loci to row indices. Rows pair by count, as in training, when the counts match before tall rows are dropped
+    and the kept rows' widths track their loci's lengths (`lines.paired`); else by text over the kept rows."""
+    kept = [i for i, k in enumerate(lines.single_row([h for _, h in sizes])) if k]
+    widths = [sizes[i][0] / sizes[i][1] for i in kept]
+    if len(sizes) == len(ids) and lines.paired(widths, [len(zl[ids[i]]) for i in kept]):
+        return {ids[i]: i for i in kept}, "count"
+    by_text = recognize.assign_by_text([decoded[i] for i in kept], zl)
+    return {k: kept[j] for k, j in by_text.items()}, "text"
+
+
 def page_instances(model, page: str, inputs: d.Inputs, loci: list[d.Locus], tokens: dict[str, str]) -> dict:
-    """Recognized glyphs of one page's paragraph rows, each tied to its map column. Rows pair with loci by count
-    when the counts match, else by text (`recognize.assign_by_text`)."""
+    """Recognized glyphs of one page's paragraph rows, each tied to its map column through `pair_rows`."""
     rows = segment.page_lines(json.loads((segment.OUT / f"{page}.json").read_text()), segment.height(page))
-    heights = [max(p[1] for p in r["boundary"]) - min(p[1] for p in r["boundary"]) for r in rows]
-    rows = [r for r, keep in zip(rows, lines.single_row(heights), strict=True) if keep]
     read = recognize.read_page(model, page, rows)
     decoded = [[tokens[g["char"]] for g in row if g["char"] != lines.SPACE] for row in read]
+    sizes = [
+        (max(p[0] for p in r["boundary"]) - min(p[0] for p in r["boundary"]),
+         max(p[1] for p in r["boundary"]) - min(p[1] for p in r["boundary"]))
+        for r in rows
+    ]  # fmt: skip
     ids = [lo.id for lo in loci]
-    by_count = segment.assign(rows, ids)
-    if by_count is not None:
-        pairs = {k: i for i, k in enumerate(ids)}
-        rule = "count"
-    else:
-        pairs = recognize.assign_by_text(decoded, {k: zl_tokens(inputs, k) for k in ids})
-        rule = "text"
+    pairs, rule = pair_rows(sizes, ids, {k: zl_tokens(inputs, k) for k in ids}, decoded)
     out = []
     inserted = 0
     for locus in loci:
