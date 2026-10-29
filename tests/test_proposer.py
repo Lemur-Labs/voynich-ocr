@@ -25,3 +25,9 @@ def test_black_fill_outside_the_line_polygon_is_not_ink():
 def test_paired_rows_index_the_unfiltered_page_rows():
     rows = [{"n": i} for i in range(5)]
     assert pr.paired_rows(rows, {"f1r.1": 0, "f1r.3": 4}) == [("f1r.1", {"n": 0}), ("f1r.3", {"n": 4})]
+
+
+def test_a_line_is_scored_when_its_crop_count_equals_its_column_count_gap_columns_included():
+    boxes = [(0, 0, 1, 1)] * 3
+    assert pr.line_columns(boxes, 3) == [0, 1, 2]
+    assert pr.line_columns(boxes, 4) == []
