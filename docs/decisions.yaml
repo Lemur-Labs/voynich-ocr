@@ -167,25 +167,35 @@
 - id: VO-034
   date: "2026-10-29"
   by: claude
-  decision: Supersedes VO-013's exclusion rule for G2 inference. A page's rows pair with its paragraph loci by count when the counts match and the labelled lines pass training's lines.screen (single-row heights, then the width-to-label-length correlation of VO-031); unlabelled lines stay unless taller than 1.5 times the labelled median. Otherwise rows pair by text, an order-preserving alignment of decoded rows to ZL locus tokens over the single-height rows.
+  decision: Supersedes VO-013's exclusion rule for G2 inference. A page's rows pair with its paragraph loci by count when the counts match and the labelled lines pass training's lines.screen (single-row heights, then VO-031's width-to-label-length correlation, which passes pages with fewer than 6 kept lines unchecked); unlabelled lines stay unless taller than 1.5 times the labelled median. Otherwise rows pair by text, an order-preserving alignment of decoded rows to ZL locus tokens over the single-height rows.
   source: PR 15; src/voynich_ocr/instances.py pair_rows
 - id: VO-035
   date: "2026-10-29"
   by: claude
-  decision: A glyph instance's crop is the line polygon between the midpoints of the CTC frame gaps to its neighbours, mapped to the baseline by an affine fit to kraken's span positions. Rows too short for the fit keep kraken's own cut. Spaces are not instances. This replaced kraken's cuts after a validation dry run whose outcome was kill; the trigger was the 14.6% of crops narrower than a glyph, which fell to 1.1%.
+  decision: A glyph instance's crop is the line polygon between the midpoints of the CTC frame gaps to its neighbours, mapped to the baseline by an affine fit to kraken's span positions. Rows with fewer than two distinct interior span frames keep kraken's own cut. Spaces are not instances. This replaced kraken's cuts after a validation dry run whose outcome was kill; the trigger was the share of crops narrower than a glyph on non-test pages, 14.6% before and 1.1% after.
   source: PR 15; src/voynich_ocr/recognize.py
 - id: VO-036
   date: "2026-10-29"
   by: claude
-  decision: H2 clustering uses k = 2 times the distinct non-space tokens in the training and evaluation labels, 220, fitted by k-means in float64 with seed 20261027 and 10 restarts. The float64 fit makes cluster assignment reproducible across BLAS builds.
+  decision: H2 clustering uses k = 2 times the distinct non-space tokens in the recognizer's training and early-stopping labels, 220, fitted by k-means in float64 with seed 20261027 and 10 restarts. The float64 fit keeps BLAS rounding from changing which restart wins; two fits on this machine are identical.
   source: PR 15; src/voynich_ocr/clusters.py
 - id: VO-037
   date: "2026-10-29"
-  by: claude
-  decision: The control arm compares a column's recognized-glyph count with its consensus glyph count, not with its column count. The entropy pool holds gated evaluation instances only. The ZL-token baseline is -0.025, not zero, because leave-page-out removes each page's own tokens from its reference.
-  source: PR 15; src/voynich_ocr/g2.py; validation dry run
+  by: brian
+  decision: The H2 control arm follows docs/prereg.md as written. A line is scored only when its connected-component count equals its column count, gap columns included, and crop i takes column i. The code had compared against the consensus glyph count; no amendment.
+  source: owner chose "Follow prereg" at G2, 2026-10-29
 - id: VO-038
   date: "2026-10-29"
   by: claude
-  decision: G2 configuration is frozen before any test-page inference. Config hash e1d439e5ada24a123a0f64e1e415a354379d264472e0e4857fe2889429b7f426 covers src/voynich_ocr, build/lines, the non-test pages' segmentation, instances and features, the split, the snapshot manifest, uv.lock and model build/model/20261027/best_0.9452.safetensors (sha256 25ed687ca9ed0256c1cdb59521a83c7dfbfb712c0cd4fbf79864fbbe1ac76539). The validation dry run at this configuration was identical across two runs and not void.
-  source: src/voynich_ocr/freeze.py; main 54ee7e3
+  decision: The G2 entropy pool holds gated evaluation instances only. The ZL-token baseline is expected near zero but not exactly zero, because leave-page-out removes each page's own instances from its reference.
+  source: src/voynich_ocr/g2.py; src/voynich_ocr/scoring.py loo_cluster_entropy
+- id: VO-039
+  date: "2026-10-29"
+  by: brian
+  decision: G2 narrows only when the control arm's point estimate has the sign opposite to the primary gap's, as docs/prereg.md states. A control of zero, or one without an estimate, does not narrow, and the gate packet reports it as uninformative with its n. scoring.decide_clusters had narrowed on zero; no amendment.
+  source: owner chose "Follow prereg" at G2, 2026-10-29
+- id: VO-040
+  date: "2026-10-29"
+  by: claude
+  decision: G2 configuration is frozen before any test-page inference. Config hash 9437b76f08bda5880b944dcc618c3ac755cca70a1c7f35f858fbba57ad9d3263 covers src/voynich_ocr, build/lines, the non-test pages' segmentation, instances and features, the split, the snapshot manifest, uv.lock and model build/model/20261027/best_0.9452.safetensors (sha256 25ed687ca9ed0256c1cdb59521a83c7dfbfb712c0cd4fbf79864fbbe1ac76539). docs/prereg.md is pinned separately by VO-033 and is not in the hash.
+  source: src/voynich_ocr/freeze.py; PR 16
