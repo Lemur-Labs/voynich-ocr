@@ -22,20 +22,22 @@ def components(line: Image.Image) -> list[tuple[int, int, int, int]]:
     return sorted(((b[1], b[0], b[3], b[2]) for b in boxes), key=lambda b: (b[0], b[1]))
 
 
+def paired_rows(rows: list[dict], pairs: dict[str, int]) -> list[tuple[str, dict]]:
+    return [(k, rows[i]) for k, i in pairs.items()]
+
+
 def page_control(page: str, pairs: dict[str, int], inputs, by_id: dict) -> tuple[list[Image.Image], list[dict]]:
     """Control-arm crops of one page, from lines whose component count equals their consensus glyph count; each
     crop takes the column of the consensus glyph in the same position."""
     from kraken.containers import BaselineLine, Segmentation
     from kraken.lib.segmentation import extract_polygons
 
-    from voynich_ocr import clusters, lines, recognize, segment
+    from voynich_ocr import clusters, recognize, segment
     from voynich_ocr import disagreement as d
 
     rows = segment.page_lines(json.loads((segment.OUT / f"{page}.json").read_text()), segment.height(page))
-    heights = [max(p[1] for p in r["boundary"]) - min(p[1] for p in r["boundary"]) for r in rows]
-    rows = [r for r, keep in zip(rows, lines.single_row(heights), strict=True) if keep]
     image = Image.open(segment.IMAGES / f"{page}.jpg")
-    baselines = [BaselineLine(id=k, baseline=rows[i]["baseline"], boundary=rows[i]["boundary"]) for k, i in pairs.items()]
+    baselines = [BaselineLine(id=k, baseline=r["baseline"], boundary=r["boundary"]) for k, r in paired_rows(rows, pairs)]
     seg = Segmentation(type="baselines", imagename=str(segment.IMAGES / f"{page}.jpg"),
                        text_direction="horizontal-lr", script_detection=False, lines=baselines)  # fmt: skip
     crops, metas = [], []

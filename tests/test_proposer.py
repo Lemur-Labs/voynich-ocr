@@ -20,3 +20,8 @@ def test_black_fill_outside_the_line_polygon_is_not_ink():
     line[12:28, 10:25] = 40
     line[12:28, 70:90] = 40
     assert pr.components(Image.fromarray(line)) == [(10, 12, 25, 28), (70, 12, 90, 28)]
+
+
+def test_paired_rows_index_the_unfiltered_page_rows():
+    rows = [{"n": i} for i in range(5)]
+    assert pr.paired_rows(rows, {"f1r.1": 0, "f1r.3": 4}) == [("f1r.1", {"n": 0}), ("f1r.3", {"n": 4})]
