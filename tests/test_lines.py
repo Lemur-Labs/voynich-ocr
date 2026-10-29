@@ -54,3 +54,11 @@ def test_paper_fill_replaces_only_the_black_polygon_fill():
 def test_paper_fill_leaves_an_all_black_image_alone():
     black = Image.new("RGB", (8, 4))
     assert np.asarray(ln.paper_fill(black)).max() == 0
+
+
+def test_screen_drops_tall_rows_then_checks_the_rest_pair():
+    sizes = [(100, 10), (200, 10), (300, 30), (400, 10), (500, 10), (600, 10), (700, 10)]
+    keep, ok = ln.screen(sizes, [10, 20, 99, 40, 50, 60, 70])
+    assert keep == [True, True, False, True, True, True, True] and ok
+    _, ok = ln.screen(sizes, [70, 60, 99, 40, 30, 20, 10])
+    assert not ok

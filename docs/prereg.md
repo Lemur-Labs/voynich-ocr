@@ -219,3 +219,14 @@ These are reported beside it:
   time (2,602 of 2,874 columns), mostly ZL against GC over GC's `d5`. That is disagreement by construction, the
   mirror of the agreement by construction the tier rule prevents. The non-test headline moves from 6.61% to 4.59%.
   No test-page figure has been computed.
+
+### A3 — 2026-10-29 — H2, test-instance attrition
+
+- **Change:** for H2, "test instances" in the attrition rule means the gated columns of paragraph-text loci (ZL locus
+  types `P*`) on test pages that have their own page image. `scoring.void_for_attrition` is applied to how many of
+  those columns get at least one gated instance. Page attrition is unchanged. It counts all 40 test pages, so the 4
+  foldout test pages excluded by VO-030 count as lost.
+- **Reason:** the H2 pipeline reads only paragraph lines on pages with their own image. Labels and foldout panels can
+  never yield an instance, so counting them made the gate void by construction. On the validation pages, which were
+  dry-run only, 2,343 of 4,608 gated columns were covered (51%). Of the 2,475 readable columns, 2,343 were covered
+  (94.7%). No test-page figure has been computed, and no test page has been segmented or read.
