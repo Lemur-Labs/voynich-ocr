@@ -1,0 +1,16 @@
+{
+ "k": 220,
+ "eval": "test, reported only (VO-043)",
+ "attrition": {
+  "pages": [
+   17,
+   40
+  ],
+  "columns": [
+   5531,
+   23309
+  ],
+  "void": true
+ },
+ "outcome": "void"
+}
