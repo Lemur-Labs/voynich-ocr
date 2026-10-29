@@ -29,3 +29,14 @@ def test_blank_crop_gives_a_zero_feature_not_nan():
 def test_kmeans_fits_in_float64():
     x = np.random.default_rng(0).standard_normal((200, 8)).astype(np.float32)
     assert cl.fit(x, 4).cluster_centers_.dtype == np.float64
+
+
+def test_k_counts_distinct_tokens_in_the_training_labels_not_the_codec(tmp_path):
+    root = tmp_path / "lines"
+    (root / "f1r").mkdir(parents=True)
+    (root / "codec.json").write_text('{"o0": "\\ue000", "d0": "\\ue001", "z0": "\\ue002", " ": " "}')
+    (root / "f1r" / "f1r_1.gt.txt").write_text(" \n")
+    (root / "f1r" / "f1r_2.gt.txt").write_text("\n")
+    (root / "train.txt").write_text(f"{root}/f1r/f1r_1.png\n")
+    (root / "eval.txt").write_text(f"{root}/f1r/f1r_2.png\n")
+    assert cl.k(root) == cl.K_PER_TOKEN * 2

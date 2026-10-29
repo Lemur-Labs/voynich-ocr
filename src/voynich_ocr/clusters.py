@@ -82,9 +82,13 @@ def page_features(model, page: str, instances: list[dict]) -> dict[str, np.ndarr
     return {"dinov2": embed(model, crops), "hog": hog(crops)}
 
 
-def k() -> int:
-    codec = json.loads((lines.OUT / "codec.json").read_text())
-    return K_PER_TOKEN * sum(t != lines.SPACE for t in codec)
+def k(root: Path = lines.OUT) -> int:
+    """K_PER_TOKEN times the distinct tokens in the training-page labels (train and early-stopping sets)."""
+    chars = set()
+    for manifest in ("train.txt", "eval.txt"):
+        for line in (root / manifest).read_text().split():
+            chars |= set((ROOT / line).with_suffix(".gt.txt").read_text().strip())
+    return K_PER_TOKEN * len(chars - {lines.SPACE})
 
 
 def fit(features: np.ndarray, n_clusters: int):
