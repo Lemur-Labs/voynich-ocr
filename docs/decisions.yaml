@@ -234,3 +234,13 @@
   by: brian
   decision: H3 scores the lines G2's pairing chooses (VO-034, by count, else by text alignment to ZL), recorded before any G3 test inference as a known deviation of the VO-041 kind. The label-blind subset is reported beside it, never gated. Label-blind pairing keeps 74 of 135 non-test pages, under the 75% the attrition rule needs, so a blind H3 would almost surely be void.
   source: owner chose "G2 rule + deviation", 2026-10-29
+- id: VO-048
+  date: "2026-10-29"
+  by: brian
+  decision: Amendment A5 re-fixes H3's coverage minimum at 0.56, keeping A1's rule (void only if the test set is less scorable than about 95% of same-size non-test sets) on the glyph instances H3 actually scores. Supersedes VO-023's value.
+  source: owner chose "A5, re-fix at 0.56", 2026-10-29; results/a5/coverage.json
+- id: VO-049
+  date: "2026-10-29"
+  by: claude
+  decision: docs/prereg.md with A1, A2, A3 and A5 appended has sha256 81d138f965c79a7aab53f839d91661390fa8b9efc69bb8bb6e28d5497f11caf0. A4 is a draft (docs/prereg-A4-draft.md) and is not appended.
+  source: docs/prereg.md Amendments

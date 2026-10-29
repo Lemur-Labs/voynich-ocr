@@ -206,6 +206,34 @@ def coverage() -> dict:
     }
 
 
+def pipeline_coverage(instances: Path, test: set[str], pages: int, draws: int = COVERAGE_DRAWS) -> dict:
+    """H3's coverage figures on seeded draws of non-test pages, from the gated glyph instances the recognizer
+    pipeline actually yields; the token is the recognized one."""
+    by_page = {}
+    for f in sorted(instances.glob("*.json")):
+        gated = [m for m in json.loads(f.read_text())["instances"] if m["gated"]]
+        if f.stem not in test and gated:
+            by_page[f.stem] = gated
+    eligible = sorted(by_page)
+    rng = np.random.default_rng(COVERAGE_SEED)
+    out = []
+    for _ in range(draws):
+        ms = [m for p in rng.choice(eligible, size=pages, replace=False) for m in by_page[p]]
+        disagree = np.array([m["class"] == "disagree" for m in ms])
+        out.append((
+            scoring.within_type_coverage(disagree, np.array([m["token"] for m in ms])),
+            scoring.within_page_coverage(disagree, np.array([m["page"] for m in ms])),
+        ))  # fmt: skip
+    out = np.array(out)
+    return {
+        "seed": COVERAGE_SEED,
+        "pages_per_draw": pages,
+        "eligible": len(eligible),
+        "within_type_p5_p50_p95": [round(float(x), 4) for x in np.percentile(out[:, 0], [5, 50, 95])],
+        "within_page_p5_p50_p95": [round(float(x), 4) for x in np.percentile(out[:, 1], [5, 50, 95])],
+        "min_of_both": [round(float(x), 4) for x in np.sort(out.min(axis=1))],
+    }
+
 def spot_check_sample() -> list[dict]:
     """One locus with a gated disagreement from each of 20 non-test pages, for checking against the images."""
     inputs = d.load()
