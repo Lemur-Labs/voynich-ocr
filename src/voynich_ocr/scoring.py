@@ -230,7 +230,7 @@ def void_for_underpower(coverage: float, minimum: float | None = MIN_GROUP_COVER
 def decide_clusters(within_token_gap: Interval, null_975: float, control_point: float) -> str:
     if within_token_gap.lo <= null_975:
         return "kill"
-    return "pass" if control_point * within_token_gap.point > 0 else "narrow"
+    return "narrow" if control_point * within_token_gap.point < 0 else "pass"
 
 
 def decide_recognizer(
