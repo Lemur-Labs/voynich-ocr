@@ -20,11 +20,14 @@ def _load(pages: list[str]) -> tuple[list[dict], dict[str, np.ndarray]]:
         f = INSTANCES / f"{page}.json"
         if not f.exists():
             continue
-        metas += json.loads(f.read_text())["instances"]
+        page_metas = json.loads(f.read_text())["instances"]
+        metas += page_metas
         z = np.load(clusters.OUT / "features" / f"{page}.npz")
         for name, parts in feats.items():
+            if len(z[name]) != len(page_metas):
+                raise AssertionError(f"{page}: {len(z[name])} {name} rows for {len(page_metas)} instances")
             parts.append(z[name].reshape(-1, z[name].shape[-1] if z[name].size else 1))
-    return metas, {k: np.concatenate([x for x in v if x.size]) for k, v in feats.items()}
+    return metas, {k: np.concatenate([x for x in v if x.size]) if metas else np.empty((0, 1)) for k, v in feats.items()}
 
 
 def gap_test(labels: np.ndarray, metas: list[dict]) -> dict:
@@ -98,22 +101,24 @@ def run(model_path: Path, gate: bool) -> dict:
     eval_metas, eval_x = _load(eval_pages)
     k = clusters.k()
     out = {"k": k, "eval": "test" if gate else "validation (dry run, not a result)"}
+    inputs = d.load()
+    out["attrition"] = attrition(eval_pages, eval_metas, inputs)
+    if out["attrition"]["void"]:
+        out["outcome"] = "void"
+        return out
     out["primary"] = _arm(fit_x["dinov2"], eval_x["dinov2"], eval_metas, k)
     out["hog"] = _arm(fit_x["hog"], eval_x["hog"], eval_metas, k)
     out["k_variants"] = {str(f): _arm(fit_x["dinov2"], eval_x["dinov2"], eval_metas, round(f * k)) for f in K_VARIANTS}
     gated = [m for m in eval_metas if m["gated"]]
     tokens = {t: i for i, t in enumerate(sorted({m["zl"] for m in gated}))}
     out["baseline_zl_token"] = gap_test(np.array([tokens[m["zl"]] for m in gated]), gated)
-    inputs = d.load()
     by_id = {lo.id: lo for lo in inputs.loci}
     model = clusters.dinov2()
     cx_fit, _ = _control(fit_pages, inputs, by_id, model)
     cx_eval, cm_eval = _control(eval_pages, inputs, by_id, model)
     out["control"] = _arm(cx_fit, cx_eval, cm_eval, k)
-    out["attrition"] = attrition(eval_pages, eval_metas, inputs)
-    if out["attrition"]["void"]:
-        out["outcome"] = "void"
-        return out
+    if "gap" not in out["primary"]:
+        raise AssertionError(f"no primary estimate on {out['primary']['n']} gated instances that passed attrition")
     gap = scoring.Interval(out["primary"]["gap"], out["primary"]["lo"], out["primary"]["hi"])
     # Narrowing needs a control estimate of the opposite sign; an empty control arm has none, so it cannot narrow.
     control = out["control"].get("gap", gap.point)
@@ -126,12 +131,15 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("model", type=Path)
     p.add_argument("--gate", action="store_true", help="score test pages: the one G2 gate run")
     args = p.parse_args(argv)
+    out = OUT if args.gate else ROOT / "build" / "g2-dry"
     if args.gate:
         if (OUT / "result.json").exists():
             raise SystemExit("the G2 gate has run; its result stands")
         freeze.require(args.model)
+        OUT.mkdir(parents=True, exist_ok=True)
+        with open(OUT / "result.json", "x") as f:
+            f.write('{"status": "started"}\n')
     result = run(args.model, args.gate)
-    out = OUT if args.gate else ROOT / "build" / "g2-dry"
     out.mkdir(parents=True, exist_ok=True)
     (out / "result.json").write_text(json.dumps(result, indent=1) + "\n")
     print(result["outcome"])

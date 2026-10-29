@@ -46,3 +46,34 @@ def test_gate_refuses_a_second_run(tmp_path, monkeypatch):
     (tmp_path / "result.json").write_text("{}")
     with pytest.raises(SystemExit):
         g2.main(["m.safetensors", "--gate"])
+
+
+def test_a_gate_run_that_crashes_still_counts_as_the_run(tmp_path, monkeypatch):
+    monkeypatch.setattr(g2, "OUT", tmp_path / "g2")
+    monkeypatch.setattr(g2.freeze, "require", lambda *a: None)
+
+    def crash(*a):
+        raise RuntimeError("mid-run")
+
+    monkeypatch.setattr(g2, "run", crash)
+    with pytest.raises(RuntimeError):
+        g2.main(["m.safetensors", "--gate"])
+    with pytest.raises(SystemExit):
+        g2.main(["m.safetensors", "--gate"])
+
+
+def test_load_refuses_features_that_do_not_line_up_with_instances(tmp_path, monkeypatch):
+    monkeypatch.setattr(g2, "INSTANCES", tmp_path / "instances")
+    monkeypatch.setattr(g2.clusters, "OUT", tmp_path / "clusters")
+    (tmp_path / "instances").mkdir()
+    (tmp_path / "clusters" / "features").mkdir(parents=True)
+    (tmp_path / "instances" / "f1r.json").write_text('{"instances": [{"page": "f1r"}, {"page": "f1r"}]}')
+    np.savez(tmp_path / "clusters" / "features" / "f1r.npz", dinov2=np.zeros((3, 4)), hog=np.zeros((3, 5)))
+    with pytest.raises(AssertionError):
+        g2._load(["f1r"])
+
+
+def test_load_of_pages_without_instances_is_empty_not_an_error(tmp_path, monkeypatch):
+    monkeypatch.setattr(g2, "INSTANCES", tmp_path)
+    metas, feats = g2._load(["f1r"])
+    assert metas == [] and len(feats["dinov2"]) == 0
