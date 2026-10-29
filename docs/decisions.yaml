@@ -149,3 +149,8 @@
   by: claude
   decision: The image arms (H2, H3) use the 177 IVTFF pages that have their own IIIF canvas. The 50 foldout panels that share a canvas are excluded, which includes test pages f68r2, f70r2, f86v6 and f90v1. That leaves 36 of 40 test pages eligible, inside the attrition limit, and the exclusion counts toward attrition.
   source: snapshot/sources.toml; PR 9
+- id: VO-031
+  date: "2026-10-28"
+  by: claude
+  decision: Recognizer training uses ketos --lrate 1e-4 --warmup 1000 and --linetype baselines, and drops pages whose line widths correlate with their label lengths below r = 0.5 (f107v, f15r, f17v, f21r, f25v, f81v, f8r). The black polygon fill stays. Evidence is three 10-epoch arms whose validation accuracy at epoch 9 was 0.573 (1e-4), 0.560 (1e-4, paper fill) and 0.289 (1e-3, paper fill). The default 1e-3 had stalled the gate seed at 0.31.
+  source: PRs 13 and 14; run 3cd3cb13aa44-2fe7f6eb3f83-20261027-lr-paper-lr-paper

@@ -18,17 +18,19 @@ MAX_HOURS = 10
 SEEDS = (20261027, 20261028, 20261029)
 MODELS = ROOT / "build" / "model"
 PAPER = LINES.with_name("lines-paper")
+# At kraken's default 1e-3 training collapses to predicting glyph frequencies.
+SCHEDULE = ["--lrate", "1e-4", "--warmup", "1000"]
 # Short fixed-length diagnostic runs, each a (line dataset, extra ketos train args) pair.
 ARMS = {
-    "lr": (LINES, ["--lrate", "1e-4", "--warmup", "1000"]),
+    "lr": (LINES, SCHEDULE),
     "paper": (PAPER, []),
-    "lr-paper": (PAPER, ["--lrate", "1e-4", "--warmup", "1000"]),
+    "lr-paper": (PAPER, SCHEDULE),
 }
 ARM_EPOCHS = 10
 
 
 def ketos_args(seed: int, out: Path, arm: str | None = None) -> list[str]:
-    lines, extra = ARMS[arm] if arm else (LINES, [])
+    lines, extra = ARMS[arm] if arm else (LINES, SCHEDULE)
     stop = ["-q", "fixed", "-N", str(ARM_EPOCHS)] if arm else ["-q", "early", "--min-epochs", "30", "--lag", "20"]
     return [
         "ketos", "-d", "cuda:0", "--precision", "32-true", "-s", str(seed), "-r",

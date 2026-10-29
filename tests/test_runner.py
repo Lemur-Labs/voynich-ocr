@@ -8,6 +8,9 @@ def test_gate_training_stops_early_and_reads_lines_as_baselines():
     assert args[args.index("--linetype") + 1] == "baselines"
     assert args[args.index("-q") + 1] == "early"
     assert args[args.index("-t") + 1] == str(runner.LINES / "train.txt")
+    assert args[args.index("--lrate") + 1] == "1e-4"
+    assert args[args.index("--warmup") + 1] == "1000"
+    assert args.index("train") < args.index("--lrate")
 
 
 def test_arm_runs_a_fixed_number_of_epochs_on_its_own_dataset_with_its_own_args():
