@@ -244,3 +244,13 @@
   by: claude
   decision: docs/prereg.md with A1, A2, A3 and A5 appended has sha256 df12191346c0b592ea35a81f5a6c5862b77ce6ec89fd45f1dba8040bd49388bc. A4 is a draft (docs/prereg-A4-draft.md) and is not appended.
   source: docs/prereg.md Amendments
+- id: VO-050
+  date: "2026-10-29"
+  by: brian
+  decision: Amendment A6 applies A3's readable-columns attrition definition to H3. G3's baseline bar scores B4 (span width) and B5 (page mean confidence) in both directions and takes the larger within-type AUROC, so no direction is chosen after looking.
+  source: owner answers on the PR 20 red-team, 2026-10-29
+- id: VO-051
+  date: "2026-10-29"
+  by: claude
+  decision: docs/prereg.md with A1, A2, A3, A5 and A6 appended has sha256 27b2e367061e9dbae91a37d4247099a3c45d7f05183870a84f94d37559c4de63. A4 is a draft and is not appended.
+  source: docs/prereg.md Amendments

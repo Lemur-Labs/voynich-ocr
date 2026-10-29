@@ -245,3 +245,12 @@ These are reported beside it:
 - **Deviation:** H3 fixes the minimum before any test-page inference. The W2/W3 model had already read the test
   pages for G2, as the prereg provides. No G3 coverage or other G3 statistic had been computed on test pages when
   A5 was fixed. The owner kept A5 as a declared deviation (VO-048).
+
+### A6 — 2026-10-29 — H3, test-instance attrition
+
+- **Change:** for H3, "test instances" in the attrition rule means what A3 defines for H2: the gated columns of
+  paragraph-text loci (ZL locus types `P*`) on test pages that have their own page image. `scoring.void_for_attrition`
+  applies to how many of those columns get at least one gated glyph. Page attrition counts all 40 test pages.
+- **Reason:** H3 reads the same paragraph lines on the same pages as H2 (the W2 model is the W3 model, VO-047).
+  Labels and foldout panels can never yield a glyph, so counting them would void H3 by construction, as it did for
+  H2 before A3. Fixed before any G3 test-page statistic. Like A5, it comes after G2's test-page inference.
