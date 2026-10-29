@@ -22,17 +22,21 @@ def components(line: Image.Image) -> list[tuple[int, int, int, int]]:
     return sorted(((b[1], b[0], b[3], b[2]) for b in boxes), key=lambda b: (b[0], b[1]))
 
 
+def line_columns(boxes: list, n_columns: int) -> list[int]:
+    """Each crop's column, in order, when the line has as many crops as columns; otherwise none."""
+    return list(range(n_columns)) if len(boxes) == n_columns else []
+
+
 def paired_rows(rows: list[dict], pairs: dict[str, int]) -> list[tuple[str, dict]]:
     return [(k, rows[i]) for k, i in pairs.items()]
 
 
 def page_control(page: str, pairs: dict[str, int], inputs, by_id: dict) -> tuple[list[Image.Image], list[dict]]:
-    """Control-arm crops of one page, from lines whose component count equals their consensus glyph count; each
-    crop takes the column of the consensus glyph in the same position."""
+    """Control-arm crops of one page, from lines whose component count equals their column count."""
     from kraken.containers import BaselineLine, Segmentation
     from kraken.lib.segmentation import extract_polygons
 
-    from voynich_ocr import clusters, recognize, segment
+    from voynich_ocr import clusters, segment
     from voynich_ocr import disagreement as d
 
     rows = segment.page_lines(json.loads((segment.OUT / f"{page}.json").read_text()), segment.height(page))
@@ -43,11 +47,11 @@ def page_control(page: str, pairs: dict[str, int], inputs, by_id: dict) -> tuple
     crops, metas = [], []
     for im, line in extract_polygons(image, seg):
         cols, _ = d.locus_columns(by_id[line.id], inputs, d.MAPS["full"])
-        cons = recognize.consensus([c.readings for c in cols])
         boxes = components(im)
-        if len(boxes) != len(cons):
+        where = line_columns(boxes, len(cols))
+        if not where:
             continue
-        for (x0, y0, x1, y1), (_, k) in zip(boxes, cons, strict=True):
+        for (x0, y0, x1, y1), k in zip(boxes, where, strict=True):
             c = cols[k]
             crops.append(clusters.crop(im, [[x0, y0], [x1, y0], [x1, y1], [x0, y1]]))
             metas.append({

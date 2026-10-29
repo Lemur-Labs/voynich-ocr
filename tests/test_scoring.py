@@ -135,6 +135,10 @@ def test_cluster_gate_narrows_when_the_label_free_control_points_the_other_way()
     assert scoring.decide_clusters(gap, 0.12, control_point=0.15) == "kill"
 
 
+def test_a_control_with_no_sign_does_not_narrow_the_cluster_gate():
+    assert scoring.decide_clusters(Interval(0.2, 0.1, 0.3), 0.05, control_point=0.0) == "pass"
+
+
 def test_cluster_entropy_excludes_every_instance_on_the_same_page():
     clusters = np.array([0, 0, 0])
     pages = np.array([1, 1, 2])
