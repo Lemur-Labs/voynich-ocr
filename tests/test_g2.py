@@ -1,6 +1,7 @@
 from types import SimpleNamespace as C
 
 import numpy as np
+import pytest
 
 from voynich_ocr import g2
 
@@ -30,3 +31,18 @@ def test_arm_scores_float32_features():
     x = np.random.default_rng(1).standard_normal((120, 8)).astype(np.float32)
     out = g2._arm(x, x, _metas(120), 4)
     assert "gap" in out
+
+
+def test_arm_without_a_token_holding_both_classes_has_no_estimate():
+    metas = [{**m, "class": "agree"} for m in _metas(120)]
+    x = np.random.default_rng(1).standard_normal((120, 8)).astype(np.float32)
+    assert "gap" not in g2._arm(x, x, metas, 4)
+
+
+def test_gate_refuses_a_second_run(tmp_path, monkeypatch):
+    monkeypatch.setattr(g2, "OUT", tmp_path)
+    monkeypatch.setattr(g2.freeze, "require", lambda *a: None)
+    monkeypatch.setattr(g2, "run", lambda *a: pytest.fail("ran"))
+    (tmp_path / "result.json").write_text("{}")
+    with pytest.raises(SystemExit):
+        g2.main(["m.safetensors", "--gate"])

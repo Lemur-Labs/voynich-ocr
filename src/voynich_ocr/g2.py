@@ -39,12 +39,21 @@ def gap_test(labels: np.ndarray, metas: list[dict]) -> dict:
     return {"gap": interval.point, "lo": interval.lo, "hi": interval.hi, "null_975": null, "n": len(metas)}
 
 
+def _comparable(metas: list[dict]) -> bool:
+    """Some ZL token has both disputed and undisputed instances, so the within-token gap has an estimate."""
+    classes: dict[str, set[str]] = {}
+    for m in metas:
+        classes.setdefault(m["zl"], set()).add(m["class"])
+    return any({"agree", "disagree"} <= c for c in classes.values())
+
+
 def _arm(fit_x: np.ndarray, eval_x: np.ndarray, eval_metas: list[dict], k: int) -> dict:
     gated = np.array([m["gated"] for m in eval_metas], dtype=bool)
-    if not gated.any() or len(fit_x) < k:
-        return {"n": int(gated.sum())}
+    scored = [m for m, g in zip(eval_metas, gated, strict=True) if g]
+    if not _comparable(scored) or len(fit_x) < k:
+        return {"n": len(scored)}
     labels = clusters.fit(fit_x, k).predict(eval_x.astype(np.float64))
-    return gap_test(labels[gated], [m for m, g in zip(eval_metas, gated, strict=True) if g])
+    return gap_test(labels[gated], scored)
 
 
 def _control(pages: list[str], inputs: d.Inputs, by_id: dict, model) -> tuple[np.ndarray, list[dict]]:
@@ -102,11 +111,13 @@ def run(model_path: Path, gate: bool) -> dict:
     cx_eval, cm_eval = _control(eval_pages, inputs, by_id, model)
     out["control"] = _arm(cx_fit, cx_eval, cm_eval, k)
     out["attrition"] = attrition(eval_pages, eval_metas, inputs)
+    if out["attrition"]["void"]:
+        out["outcome"] = "void"
+        return out
     gap = scoring.Interval(out["primary"]["gap"], out["primary"]["lo"], out["primary"]["hi"])
     # Narrowing needs a control estimate of the opposite sign; an empty control arm has none, so it cannot narrow.
     control = out["control"].get("gap", gap.point)
-    decision = scoring.decide_clusters(gap, out["primary"]["null_975"], control)
-    out["outcome"] = "void" if out["attrition"]["void"] else decision
+    out["outcome"] = scoring.decide_clusters(gap, out["primary"]["null_975"], control)
     return out
 
 
@@ -116,6 +127,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--gate", action="store_true", help="score test pages: the one G2 gate run")
     args = p.parse_args(argv)
     if args.gate:
+        if (OUT / "result.json").exists():
+            raise SystemExit("the G2 gate has run; its result stands")
         freeze.require(args.model)
     result = run(args.model, args.gate)
     out = OUT if args.gate else ROOT / "build" / "g2-dry"
