@@ -164,3 +164,28 @@
   by: claude
   decision: docs/prereg.md with A1, A2 and A3 appended has sha256 b57922a8b8627a62d7424d187e295bd085095dbf1a6a90c506b96afe6c393534.
   source: docs/prereg.md Amendments
+- id: VO-034
+  date: "2026-10-29"
+  by: claude
+  decision: Supersedes VO-013's exclusion rule for G2 inference. A page's rows pair with its paragraph loci by count when the counts match and the labelled lines pass training's lines.screen (single-row heights, then the width-to-label-length correlation of VO-031); unlabelled lines stay unless taller than 1.5 times the labelled median. Otherwise rows pair by text, an order-preserving alignment of decoded rows to ZL locus tokens over the single-height rows.
+  source: PR 15; src/voynich_ocr/instances.py pair_rows
+- id: VO-035
+  date: "2026-10-29"
+  by: claude
+  decision: A glyph instance's crop is the line polygon between the midpoints of the CTC frame gaps to its neighbours, mapped to the baseline by an affine fit to kraken's span positions. Rows too short for the fit keep kraken's own cut. Spaces are not instances. This replaced kraken's cuts after a validation dry run whose outcome was kill; the trigger was the 14.6% of crops narrower than a glyph, which fell to 1.1%.
+  source: PR 15; src/voynich_ocr/recognize.py
+- id: VO-036
+  date: "2026-10-29"
+  by: claude
+  decision: H2 clustering uses k = 2 times the distinct non-space tokens in the training and evaluation labels, 220, fitted by k-means in float64 with seed 20261027 and 10 restarts. The float64 fit makes cluster assignment reproducible across BLAS builds.
+  source: PR 15; src/voynich_ocr/clusters.py
+- id: VO-037
+  date: "2026-10-29"
+  by: claude
+  decision: The control arm compares a column's recognized-glyph count with its consensus glyph count, not with its column count. The entropy pool holds gated evaluation instances only. The ZL-token baseline is -0.025, not zero, because leave-page-out removes each page's own tokens from its reference.
+  source: PR 15; src/voynich_ocr/g2.py; validation dry run
+- id: VO-038
+  date: "2026-10-29"
+  by: claude
+  decision: G2 configuration is frozen before any test-page inference. Config hash e1d439e5ada24a123a0f64e1e415a354379d264472e0e4857fe2889429b7f426 covers src/voynich_ocr, build/lines, the non-test pages' segmentation, instances and features, the split, the snapshot manifest, uv.lock and model build/model/20261027/best_0.9452.safetensors (sha256 25ed687ca9ed0256c1cdb59521a83c7dfbfb712c0cd4fbf79864fbbe1ac76539). The validation dry run at this configuration was identical across two runs and not void.
+  source: src/voynich_ocr/freeze.py; main 54ee7e3
