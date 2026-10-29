@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 from voynich_ocr import disagreement as d
-from voynich_ocr import lines, recognize, segment
+from voynich_ocr import freeze, lines, recognize, segment
 from voynich_ocr.snapshot import ROOT
 
 OUT = ROOT / "build" / "instances"
@@ -70,6 +70,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--test", action="store_true", help="also test pages (only once configs are frozen)")
     p.add_argument("--out", type=Path, default=OUT)
     args = p.parse_args(argv)
+    if args.test:
+        freeze.require(args.model)
     test = d.test_pages()
     if not args.test and (blocked := sorted(set(args.pages) & test)):
         raise SystemExit(f"test pages need --test: {blocked}")

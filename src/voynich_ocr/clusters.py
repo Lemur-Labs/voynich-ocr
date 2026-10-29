@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image
 
 from voynich_ocr import disagreement as d
-from voynich_ocr import lines, segment
+from voynich_ocr import freeze, lines, segment
 from voynich_ocr.instances import OUT as INSTANCES
 from voynich_ocr.snapshot import RAW, ROOT
 
@@ -103,6 +103,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--test", action="store_true", help="also featurize test pages (only once configs are frozen)")
     p.add_argument("--out", type=Path, default=OUT)
     args = p.parse_args(argv)
+    if args.test:
+        freeze.require()
     test = d.test_pages()
     (args.out / "features").mkdir(parents=True, exist_ok=True)
     model = dinov2()

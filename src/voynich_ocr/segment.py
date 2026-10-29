@@ -7,6 +7,7 @@ from pathlib import Path
 
 from shapely.geometry import MultiPoint
 
+from voynich_ocr import freeze
 from voynich_ocr.disagreement import test_pages
 from voynich_ocr.snapshot import RAW, ROOT
 
@@ -102,6 +103,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--test", action="store_true", help="also segment test pages (only once configs are frozen)")
     p.add_argument("--out", type=Path, default=OUT)
     args = p.parse_args(argv)
+    if args.test:
+        freeze.require()
     test = test_pages()
     if not args.test and (blocked := sorted(set(args.pages) & test)):
         raise SystemExit(f"test pages need --test: {blocked}")

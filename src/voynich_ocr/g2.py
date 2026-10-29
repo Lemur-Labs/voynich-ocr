@@ -1,31 +1,17 @@
 import argparse
-import hashlib
 import json
 import sys
 from pathlib import Path
 
 import numpy as np
 
-from voynich_ocr import clusters, lines, proposer, scoring, segment
+from voynich_ocr import clusters, freeze, lines, proposer, scoring, segment
 from voynich_ocr import disagreement as d
 from voynich_ocr.instances import OUT as INSTANCES
 from voynich_ocr.snapshot import ROOT
 
-FROZEN = [
-    "src/voynich_ocr/segment.py", "src/voynich_ocr/lines.py", "src/voynich_ocr/runner.py",
-    "src/voynich_ocr/recognize.py", "src/voynich_ocr/instances.py", "src/voynich_ocr/proposer.py",
-    "src/voynich_ocr/clusters.py", "src/voynich_ocr/g2.py",
-]  # fmt: skip
 K_VARIANTS = (0.5, 4)
 OUT = ROOT / "results" / "g2"
-
-
-def config_hash(model: Path) -> str:
-    h = hashlib.sha256()
-    for rel in FROZEN:
-        h.update(rel.encode() + b"\0" + (ROOT / rel).read_bytes())
-    h.update(hashlib.sha256(model.read_bytes()).digest())
-    return h.hexdigest()
 
 
 def _load(pages: list[str]) -> tuple[list[dict], dict[str, np.ndarray]]:
@@ -130,9 +116,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--gate", action="store_true", help="score test pages: the one G2 gate run")
     args = p.parse_args(argv)
     if args.gate:
-        digest = config_hash(args.model)
-        if digest not in (ROOT / "docs" / "decisions.yaml").read_text():
-            raise SystemExit(f"config hash {digest} is not recorded in docs/decisions.yaml")
+        freeze.require(args.model)
     result = run(args.model, args.gate)
     out = OUT if args.gate else ROOT / "build" / "g2-dry"
     out.mkdir(parents=True, exist_ok=True)
