@@ -17,28 +17,41 @@ IMAGE = ("deeplearning-platform-release", "common-cu129-ubuntu-2204-nvidia-580")
 MAX_HOURS = 10
 SEEDS = (20261027, 20261028, 20261029)
 MODELS = ROOT / "build" / "model"
+PAPER = LINES.with_name("lines-paper")
+# Short fixed-length diagnostic runs, each a (line dataset, extra ketos train args) pair.
+ARMS = {
+    "lr": (LINES, ["--lrate", "1e-4", "--warmup", "1000"]),
+    "paper": (PAPER, []),
+    "lr-paper": (PAPER, ["--lrate", "1e-4", "--warmup", "1000"]),
+}
+ARM_EPOCHS = 10
 
 
-def ketos_args(seed: int, out: Path) -> list[str]:
+def ketos_args(seed: int, out: Path, arm: str | None = None) -> list[str]:
+    lines, extra = ARMS[arm] if arm else (LINES, [])
+    stop = ["-q", "fixed", "-N", str(ARM_EPOCHS)] if arm else ["-q", "early", "--min-epochs", "30", "--lag", "20"]
     return [
         "ketos", "-d", "cuda:0", "--precision", "32-true", "-s", str(seed), "-r",
-        "train", "--arch", "vgsl", "-f", "path", "--no-reorder",
-        "-t", str(LINES / "train.txt"), "-e", str(LINES / "eval.txt"),
-        "-q", "early", "--min-epochs", "30", "--lag", "20", "--augment", "-o", str(out),
+        "train", "--arch", "vgsl", "-f", "path", "--linetype", "baselines", "--no-reorder",
+        "-t", str(lines / "train.txt"), "-e", str(lines / "eval.txt"),
+        *stop, "--augment", *extra, "-o", str(out),
     ]  # fmt: skip
 
 
-def pack(lines: Path = LINES) -> tuple[Path, str]:
-    """A tar of the line dataset, named by the hash of its contents."""
-    files = sorted(p for p in lines.rglob("*") if p.is_file())
+def pack(dirs: list[Path]) -> tuple[Path, str]:
+    """A tar of line datasets, paths relative to build/, named by the hash of its contents."""
+    base = LINES.parent
+    if missing := [str(d) for d in dirs if not (d / "train.txt").exists()]:
+        raise SystemExit(f"line datasets not built: {missing}")
+    files = sorted(p for d in dirs for p in d.rglob("*") if p.is_file())
     digest = hashlib.sha256()
     for p in files:
-        digest.update(str(p.relative_to(lines)).encode() + b"\0" + p.read_bytes())
-    tar = ROOT / "build" / f"lines-{digest.hexdigest()[:16]}.tar"
+        digest.update(str(p.relative_to(base)).encode() + b"\0" + p.read_bytes())
+    tar = base / f"lines-{digest.hexdigest()[:16]}.tar"
     if not tar.exists():
         with tarfile.open(tar, "w") as t:
             for p in files:
-                t.add(p, arcname=str(p.relative_to(lines)))
+                t.add(p, arcname=str(p.relative_to(base)))
     return tar, digest.hexdigest()
 
 
@@ -51,13 +64,17 @@ def _commit() -> str:
     return head.stdout.strip()
 
 
-def launch(seed: int) -> str:
+def instance_name(seed: int, digest: str, arms: list[str]) -> str:
+    return "-".join([f"train-{seed}-{digest[:8]}", *arms])
+
+
+def launch(seed: int, arms: list[str]) -> str:
     commit = _commit()
-    tar, digest = pack()
+    tar, digest = pack(sorted({ARMS[a][0] for a in arms}) if arms else [LINES])
     lines = f"{BUCKET}/lines/{tar.name}"
     subprocess.run(["gcloud", "storage", "cp", "--no-clobber", str(tar), lines], check=True)
-    run = f"{BUCKET}/runs/{commit[:12]}-{digest[:12]}-{seed}"
-    name = f"train-{seed}-{digest[:8]}"
+    run = f"{BUCKET}/runs/{commit[:12]}-{digest[:12]}-{'-'.join([str(seed), *arms])}"
+    name = instance_name(seed, digest, arms)
     for zone in ZONES:
         r = subprocess.run(
             [
@@ -66,7 +83,7 @@ def launch(seed: int) -> str:
                 f"--image-project={IMAGE[0]}", f"--image-family={IMAGE[1]}", "--boot-disk-size=100GB",
                 "--provisioning-model=STANDARD", "--instance-termination-action=DELETE",
                 f"--max-run-duration={MAX_HOURS}h", "--scopes=storage-rw,compute-rw",
-                f"--metadata=install-nvidia-driver=True,commit={commit},seed={seed},lines={lines},run={run}",
+                f"--metadata=install-nvidia-driver=True,commit={commit},seed={seed},lines={lines},run={run},arms={'+'.join(arms)}",
                 f"--metadata-from-file=startup-script={ROOT / 'vm' / 'train.sh'}",
             ],
             check=False,
@@ -81,21 +98,24 @@ def launch(seed: int) -> str:
     raise SystemExit("no zone had capacity")
 
 
-def train(seed: int) -> None:
-    out = MODELS / str(seed)
+def train(seed: int, arm: str | None) -> None:
+    out = MODELS / (f"{seed}-{arm}" if arm else str(seed))
     out.mkdir(parents=True, exist_ok=True)
-    subprocess.run(ketos_args(seed, out), cwd=ROOT, check=True)
+    subprocess.run(ketos_args(seed, out, arm), cwd=ROOT, check=True)
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="runner")
     p.add_argument("command", choices=["launch", "train"])
     p.add_argument("--seed", type=int, choices=SEEDS, required=True)
+    p.add_argument("--arm", action="append", choices=list(ARMS), default=[], help="launch: repeatable; train: one")
     args = p.parse_args(argv)
+    if args.command == "train" and len(args.arm) > 1:
+        p.error("train takes one --arm")
     if args.command == "launch":
-        print(launch(args.seed))
+        print(launch(args.seed, args.arm))
     else:
-        train(args.seed)
+        train(args.seed, args.arm[0] if args.arm else None)
     return 0
 
 

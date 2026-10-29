@@ -1,3 +1,6 @@
+import numpy as np
+from PIL import Image
+
 from voynich_ocr import lines as ln
 from voynich_ocr.sta import Glyph
 
@@ -30,3 +33,24 @@ def test_file_stems_have_no_dots_so_kraken_finds_the_label_file():
 
 def test_line_images_much_taller_than_their_page_median_are_dropped():
     assert ln.single_row([100, 110, 105, 170, 95]) == [True, True, True, False, True]
+
+
+def test_page_whose_line_widths_do_not_track_label_lengths_is_unpaired():
+    widths = [10.0, 12.0, 14.0, 16.0, 18.0, 20.0]
+    assert ln.paired(widths, [20, 24, 28, 32, 36, 40])
+    assert not ln.paired(widths, [40, 36, 32, 28, 24, 20])
+    assert ln.paired(widths[:5], [40, 36, 32, 28, 24])
+
+
+def test_paper_fill_replaces_only_the_black_polygon_fill():
+    a = np.full((10, 20, 3), 200, dtype=np.uint8)
+    a[:3] = 0
+    a[5, 5] = (60, 40, 20)
+    out = np.asarray(ln.paper_fill(Image.fromarray(a)))
+    assert (out[:3] == 200).all()
+    assert tuple(out[5, 5]) == (60, 40, 20)
+
+
+def test_paper_fill_leaves_an_all_black_image_alone():
+    black = Image.new("RGB", (8, 4))
+    assert np.asarray(ln.paper_fill(black)).max() == 0
