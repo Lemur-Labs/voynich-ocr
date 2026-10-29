@@ -6,13 +6,13 @@ from voynich_ocr.snapshot import ROOT
 
 MODEL = ROOT / "build" / "model" / "20261027" / "best_0.9452.safetensors"
 STATIC = ["docs/prereg/splits.json", "snapshot/manifest.sha256", "uv.lock"]
-OUTPUTS = ["build/seg", "build/instances", "build/clusters/features"]
+OUTPUTS = ["build/seg", "build/instances", "build/clusters/features", "build/g3"]
 DECISIONS = ROOT / "docs" / "decisions.yaml"
 
 
 def frozen_files(root: Path = ROOT) -> list[str]:
     """Code, split, snapshot manifest, locked dependencies, the line dataset, and the non-test pages' segmentation,
-    instances and features; test-page outputs are made after the freeze, so they stay out."""
+    instances and features, and the G3 temperature; test-page outputs are made after the freeze, so they stay out."""
     test = set(json.loads((root / "docs" / "prereg" / "splits.json").read_text())["test"])
     files = [p for p in (root / "src" / "voynich_ocr").glob("*.py")]
     files += [p for p in (root / "build" / "lines").rglob("*") if p.is_file()]

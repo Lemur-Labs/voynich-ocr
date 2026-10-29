@@ -47,6 +47,15 @@ def pair_rows_blind(sizes: list[tuple[int, int]], ids: list[str]) -> tuple[dict[
     return dict(zip(ids, kept, strict=True)), "blind"
 
 
+def columns_for(
+    locus: d.Locus, recognized: list[str], inputs: d.Inputs, names: tuple[str, ...]
+) -> tuple[list[d.Column], list[int | None], int]:
+    """The locus's columns in the map over `names`, each recognized glyph's column there, and the insertions."""
+    cols, _ = d.locus_columns(locus, inputs, names)
+    where, n = recognize.align_to_columns(recognized, recognize.consensus([c.readings for c in cols]))
+    return cols, where, n
+
+
 def page_instances(
     model, page: str, inputs: d.Inputs, loci: list[d.Locus], tokens: dict[str, str], blind: bool = False
 ) -> dict:
@@ -68,11 +77,8 @@ def page_instances(
     for locus in loci:
         if locus.id not in pairs:
             continue
-        cols, _ = d.locus_columns(locus, inputs, d.MAPS["full"])
         glyphs = [g for g in read[pairs[locus.id]] if g["char"] != lines.SPACE]
-        where, n = recognize.align_to_columns(
-            [tokens[g["char"]] for g in glyphs], recognize.consensus([c.readings for c in cols])
-        )
+        cols, where, n = columns_for(locus, [tokens[g["char"]] for g in glyphs], inputs, d.MAPS["full"])
         inserted += n
         for g, k in zip(glyphs, where, strict=True):
             if k is None:

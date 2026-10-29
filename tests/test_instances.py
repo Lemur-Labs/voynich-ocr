@@ -1,4 +1,6 @@
+from voynich_ocr import disagreement as d
 from voynich_ocr import instances as ins
+from voynich_ocr.sta import Glyph
 
 IDS = [f"f1r.{i}" for i in range(1, 7)]
 ZL = {k: ["o0"] * n for k, n in zip(IDS, [10, 20, 30, 40, 50, 60], strict=True)}
@@ -43,3 +45,16 @@ def test_blind_pairing_uses_only_line_heights_and_the_locus_count():
 def test_blind_pairing_drops_a_page_whose_single_rows_do_not_match_its_loci():
     pairs, _ = ins.pair_rows_blind([(100, 10)] * 5, IDS)
     assert pairs == {}
+
+
+def test_glyphs_take_columns_from_the_consensus_of_the_map_they_are_aligned_to():
+    aaa = {"A1": "o0", "B1": "d0", "E1": "i0"}
+    with_d, without_d = ["A1", "B1", "E1"], ["A1", "E1"]
+    codes = {"ZL": with_d, "IT": with_d, "GC": with_d, "FG": without_d, "CD": without_d}
+    sources = {s: d.Source({"f1r.1": [Glyph(c, False, "") for c in cs]}, frozenset(aaa)) for s, cs in codes.items()}
+    inputs = d.Inputs(sources, [d.Locus("f1r.1", "f1r", {})], aaa)
+    cols, where, inserted = ins.columns_for(inputs.loci[0], ["o0", "d0", "i0"], inputs, d.MAPS["full"])
+    assert where == [0, 1, 2] and inserted == 0
+    cols, where, inserted = ins.columns_for(inputs.loci[0], ["o0", "d0", "i0"], inputs, d.MAPS["leave-ZL-IT-out"])
+    assert where == [0, None, 2] and inserted == 1
+    assert cols[0].contributing == ("GC", "FG", "CD")
