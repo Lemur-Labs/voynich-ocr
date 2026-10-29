@@ -2,6 +2,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from statistics import NormalDist
 
 import numpy as np
 
@@ -14,15 +15,19 @@ K_VARIANTS = (0.5, 4)
 OUT = ROOT / "results" / "g2"
 
 
-def _load(pages: list[str]) -> tuple[list[dict], dict[str, np.ndarray]]:
+def _load(
+    pages: list[str], instances: Path | None = None, features: Path | None = None
+) -> tuple[list[dict], dict[str, np.ndarray]]:
+    instances = instances or INSTANCES
+    features = features or clusters.OUT / "features"
     metas, feats = [], {"dinov2": [], "hog": []}
     for page in pages:
-        f = INSTANCES / f"{page}.json"
+        f = instances / f"{page}.json"
         if not f.exists():
             continue
         page_metas = json.loads(f.read_text())["instances"]
         metas += page_metas
-        z = np.load(clusters.OUT / "features" / f"{page}.npz")
+        z = np.load(features / f"{page}.npz")
         for name, parts in feats.items():
             if len(z[name]) != len(page_metas):
                 raise AssertionError(f"{page}: {len(z[name])} {name} rows for {len(page_metas)} instances")
@@ -42,6 +47,19 @@ def gap_test(labels: np.ndarray, metas: list[dict]) -> dict:
     return {"gap": interval.point, "lo": interval.lo, "hi": interval.hi, "null_975": null, "n": len(metas)}
 
 
+_Z = NormalDist()
+
+
+def power(true_gap: float, se: float, null_975: float) -> float:
+    """Chance, under a normal approximation, that the interval's lower bound clears the null at this true gap."""
+    return _Z.cdf((true_gap - null_975) / se - _Z.inv_cdf(0.975))
+
+
+def detectable(se: float, null_975: float, at: float = 0.8) -> float:
+    """The true gap the gate rule detects with probability `at`."""
+    return null_975 + se * (_Z.inv_cdf(0.975) + _Z.inv_cdf(at))
+
+
 def _comparable(metas: list[dict]) -> bool:
     """Some ZL token has both disputed and undisputed instances, so the within-token gap has an estimate."""
     classes: dict[str, set[str]] = {}
@@ -59,10 +77,13 @@ def _arm(fit_x: np.ndarray, eval_x: np.ndarray, eval_metas: list[dict], k: int) 
     return gap_test(labels[gated], scored)
 
 
-def _control(pages: list[str], inputs: d.Inputs, by_id: dict, model) -> tuple[np.ndarray, list[dict]]:
+def _control(
+    pages: list[str], inputs: d.Inputs, by_id: dict, model, instances: Path | None = None
+) -> tuple[np.ndarray, list[dict]]:
+    instances = instances or INSTANCES
     crops, metas = [], []
     for page in pages:
-        f = INSTANCES / f"{page}.json"
+        f = instances / f"{page}.json"
         if not f.exists():
             continue
         c, m = proposer.page_control(page, json.loads(f.read_text())["pairs"], inputs, by_id)
@@ -91,16 +112,24 @@ def attrition(eval_pages: list[str], metas: list[dict], inputs: d.Inputs) -> dic
     }
 
 
-def run(model_path: Path, gate: bool) -> dict:
+def run(
+    model_path: Path,
+    gate: bool,
+    report: bool = False,
+    instances: Path | None = None,
+    features: Path | None = None,
+) -> dict:
+    instances = instances or INSTANCES
     split = json.loads(d.SPLITS.read_text())
     excluded = set(split["test"]) | set(split["validation"])
-    seg_pages = sorted(f.stem for f in INSTANCES.glob("*.json"))
+    seg_pages = sorted(f.stem for f in instances.glob("*.json"))
     fit_pages = [p for p in seg_pages if p not in excluded]
-    eval_pages = sorted(split["test"] if gate else split["validation"])
-    _, fit_x = _load(fit_pages)
-    eval_metas, eval_x = _load(eval_pages)
+    eval_pages = sorted(split["test"] if gate or report else split["validation"])
+    _, fit_x = _load(fit_pages, instances, features)
+    eval_metas, eval_x = _load(eval_pages, instances, features)
     k = clusters.k()
-    out = {"k": k, "eval": "test" if gate else "validation (dry run, not a result)"}
+    label = "test" if gate else "test, reported only (VO-043)" if report else "validation (dry run, not a result)"
+    out = {"k": k, "eval": label}
     inputs = d.load()
     out["attrition"] = attrition(eval_pages, eval_metas, inputs)
     if out["attrition"]["void"]:
@@ -114,8 +143,8 @@ def run(model_path: Path, gate: bool) -> dict:
     out["baseline_zl_token"] = gap_test(np.array([tokens[m["zl"]] for m in gated]), gated)
     by_id = {lo.id: lo for lo in inputs.loci}
     model = clusters.dinov2()
-    cx_fit, _ = _control(fit_pages, inputs, by_id, model)
-    cx_eval, cm_eval = _control(eval_pages, inputs, by_id, model)
+    cx_fit, _ = _control(fit_pages, inputs, by_id, model, instances)
+    cx_eval, cm_eval = _control(eval_pages, inputs, by_id, model, instances)
     out["control"] = _arm(cx_fit, cx_eval, cm_eval, k)
     if "gap" not in out["primary"]:
         raise AssertionError(f"no primary estimate on {out['primary']['n']} gated instances that passed attrition")
@@ -130,8 +159,17 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="g2")
     p.add_argument("model", type=Path)
     p.add_argument("--gate", action="store_true", help="score test pages: the one G2 gate run")
+    p.add_argument("--report", type=Path, help="score test pages into this directory, reported only, never gated")
+    p.add_argument("--instances", type=Path)
+    p.add_argument("--features", type=Path)
     args = p.parse_args(argv)
-    out = OUT if args.gate else ROOT / "build" / "g2-dry"
+    if args.gate and args.report:
+        raise SystemExit("--gate and --report are exclusive")
+    out = OUT if args.gate else args.report or ROOT / "build" / "g2-dry"
+    if args.report:
+        if args.report.resolve() == OUT.resolve():
+            raise SystemExit("reported runs never write the gate's result")
+        freeze.require(args.model)
     if args.gate:
         if (OUT / "result.json").exists():
             raise SystemExit("the G2 gate has run; its result stands")
@@ -139,7 +177,7 @@ def main(argv: list[str] | None = None) -> int:
         OUT.mkdir(parents=True, exist_ok=True)
         with open(OUT / "result.json", "x") as f:
             f.write('{"status": "started"}\n')
-    result = run(args.model, args.gate)
+    result = run(args.model, args.gate, args.report is not None, args.instances, args.features)
     out.mkdir(parents=True, exist_ok=True)
     (out / "result.json").write_text(json.dumps(result, indent=1) + "\n")
     print(result["outcome"])
