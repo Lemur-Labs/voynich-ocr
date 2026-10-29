@@ -11,7 +11,7 @@ from voynich_ocr import disagreement as d
 from voynich_ocr import freeze, g2, instances, lines, recognize, scoring, segment
 from voynich_ocr.align import majority
 from voynich_ocr.instances import OUT as INSTANCES
-from voynich_ocr.snapshot import ROOT
+from voynich_ocr.snapshot import ROOT, sha256
 
 OUT = ROOT / "results" / "g3"
 TEMPERATURE = ROOT / "build" / "g3" / "temperature.json"
@@ -123,7 +123,7 @@ def place(
                 by_map[name].append({
                     "page": page, "locus": locus.id, "column": k, "token": g["token"], "confidence": g["confidence"],
                     "frames": g["frames"], "page_confidence": page_confidence, "class": c.cls, "tier": c.tier,
-                    "gated": c.gated, "majority": " ".join(majority(list(c.readings.values()))),
+                    "gated": c.gated, "majority": majority(list(c.readings.values())),
                 })  # fmt: skip
     return by_map, inserted, texts
 
@@ -150,7 +150,8 @@ def coverage(metas: list[dict]) -> dict:
 
 def statistics(by_map: dict[str, list[dict]], b1: dict[str, float], b1_pooled: float, b2: dict[str, float]) -> dict:
     """H3's statistics on each map's gated glyphs. A glyph's type is its recognized token; higher scores mean more
-    likely disputed."""
+    likely disputed. B4 and B5 are scored both ways, higher and lower values as disputed, and the bar is the larger
+    within-type point of the four (VO-050)."""
     out: dict = {"n": {name: len(_gated(by_map[name])) for name in MAPS}, "within_type": {}}
     for name in ("leave-ZL-out", "leave-ZL-IT-out"):
         metas = _gated(by_map[name])
@@ -167,16 +168,21 @@ def statistics(by_map: dict[str, list[dict]], b1: dict[str, float], b1_pooled: f
         "B1": np.array([b1.get(t, b1_pooled) for t in types]),
         "B2": np.array([b2.get(t, np.inf) for t in types]),
         "B3": np.array([strokes(t) for t in types], dtype=float),
-        "B4": np.array([m["frames"] for m in full], dtype=float),
-        "B5": 1 - np.array([m["page_confidence"] for m in full]),
     }
     out["baselines"] = {k: {"pooled": _interval(scoring.auroc_statistic(s, disagree), pages)} for k, s in scores.items()}
-    for k in ("B4", "B5"):
-        out["baselines"][k]["within_type"] = _interval(scoring.within_type_auroc(scores[k], disagree, types), pages)
-    out["baseline_bar"] = max(out["baselines"][k]["within_type"]["point"] for k in ("B4", "B5"))
+    within = {"B4": np.array([m["frames"] for m in full], dtype=float),
+              "B5": np.array([m["page_confidence"] for m in full])}  # fmt: skip
+    for k, s in within.items():
+        ways = {"higher": s, "lower": -s}
+        out["baselines"][k] = {
+            "pooled": {w: _interval(scoring.auroc_statistic(v, disagree), pages) for w, v in ways.items()},
+            "within_type": {w: _interval(scoring.within_type_auroc(v, disagree, types), pages) for w, v in ways.items()},
+        }
+    out["baseline_bar"] = max(v["point"] for k in within for v in out["baselines"][k]["within_type"].values())
     loo = _gated(by_map["leave-ZL-IT-out"])
-    out["ece"] = scoring.ece(np.array([m["confidence"] for m in loo]),
-                             np.array([m["majority"] == m["token"] for m in loo]), ECE_BINS)  # fmt: skip
+    # A merged column holds a run of one token, and the consensus aligns each glyph to one token of that run.
+    agree = [bool(m["majority"]) and all(t == m["token"] for t in m["majority"]) for m in loo]
+    out["ece"] = scoring.ece(np.array([m["confidence"] for m in loo]), np.array(agree), ECE_BINS)
     wt = {k: scoring.Interval(**v) for k, v in out["within_type"].items()}
     out["outcome_by_rule"] = scoring.decide_recognizer(
         wt["full"], wt["leave-ZL-out"], scoring.Interval(**out["within_page"]), out["baseline_bar"]
@@ -187,7 +193,7 @@ def statistics(by_map: dict[str, list[dict]], b1: dict[str, float], b1_pooled: f
 def decide(
     by_map: dict[str, list[dict]], eval_pages: list[str], inputs: d.Inputs, b1: dict, b1_pooled: float, b2: dict
 ) -> dict:
-    """Void on page or readable-column attrition (docs/prereg.md A3, as G2 counts it) or on either coverage under
+    """Void on page or readable-column attrition (docs/prereg.md A6, A3's readable columns) or on either coverage under
     the minimum; otherwise the pre-registered rule."""
     out = {"attrition": g2.attrition(eval_pages, by_map["full"], inputs), "coverage": coverage(by_map["full"])}
     if out["attrition"]["void"] or any(scoring.void_for_underpower(c) for c in out["coverage"].values()):
@@ -227,29 +233,39 @@ def run(model_path: Path, gate: bool, instances_dir: Path | None = None) -> dict
         p: read(model, p, [lo.id for lo in loci[p]], instances_dir)
         for p in eval_pages if (instances_dir / f"{p}.json").exists()
     }  # fmt: skip
-    if gate:
-        temperature = json.loads(TEMPERATURE.read_text())["temperature"]
-    else:
-        fit = fit_from(reads, inputs, table, codec)
-        TEMPERATURE.parent.mkdir(parents=True, exist_ok=True)
-        TEMPERATURE.write_text(json.dumps({**fit, "model": str(model_path)}, indent=1) + "\n")
-        temperature = fit["temperature"]
-    test = set(split["test"])
-    b1_pages = sorted(f.stem for f in instances_dir.glob("*.json") if f.stem not in test and f.stem not in eval_pages)
-    b1, b1_pooled = disagreement_rates(instances_dir, b1_pages)
+    T = temperature(gate, lambda: fit_from(reads, inputs, table, codec), model_path)
+    b1, b1_pooled = disagreement_rates(instances_dir, b1_pages(instances_dir, set(split["test"]), eval_pages))
     b2 = surprisal(lines.OUT, tokens)
     label = "test" if gate else "validation (dry run, not a result)"
-    main = _evaluate(reads, "pairs", temperature, inputs, loci, codec.l2c, tokens)
-    out = {"eval": label, "temperature": temperature, "inserted": main["inserted"], "cer": main["cer"],
+    main = _evaluate(reads, "pairs", T, inputs, loci, codec.l2c, tokens)
+    out = {"eval": label, "temperature": T, "inserted": main["inserted"], "cer": main["cer"],
            "lines": main["lines"]}  # fmt: skip
     out.update(decide(main["by_map"], eval_pages, inputs, b1, b1_pooled, b2))
     blind_reads = {p: r for p, r in reads.items() if r["blind"]}
-    blind = _evaluate(blind_reads, "blind", temperature, inputs, loci, codec.l2c, tokens)
+    blind = _evaluate(blind_reads, "blind", T, inputs, loci, codec.l2c, tokens)
     out["label_blind"] = {"pages": sorted(blind_reads), "inserted": blind["inserted"], "cer": blind["cer"],
                           "coverage": coverage(blind["by_map"]["full"])}  # fmt: skip
     if blind_reads:
         out["label_blind"].update(statistics(blind["by_map"], b1, b1_pooled, b2))
     return out
+
+
+def b1_pages(instances_dir: Path, test: set[str], scored: list[str]) -> list[str]:
+    return sorted(f.stem for f in instances_dir.glob("*.json") if f.stem not in test and f.stem not in scored)
+
+
+def temperature_record(fit: dict, model_path: Path) -> dict:
+    return {**fit, "model": str(model_path), "model_sha256": sha256(model_path)}
+
+
+def temperature(gate: bool, fit, model_path: Path) -> float:
+    """The stored T at the gate, and in any dry run once the gate has run; otherwise `fit()` is run and stored."""
+    if gate or (OUT / "result.json").exists():
+        return json.loads(TEMPERATURE.read_text())["temperature"]
+    record = temperature_record(fit(), model_path)
+    TEMPERATURE.parent.mkdir(parents=True, exist_ok=True)
+    TEMPERATURE.write_text(json.dumps(record, indent=1) + "\n")
+    return record["temperature"]
 
 
 def fit_from(reads: dict, inputs: d.Inputs, table: dict[str, str], codec) -> dict:
@@ -275,11 +291,13 @@ def main(argv: list[str] | None = None) -> int:
     args = p.parse_args(argv)
     out = OUT if args.gate else ROOT / "build" / "g3-dry"
     if args.gate:
+        if args.instances is not None:
+            raise SystemExit("the gate reads G2's stored pairs in build/instances; --instances is for dry runs")
         if (OUT / "result.json").exists():
             raise SystemExit("the G3 gate has run; its result stands")
         if not TEMPERATURE.exists():
             raise SystemExit(f"no fitted temperature at {TEMPERATURE}; run the validation dry run first")
-        if json.loads(TEMPERATURE.read_text()).get("model") != str(args.model):
+        if json.loads(TEMPERATURE.read_text()).get("model_sha256") != sha256(args.model):
             raise SystemExit(f"{TEMPERATURE.name} was fitted for another model")
         freeze.require(args.model)
         OUT.mkdir(parents=True, exist_ok=True)

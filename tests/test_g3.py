@@ -80,24 +80,62 @@ def _metas(n: int, pages: int = 12, signal: float = 0.0, seed: int = 0) -> list[
         conf = float(np.clip(rng.uniform(0.3, 1.0) - signal * disagree, 0.01, 1.0))
         out.append({"page": f"f{i % pages}r", "locus": f"f{i % pages}r.1", "column": i, "token": ["o0", "d0"][i % 2],
                     "confidence": conf, "frames": int(rng.integers(1, 6)), "page_confidence": 0.8,
-                    "class": "disagree" if disagree else "agree", "gated": True, "majority": "o0"})  # fmt: skip
+                    "class": "disagree" if disagree else "agree", "gated": True, "majority": ("o0",)})  # fmt: skip
     return out
 
 
-def test_statistics_put_the_within_type_baseline_bar_at_the_larger_of_span_width_and_page_confidence():
+def test_statistics_pass_when_confidence_separates_disputed_glyphs_within_type_and_page():
     maps = {name: _metas(600, signal=0.4) for name in g3.MAPS}
     out = g3.statistics(maps, {"o0": 0.3}, 0.3, {"o0": 1.0, "d0": 2.0})
-    bar = max(out["baselines"]["B4"]["within_type"]["point"], out["baselines"]["B5"]["within_type"]["point"])
-    assert out["baseline_bar"] == bar
     assert out["within_type"]["full"]["lo"] > 0.5 and out["within_page"]["lo"] > 0.5
     assert set(out["baselines"]["B1"]) == {"pooled"} and "within_type" in out["baselines"]["B4"]
     assert out["outcome_by_rule"] == "pass"
 
 
+def _directional(n: int = 1200, pages: int = 12, seed: int = 1) -> list[dict]:
+    """Disputed glyphs are narrow (B4 points down) and sit on low-confidence pages (B5 points down, weaker)."""
+    rng = np.random.default_rng(seed)
+    out = []
+    for i in range(n):
+        page = i % pages
+        disagree = rng.random() < (0.45 if page < pages // 2 else 0.15)
+        frames = rng.integers(1, 3) if disagree else rng.integers(2, 7)
+        out.append({"page": f"f{page}r", "locus": f"f{page}r.1", "column": i, "token": ["o0", "d0"][i % 2],
+                    "confidence": float(rng.uniform(0.3, 1.0)), "frames": int(frames),
+                    "page_confidence": 0.6 if page < pages // 2 else 0.9,
+                    "class": "disagree" if disagree else "agree", "gated": True, "majority": ("o0",)})  # fmt: skip
+    return out
+
+
+def test_baseline_bar_takes_the_larger_of_both_directions_of_span_width_and_page_confidence():
+    maps = {name: _directional() for name in g3.MAPS}
+    out = g3.statistics(maps, {}, 0.3, {"o0": 1.0, "d0": 2.0})
+    b4, b5 = out["baselines"]["B4"]["within_type"], out["baselines"]["B5"]["within_type"]
+    assert b4["higher"]["point"] < 0.3 and b4["lower"]["point"] > 0.7
+    assert 0.5 < b5["lower"]["point"] < b4["lower"]["point"] and b5["higher"]["point"] < 0.5
+    assert b4["lower"]["point"] == pytest.approx(1 - b4["higher"]["point"])
+    assert out["baseline_bar"] == b4["lower"]["point"]
+
+
+def test_each_map_is_scored_on_its_own_glyphs():
+    maps = {"full": _metas(600, signal=0.4), "leave-ZL-out": _metas(600, signal=0.0, seed=1),
+            "leave-ZL-IT-out": _metas(600, signal=-0.4, seed=2)}  # fmt: skip
+    wt = g3.statistics(maps, {}, 0.3, {"o0": 1.0, "d0": 2.0})["within_type"]
+    assert wt["full"]["point"] > 0.65 and abs(wt["leave-ZL-out"]["point"] - 0.5) < 0.1
+    assert wt["leave-ZL-IT-out"]["point"] < 0.35
+
+
 def test_ece_scores_agreement_with_the_leave_zl_it_out_majority():
     maps = {name: _metas(300) for name in g3.MAPS}
     for m in maps["leave-ZL-IT-out"]:
-        m["confidence"], m["majority"] = 1.0, m["token"]
+        m["confidence"], m["majority"] = 1.0, (m["token"],)
+    assert g3.statistics(maps, {}, 0.3, {"o0": 1.0, "d0": 1.0})["ece"] == pytest.approx(0.0)
+
+
+def test_a_glyph_in_a_merged_run_of_its_own_token_agrees_with_the_majority():
+    maps = {name: _metas(300) for name in g3.MAPS}
+    for m in maps["leave-ZL-IT-out"]:
+        m["confidence"], m["majority"] = 1.0, (m["token"], m["token"])
     assert g3.statistics(maps, {}, 0.3, {"o0": 1.0, "d0": 1.0})["ece"] == pytest.approx(0.0)
 
 
@@ -140,22 +178,100 @@ def test_gate_refuses_a_temperature_fitted_for_another_model(tmp_path, monkeypat
     monkeypatch.setattr(g3, "TEMPERATURE", tmp_path / "temperature.json")
     monkeypatch.setattr(g3.freeze, "require", lambda *a: None)
     monkeypatch.setattr(g3, "run", lambda *a: pytest.fail("ran"))
-    (tmp_path / "temperature.json").write_text(json.dumps({"temperature": 1.5, "model": "other.safetensors"}))
+    model = tmp_path / "m.safetensors"
+    model.write_bytes(b"weights")
+    other = tmp_path / "other.safetensors"
+    other.write_bytes(b"other weights")
+    (tmp_path / "temperature.json").write_text(json.dumps(g3.temperature_record({"temperature": 1.5}, other)))
     with pytest.raises(SystemExit, match="model"):
-        g3.main(["m.safetensors", "--gate"])
+        g3.main([str(model), "--gate"])
+
+
+def test_gate_accepts_a_temperature_fitted_for_the_same_weights_at_another_path(tmp_path, monkeypatch):
+    monkeypatch.setattr(g3, "OUT", tmp_path / "g3")
+    monkeypatch.setattr(g3, "TEMPERATURE", tmp_path / "temperature.json")
+    monkeypatch.setattr(g3.freeze, "require", lambda *a: None)
+    monkeypatch.setattr(g3, "run", lambda *a: {"outcome": "kill"})
+    (tmp_path / "a.safetensors").write_bytes(b"weights")
+    (tmp_path / "b.safetensors").write_bytes(b"weights")
+    record = g3.temperature_record({"temperature": 1.5}, tmp_path / "a.safetensors")
+    (tmp_path / "temperature.json").write_text(json.dumps(record))
+    g3.main([str(tmp_path / "b.safetensors"), "--gate"])
+    assert json.loads((tmp_path / "g3" / "result.json").read_text())["outcome"] == "kill"
+
+
+def test_gate_refuses_an_instance_directory(tmp_path, monkeypatch):
+    monkeypatch.setattr(g3, "OUT", tmp_path / "g3")
+    monkeypatch.setattr(g3.freeze, "require", lambda *a: None)
+    monkeypatch.setattr(g3, "run", lambda *a: pytest.fail("ran"))
+    with pytest.raises(SystemExit, match="instances"):
+        g3.main(["m.safetensors", "--gate", "--instances", str(tmp_path)])
+    assert not (tmp_path / "g3").exists()
+
+
+def test_a_dry_run_writes_under_build_and_never_results(tmp_path, monkeypatch):
+    monkeypatch.setattr(g3, "ROOT", tmp_path)
+    monkeypatch.setattr(g3, "OUT", tmp_path / "results" / "g3")
+    monkeypatch.setattr(g3, "run", lambda *a: {"outcome": "void"})
+    g3.main(["m.safetensors"])
+    assert (tmp_path / "build" / "g3-dry" / "result.json").exists()
+    assert not (tmp_path / "results").exists()
+
+
+def test_once_the_gate_has_run_a_dry_run_reuses_the_temperature_and_never_refits(tmp_path, monkeypatch):
+    monkeypatch.setattr(g3, "OUT", tmp_path / "g3")
+    monkeypatch.setattr(g3, "TEMPERATURE", tmp_path / "temperature.json")
+    (tmp_path / "g3").mkdir()
+    (tmp_path / "g3" / "result.json").write_text("{}")
+    (tmp_path / "temperature.json").write_text('{"temperature": 1.5}')
+    assert g3.temperature(False, lambda: pytest.fail("refit"), tmp_path / "m.safetensors") == 1.5
+    assert (tmp_path / "temperature.json").read_text() == '{"temperature": 1.5}'
+
+
+def test_a_dry_run_before_the_gate_fits_and_records_the_model_hash(tmp_path, monkeypatch):
+    monkeypatch.setattr(g3, "OUT", tmp_path / "g3")
+    monkeypatch.setattr(g3, "TEMPERATURE", tmp_path / "build" / "temperature.json")
+    (tmp_path / "m.safetensors").write_bytes(b"weights")
+    assert g3.temperature(False, lambda: {"temperature": 2.0}, tmp_path / "m.safetensors") == 2.0
+    record = json.loads((tmp_path / "build" / "temperature.json").read_text())
+    assert record["model_sha256"] == g3.sha256(tmp_path / "m.safetensors")
+
+
+def test_b1_reads_non_test_pages_other_than_the_scored_ones(tmp_path):
+    for page in ("f1r", "f2r", "f9r"):
+        (tmp_path / f"{page}.json").write_text("{}")
+    assert g3.b1_pages(tmp_path, test={"f9r"}, scored=["f2r"]) == ["f1r"]
+
+
+def test_the_fit_skips_lines_whose_zl_label_has_a_question_mark():
+    from voynich_ocr import disagreement as d
+    from voynich_ocr.sta import Glyph
+
+    aaa = {"A1": "o0", "B1": "d0"}
+    zl = {"f1r.1": [Glyph("A1", False, ""), Glyph("B1", False, "")],
+          "f1r.2": [Glyph("A1", False, ""), Glyph("Z1", False, "")]}  # fmt: skip
+    inputs = d.Inputs({"ZL": d.Source(zl, frozenset(aaa))}, [], aaa)
+    codec = type("Codec", (), {"encode": staticmethod(lambda s: np.array([{"a": 1, "b": 2}[c] for c in s]))})
+    reads = {"f1r": {"pairs": {"f1r.1": 0, "f1r.2": 1},
+                     "posteriors": {0: _posterior([0, 1, 0, 2]), 1: _posterior([0, 1, 0, 2])}}}  # fmt: skip
+    fit = g3.fit_from(reads, inputs, {"o0": "a", "d0": "b"}, codec)
+    assert fit["lines"] == 1 and fit["unlabelled"] == 1
 
 
 def test_a_gate_run_that_crashes_still_counts_as_the_run(tmp_path, monkeypatch):
     monkeypatch.setattr(g3, "OUT", tmp_path / "g3")
     monkeypatch.setattr(g3, "TEMPERATURE", tmp_path / "temperature.json")
     monkeypatch.setattr(g3.freeze, "require", lambda *a: None)
-    (tmp_path / "temperature.json").write_text(json.dumps({"temperature": 1.5, "model": "m.safetensors"}))
+    (tmp_path / "m.safetensors").write_bytes(b"weights")
+    record = g3.temperature_record({"temperature": 1.5}, tmp_path / "m.safetensors")
+    (tmp_path / "temperature.json").write_text(json.dumps(record))
+    model = str(tmp_path / "m.safetensors")
 
     def crash(*a):
         raise RuntimeError("mid-run")
 
     monkeypatch.setattr(g3, "run", crash)
     with pytest.raises(RuntimeError):
-        g3.main(["m.safetensors", "--gate"])
+        g3.main([model, "--gate"])
     with pytest.raises(SystemExit):
-        g3.main(["m.safetensors", "--gate"])
+        g3.main([model, "--gate"])
