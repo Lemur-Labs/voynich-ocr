@@ -57,11 +57,11 @@ def page_instances(
     decoded = [[tokens[g["char"]] for g in row if g["char"] != lines.SPACE] for row in read]
     sizes = [im.size for _, im in lines.line_images(page, {str(i): r for i, r in enumerate(rows)})]
     ids = [lo.id for lo in loci]
-    zl = inputs.sources["ZL"].loci
-    labels = {k: lines.tokens(zl.get(k, []), inputs.aaa) for k in ids}
     if blind:
         pairs, rule = pair_rows_blind(sizes, ids)
     else:
+        zl = inputs.sources["ZL"].loci
+        labels = {k: lines.tokens(zl.get(k, []), inputs.aaa) for k in ids}
         pairs, rule = pair_rows(sizes, ids, labels, {k: zl_tokens(inputs, k) for k in ids}, decoded)
     out = []
     inserted = 0
@@ -95,6 +95,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--out", type=Path, default=OUT)
     p.add_argument("--blind", action="store_true", help="pair rows to loci without reading any transliteration")
     args = p.parse_args(argv)
+    if args.blind and args.out == OUT:
+        raise SystemExit("blind pairing needs its own --out")
     if args.test:
         freeze.require(args.model)
     test = d.test_pages()

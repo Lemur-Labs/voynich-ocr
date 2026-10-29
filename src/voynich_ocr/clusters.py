@@ -104,6 +104,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--out", type=Path, default=OUT)
     p.add_argument("--instances", type=Path, default=INSTANCES)
     args = p.parse_args(argv)
+    if args.instances != INSTANCES and args.out == OUT:
+        raise SystemExit("features of other instances need their own --out")
     if args.test:
         freeze.require()
     test = d.test_pages()

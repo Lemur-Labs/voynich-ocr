@@ -60,6 +60,14 @@ def detectable(se: float, null_975: float, at: float = 0.8) -> float:
     return null_975 + se * (_Z.inv_cdf(0.975) + _Z.inv_cdf(at))
 
 
+def gate_power(primary: dict) -> dict:
+    """Standard error from the distance between the gap and its interval's lower bound, which is what the rule
+    tests, and the gap detectable with 80% power."""
+    se = (primary["gap"] - primary["lo"]) / _Z.inv_cdf(0.975)
+    return {"se": se, "detectable_80": detectable(se, primary["null_975"]),
+            "power_at_gap": power(primary["gap"], se, primary["null_975"])}  # fmt: skip
+
+
 def _comparable(metas: list[dict]) -> bool:
     """Some ZL token has both disputed and undisputed instances, so the within-token gap has an estimate."""
     classes: dict[str, set[str]] = {}
@@ -167,9 +175,12 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit("--gate and --report are exclusive")
     out = OUT if args.gate else args.report or ROOT / "build" / "g2-dry"
     if args.report:
-        if args.report.resolve() == OUT.resolve():
-            raise SystemExit("reported runs never write the gate's result")
+        if not args.report.resolve().is_relative_to((ROOT / "build").resolve()):
+            raise SystemExit("reported runs write only under build/")
         freeze.require(args.model)
+        args.report.mkdir(parents=True, exist_ok=True)
+        with open(args.report / "result.json", "x") as f:
+            f.write('{"status": "started"}\n')
     if args.gate:
         if (OUT / "result.json").exists():
             raise SystemExit("the G2 gate has run; its result stands")
@@ -178,6 +189,9 @@ def main(argv: list[str] | None = None) -> int:
         with open(OUT / "result.json", "x") as f:
             f.write('{"status": "started"}\n')
     result = run(args.model, args.gate, args.report is not None, args.instances, args.features)
+    if args.report and "gap" in result.get("primary", {}):
+        result["power"] = gate_power(result["primary"])
+        result["inputs"] = {"model": str(args.model), "instances": str(args.instances), "features": str(args.features)}
     out.mkdir(parents=True, exist_ok=True)
     (out / "result.json").write_text(json.dumps(result, indent=1) + "\n")
     print(result["outcome"])
