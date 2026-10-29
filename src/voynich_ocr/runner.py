@@ -41,6 +41,8 @@ def ketos_args(seed: int, out: Path, arm: str | None = None) -> list[str]:
 def pack(dirs: list[Path]) -> tuple[Path, str]:
     """A tar of line datasets, paths relative to build/, named by the hash of its contents."""
     base = LINES.parent
+    if missing := [str(d) for d in dirs if not (d / "train.txt").exists()]:
+        raise SystemExit(f"line datasets not built: {missing}")
     files = sorted(p for d in dirs for p in d.rglob("*") if p.is_file())
     digest = hashlib.sha256()
     for p in files:
@@ -62,13 +64,17 @@ def _commit() -> str:
     return head.stdout.strip()
 
 
+def instance_name(seed: int, digest: str, arms: list[str]) -> str:
+    return "-".join([f"train-{seed}-{digest[:8]}", *arms])
+
+
 def launch(seed: int, arms: list[str]) -> str:
     commit = _commit()
     tar, digest = pack(sorted({ARMS[a][0] for a in arms}) if arms else [LINES])
     lines = f"{BUCKET}/lines/{tar.name}"
     subprocess.run(["gcloud", "storage", "cp", "--no-clobber", str(tar), lines], check=True)
     run = f"{BUCKET}/runs/{commit[:12]}-{digest[:12]}-{'-'.join([str(seed), *arms])}"
-    name = f"train-{seed}-{digest[:8]}" + ("-arms" if arms else "")
+    name = instance_name(seed, digest, arms)
     for zone in ZONES:
         r = subprocess.run(
             [
@@ -104,6 +110,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--seed", type=int, choices=SEEDS, required=True)
     p.add_argument("--arm", action="append", choices=list(ARMS), default=[], help="launch: repeatable; train: one")
     args = p.parse_args(argv)
+    if args.command == "train" and len(args.arm) > 1:
+        p.error("train takes one --arm")
     if args.command == "launch":
         print(launch(args.seed, args.arm))
     else:

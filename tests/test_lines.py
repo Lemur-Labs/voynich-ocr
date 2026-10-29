@@ -49,3 +49,8 @@ def test_paper_fill_replaces_only_the_black_polygon_fill():
     out = np.asarray(ln.paper_fill(Image.fromarray(a)))
     assert (out[:3] == 200).all()
     assert tuple(out[5, 5]) == (60, 40, 20)
+
+
+def test_paper_fill_leaves_an_all_black_image_alone():
+    black = Image.new("RGB", (8, 4))
+    assert np.asarray(ln.paper_fill(black)).max() == 0
