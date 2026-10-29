@@ -25,6 +25,29 @@ def spans(probs: np.ndarray) -> list[tuple[int, int, int, float]]:
     return out
 
 
+def regions(runs: list[tuple[int, int, int, float]], n_frames: int) -> list[tuple[float, float]]:
+    """Each span's frame range widened to the midpoints of the gaps to its neighbours; the outer spans extend by the
+    same margin they get on their inner side."""
+    if len(runs) < 2:
+        return [(s, e) for _, s, e, _ in runs]
+    cuts = [(runs[i][2] + runs[i + 1][1]) / 2 for i in range(len(runs) - 1)]
+    lo = [max(0.0, runs[0][1] - (cuts[0] - runs[0][2])), *cuts]
+    hi = [*cuts, min(n_frames, runs[-1][2] + (runs[-1][1] - cuts[-1]))]
+    return list(zip(lo, hi, strict=True))
+
+
+def baseline_map(runs: list[tuple[int, int, int, float]], cuts: list) -> tuple[float, float] | None:
+    """Slope and offset from output frame to distance along the baseline, fitted to kraken's span positions, which
+    take a span's last frame as its end and are clamped to the line's extent."""
+    frames = [f for _, s, e, _ in runs for f in (s, e - 1)]
+    dists = [x for c in cuts for x in c]
+    inner = {(f, x) for f, x in zip(frames, dists, strict=True) if 0 < x < max(dists)}
+    if len({f for f, _ in inner}) < 2:
+        return None
+    a, b = np.polyfit(*zip(*sorted(inner), strict=True), 1)
+    return float(a), float(b)
+
+
 def _distance(a: list[str], b: list[str]) -> int:
     prev = list(range(len(b) + 1))
     for i, x in enumerate(a, 1):
@@ -103,9 +126,11 @@ def load(path: Path):
 
 
 def read_page(model, page: str, rows: list[dict], temperature: float = 1.0) -> list[list[dict]]:
-    """Each row's glyphs as {char, confidence, cut}; `cut` is kraken's polygon for the same greedy label run."""
+    """Each row's glyphs as {char, confidence, cut}; `cut` is the line polygon between the span's `regions`
+    boundaries, or kraken's own cut for the span when the row is too short to map frames onto the baseline."""
     from kraken.configs import RecognitionInferenceConfig
     from kraken.containers import BaselineLine, Segmentation
+    from kraken.lib.segmentation import compute_polygon_section
     from PIL import Image
 
     seg = Segmentation(
@@ -121,13 +146,27 @@ def read_page(model, page: str, rows: list[dict], temperature: float = 1.0) -> l
     l2c = model.net.codec.l2c
     out = []
     for rec in model.predict(Image.open(segment.IMAGES / f"{page}.jpg"), seg, config):
-        runs = spans(rec.logits.numpy())
+        probs = rec.logits.numpy()
+        runs = spans(probs)
         if len(runs) != len(rec.cuts):
             raise AssertionError(f"{page}: {len(runs)} spans but {len(rec.cuts)} cuts")
+        # kraken 7.1.1 keeps span positions along the baseline in the private `_cuts`.
+        fit = baseline_map(runs, rec._cuts) if runs else None
+        if fit is None:
+            cuts = list(rec.cuts)
+        else:
+            a, b = fit
+            length = rec._bl_length
+            cuts = [
+                compute_polygon_section(
+                    rec.baseline, rec.boundary, min(max(a * lo + b, 0), length), min(max(a * hi + b, 0), length)
+                )
+                for lo, hi in regions(runs, probs.shape[1])
+            ]
         out.append(
             [
                 {"char": l2c[(c,)], "confidence": conf, "cut": [list(map(float, p)) for p in cut]}
-                for (c, _, _, conf), cut in zip(runs, rec.cuts, strict=True)
+                for (c, _, _, conf), cut in zip(runs, cuts, strict=True)
             ]
         )
     return out

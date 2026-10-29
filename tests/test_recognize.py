@@ -41,3 +41,23 @@ def test_recognized_glyphs_inherit_columns_and_insertions_are_counted():
     columns, inserted = rc.align_to_columns(["a", "x", "b", "d"], cons)
     assert columns == [0, None, 1, 2]
     assert inserted == 1
+
+
+def test_regions_split_the_gaps_between_neighbouring_spans_at_their_midpoints():
+    runs = [(1, 10, 12, 0.9), (2, 20, 22, 0.9), (1, 40, 41, 0.9)]
+    assert rc.regions(runs, 48) == [(6.0, 16.0), (16.0, 31.0), (31.0, 48)]
+
+
+def test_a_lone_span_keeps_its_own_frames():
+    assert rc.regions([(1, 5, 7, 0.9)], 30) == [(5, 7)]
+
+
+def test_frame_to_baseline_map_fits_kraken_cuts_with_inclusive_ends_and_skips_clamped_points():
+    runs = [(1, 0, 2, 0.9), (2, 7, 8, 0.9), (1, 12, 14, 0.9), (2, 20, 21, 0.9)]
+    cuts = [[0, 0], [50, 50], [100, 110], [180, 180]]
+    a, b = rc.baseline_map(runs, cuts)
+    assert abs(a - 10) < 1e-9 and abs(b + 20) < 1e-9
+
+
+def test_frame_to_baseline_map_needs_two_unclamped_frames():
+    assert rc.baseline_map([(1, 0, 1, 0.9), (2, 9, 10, 0.9)], [[0, 0], [70, 70]]) is None
