@@ -3,6 +3,8 @@ import json
 import sys
 from pathlib import Path
 
+import numpy as np
+
 from voynich_ocr import disagreement as d
 from voynich_ocr import freeze, lines, recognize, segment
 from voynich_ocr.snapshot import ROOT
@@ -15,14 +17,24 @@ def zl_tokens(inputs: d.Inputs, locus: str) -> list[str]:
 
 
 def pair_rows(
-    sizes: list[tuple[float, float]], ids: list[str], zl: dict[str, list[str]], decoded: list[list[str]]
+    sizes: list[tuple[int, int]],
+    ids: list[str],
+    labels: dict[str, list[str] | None],
+    zl: dict[str, list[str]],
+    decoded: list[list[str]],
 ) -> tuple[dict[str, int], str]:
-    """Loci to row indices. Rows pair by count, as in training, when the counts match before tall rows are dropped
-    and the kept rows' widths track their loci's lengths (`lines.paired`); else by text over the kept rows."""
+    """Loci to row indices. When the counts match, rows pair by count if the labelled lines pass training's
+    `lines.screen`; unlabelled (`?`) lines stay unless taller than the labelled ones allow. Otherwise rows pair by
+    text over the single rows."""
+    labelled = [i for i, k in enumerate(ids) if labels[k] is not None] if len(sizes) == len(ids) else []
+    if labelled:
+        keep, ok = lines.screen([sizes[i] for i in labelled], [len(labels[ids[i]]) for i in labelled])
+        if ok:
+            tallest = lines.TALL * float(np.median([sizes[i][1] for i in labelled]))
+            kept = {i for i, k in zip(labelled, keep, strict=True) if k}
+            kept |= {i for i, k in enumerate(ids) if labels[k] is None and sizes[i][1] <= tallest}
+            return {ids[i]: i for i in sorted(kept)}, "count"
     kept = [i for i, k in enumerate(lines.single_row([h for _, h in sizes])) if k]
-    widths = [sizes[i][0] / sizes[i][1] for i in kept]
-    if len(sizes) == len(ids) and lines.paired(widths, [len(zl[ids[i]]) for i in kept]):
-        return {ids[i]: i for i in kept}, "count"
     by_text = recognize.assign_by_text([decoded[i] for i in kept], zl)
     return {k: kept[j] for k, j in by_text.items()}, "text"
 
@@ -32,13 +44,11 @@ def page_instances(model, page: str, inputs: d.Inputs, loci: list[d.Locus], toke
     rows = segment.page_lines(json.loads((segment.OUT / f"{page}.json").read_text()), segment.height(page))
     read = recognize.read_page(model, page, rows)
     decoded = [[tokens[g["char"]] for g in row if g["char"] != lines.SPACE] for row in read]
-    sizes = [
-        (max(p[0] for p in r["boundary"]) - min(p[0] for p in r["boundary"]),
-         max(p[1] for p in r["boundary"]) - min(p[1] for p in r["boundary"]))
-        for r in rows
-    ]  # fmt: skip
+    sizes = [im.size for _, im in lines.line_images(page, {str(i): r for i, r in enumerate(rows)})]
     ids = [lo.id for lo in loci]
-    pairs, rule = pair_rows(sizes, ids, {k: zl_tokens(inputs, k) for k in ids}, decoded)
+    zl = inputs.sources["ZL"].loci
+    labels = {k: lines.tokens(zl.get(k, []), inputs.aaa) for k in ids}
+    pairs, rule = pair_rows(sizes, ids, labels, {k: zl_tokens(inputs, k) for k in ids}, decoded)
     out = []
     inserted = 0
     for locus in loci:

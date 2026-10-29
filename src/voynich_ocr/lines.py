@@ -1,6 +1,7 @@
 import argparse
 import json
 import sys
+from collections.abc import Iterator
 from pathlib import Path
 
 import numpy as np
@@ -48,6 +49,13 @@ def paired(widths: list[float], lengths: list[int]) -> bool:
     return float(np.corrcoef(widths, lengths)[0, 1]) >= MIN_PAIRING_R
 
 
+def screen(sizes: list[tuple[int, int]], lengths: list[int]) -> tuple[list[bool], bool]:
+    """Which line images are single rows, and whether the kept ones' widths track their label lengths."""
+    keep = single_row([h for _, h in sizes])
+    kept = [i for i, k in enumerate(keep) if k]
+    return keep, paired([sizes[i][0] / sizes[i][1] for i in kept], [lengths[i] for i in kept])
+
+
 def paper_fill(im: Image.Image) -> Image.Image:
     """The line image with kraken's black polygon fill replaced by the median colour of the rest."""
     a = np.asarray(im.convert("RGB")).copy()
@@ -77,16 +85,21 @@ def stem(locus: str) -> str:
     return locus.replace(".", "_")
 
 
-def extract(page: str, rows: dict[str, dict], out: Path, fill: str) -> None:
+def line_images(page: str, rows: dict[str, dict]) -> Iterator[tuple[str, Image.Image]]:
+    """Kraken's straightened, polygon-masked image of each row, by row id."""
     from kraken.containers import BaselineLine, Segmentation
     from kraken.lib.segmentation import extract_polygons
-    from PIL import Image
 
     lines = [BaselineLine(id=k, baseline=r["baseline"], boundary=r["boundary"]) for k, r in rows.items()]
     seg = Segmentation(type="baselines", imagename=str(segment.IMAGES / f"{page}.jpg"), text_direction="horizontal-lr",
                        script_detection=False, lines=lines)
     for im, line in extract_polygons(Image.open(segment.IMAGES / f"{page}.jpg"), seg):
-        (paper_fill(im) if fill == "paper" else im).save(out / f"{stem(line.id)}.png")
+        yield line.id, im
+
+
+def extract(page: str, rows: dict[str, dict], out: Path, fill: str) -> None:
+    for k, im in line_images(page, rows):
+        (paper_fill(im) if fill == "paper" else im).save(out / f"{stem(k)}.png")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -122,13 +135,12 @@ def main(argv: list[str] | None = None) -> int:
         target = args.out / page
         target.mkdir(exist_ok=True)
         extract(page, {k: rows[k] for k in labelled[page]}, target, args.fill)
-        heights = [Image.open(target / f"{stem(k)}.png").size[1] for k in labelled[page]]
-        for k, keep in zip(list(labelled[page]), single_row(heights), strict=True):
-            if not keep:
+        sizes = [Image.open(target / f"{stem(k)}.png").size for k in labelled[page]]
+        keep, report[page]["paired"] = screen(sizes, [len(ts) for ts in labelled[page].values()])
+        for k, single in zip(list(labelled[page]), keep, strict=True):
+            if not single:
                 (target / f"{stem(k)}.png").unlink()
                 del labelled[page][k]
-        sizes = [Image.open(target / f"{stem(k)}.png").size for k in labelled[page]]
-        report[page]["paired"] = paired([w / h for w, h in sizes], [len(ts) for ts in labelled[page].values()])
         if not report[page]["paired"]:
             for k in labelled[page]:
                 (target / f"{stem(k)}.png").unlink()
