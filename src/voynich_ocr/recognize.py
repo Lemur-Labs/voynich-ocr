@@ -125,12 +125,17 @@ def load(path: Path):
     return RecognitionTaskModel.load_model(path)
 
 
-def read_page(model, page: str, rows: list[dict], temperature: float = 1.0) -> list[list[dict]]:
-    """Each row's glyphs as {char, confidence, cut}; `cut` is the line polygon between the span's `regions`
-    boundaries, or kraken's own cut for the span when the row is too short to map frames onto the baseline."""
+def log_posteriors(probs: np.ndarray, temperature: float) -> np.ndarray:
+    """log_softmax(log p / T) over classes: kraken's posteriors are softmax(logits), so this is softmax(logits / T)."""
+    with np.errstate(divide="ignore"):
+        z = np.log(probs.astype(np.float64)) / temperature
+    top = z.max(axis=0)
+    return z - (top + np.log(np.exp(z - top).sum(axis=0)))
+
+
+def _records(model, page: str, rows: list[dict], temperature: float = 1.0):
     from kraken.configs import RecognitionInferenceConfig
     from kraken.containers import BaselineLine, Segmentation
-    from kraken.lib.segmentation import compute_polygon_section
     from PIL import Image
 
     seg = Segmentation(
@@ -143,9 +148,22 @@ def read_page(model, page: str, rows: list[dict], temperature: float = 1.0) -> l
     config = RecognitionInferenceConfig(
         return_logits=True, temperature=temperature, accelerator="cpu", num_workers=0, bidi_reordering=False
     )
+    return model.predict(Image.open(segment.IMAGES / f"{page}.jpg"), seg, config)
+
+
+def posteriors(model, page: str, rows: list[dict]) -> list[np.ndarray]:
+    """Each row's (classes, frames) posteriors at temperature 1; kraken 7.1.1's `logits` are softmax outputs."""
+    return [rec.logits.numpy() for rec in _records(model, page, rows)]
+
+
+def read_page(model, page: str, rows: list[dict], temperature: float = 1.0) -> list[list[dict]]:
+    """Each row's glyphs as {char, confidence, cut}; `cut` is the line polygon between the span's `regions`
+    boundaries, or kraken's own cut for the span when the row is too short to map frames onto the baseline."""
+    from kraken.lib.segmentation import compute_polygon_section
+
     l2c = model.net.codec.l2c
     out = []
-    for rec in model.predict(Image.open(segment.IMAGES / f"{page}.jpg"), seg, config):
+    for rec in _records(model, page, rows, temperature):
         probs = rec.logits.numpy()
         runs = spans(probs)
         if len(runs) != len(rec.cuts):

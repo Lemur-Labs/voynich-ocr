@@ -61,3 +61,16 @@ def test_frame_to_baseline_map_fits_kraken_cuts_with_inclusive_ends_and_skips_cl
 
 def test_frame_to_baseline_map_needs_two_unclamped_frames():
     assert rc.baseline_map([(1, 0, 1, 0.9), (2, 9, 10, 0.9)], [[0, 0], [70, 70]]) is None
+
+
+def test_rescaled_posteriors_equal_a_softmax_of_the_raw_logits_divided_by_the_temperature():
+    raw = np.random.default_rng(0).standard_normal((5, 9)) * 4
+    probs = np.exp(raw) / np.exp(raw).sum(axis=0)
+    hot = np.exp(raw / 2.5) / np.exp(raw / 2.5).sum(axis=0)
+    assert np.allclose(np.exp(rc.log_posteriors(probs, 2.5)), hot)
+
+
+def test_rescaling_keeps_every_frame_argmax_so_spans_keep_their_frames():
+    probs = _probs([0, 2, 2, 0, 2, 3, 3, 0])
+    hot = np.exp(rc.log_posteriors(probs, 3.0))
+    assert [s[:3] for s in rc.spans(hot)] == [s[:3] for s in rc.spans(probs)]

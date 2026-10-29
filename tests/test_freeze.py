@@ -37,3 +37,12 @@ def test_hash_follows_fit_page_outputs_and_line_labels_but_not_test_page_outputs
     after = freeze.config_hash(model, tmp_path)
     (tmp_path / "build/instances/f1r.json").write_text("y")
     assert freeze.config_hash(model, tmp_path) != after
+
+
+def test_hash_follows_the_g3_temperature(tmp_path):
+    model = _root(tmp_path)
+    (tmp_path / "build/g3").mkdir(parents=True)
+    (tmp_path / "build/g3/temperature.json").write_text('{"temperature": 1.5}')
+    before = freeze.config_hash(model, tmp_path)
+    (tmp_path / "build/g3/temperature.json").write_text('{"temperature": 1.55}')
+    assert freeze.config_hash(model, tmp_path) != before
