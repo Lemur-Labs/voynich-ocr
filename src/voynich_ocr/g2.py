@@ -6,7 +6,7 @@ from pathlib import Path
 
 import numpy as np
 
-from voynich_ocr import clusters, proposer, scoring
+from voynich_ocr import clusters, lines, proposer, scoring, segment
 from voynich_ocr import disagreement as d
 from voynich_ocr.instances import OUT as INSTANCES
 from voynich_ocr.snapshot import ROOT
@@ -73,10 +73,16 @@ def _control(pages: list[str], inputs: d.Inputs, by_id: dict, model) -> tuple[np
     return clusters.embed(model, crops), metas
 
 
+def readable(columns, eval_pages: list[str], imaged: set[str], paragraph: dict[str, list[str]]) -> set:
+    """Gated paragraph-text columns on evaluated pages that have their own image (docs/prereg.md amendment A3)."""
+    loci = {k for page in set(eval_pages) & imaged for k in paragraph.get(page, [])}
+    return {(c.locus, c.index) for c in columns if c.gated and c.locus in loci}
+
+
 def attrition(eval_pages: list[str], metas: list[dict], inputs: d.Inputs) -> dict:
-    """Pages and gated map columns of the evaluated pages that end up with at least one gated instance."""
+    """Pages of the evaluated set, and its readable gated columns, that end up with at least one gated instance."""
     columns, _ = d.build(inputs, d.MAPS["full"])
-    wanted = {(c.locus, c.index) for c in columns if c.page in set(eval_pages) and c.gated}
+    wanted = readable(columns, eval_pages, set(segment.image_pages()), lines.paragraph_loci())
     got = {(m["locus"], m["column"]) for m in metas if m["gated"]}
     pages = {m["page"] for m in metas if m["gated"]}
     return {
