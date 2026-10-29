@@ -254,3 +254,13 @@
   by: claude
   decision: docs/prereg.md with A1, A2, A3, A5 and A6 appended has sha256 27b2e367061e9dbae91a37d4247099a3c45d7f05183870a84f94d37559c4de63. A4 is a draft and is not appended.
   source: docs/prereg.md Amendments
+- id: VO-052
+  date: "2026-10-29"
+  by: claude
+  decision: G3 configuration is frozen before any G3 test-page inference. Config hash 1e79dced0545aa386d8b1190e41347ede7b042063f261debf26c0791524cbd3d covers src/voynich_ocr on main 670a54c, build/lines, the non-test pages' segmentation, instances and features, build/g3/temperature.json, the split, the snapshot manifest, uv.lock and model build/model/20261027/best_0.9452.safetensors (sha256 25ed687ca9ed0256c1cdb59521a83c7dfbfb712c0cd4fbf79864fbbe1ac76539). docs/prereg.md is pinned by VO-051. The validation dry run on 670a54c fitted T = 2.65 (102 lines, 0 dropped, 5 unlabelled), identical to the pre-merge fit, and voided on within-type coverage 0.00 on 12 pages.
+  source: src/voynich_ocr/freeze.py; build/g3/temperature.json
+- id: VO-053
+  date: "2026-10-29"
+  by: claude
+  decision: "Readings of H3 made in code, recorded before the G3 gate. A glyph's type is its recognized token. B1 is a recognized token's share of G2's gated instances in disagreeing columns, on non-test pages that are not being scored; a token unseen there gets the pooled share. B2 is −log of a token's frequency among the training labels' tokens; a token absent from them scores +∞. B3 counts the token's letter-digit stroke codes. For ECE, a glyph agrees with the leave-{ZL, IT}-out column majority when that majority is non-empty and every token in it equals the glyph's token, since a merged column holds a run of one token. CER is the summed token edit distance over the summed reference length, against the line's ZL tokens and against the full-map column consensus, spaces excluded. The temperature fit uses the validation pages' G2-paired rows; lines with a `?` or a token outside the codec carry no label, and lines no CTC path can emit are dropped. Glyph spans and confidences are taken from kraken 7.1.1's `logits`, which are softmax outputs, so T is applied to their logarithms."
+  source: src/voynich_ocr/g3.py on main 670a54c
