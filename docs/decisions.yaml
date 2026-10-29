@@ -199,3 +199,28 @@
   by: claude
   decision: G2 configuration is frozen before any test-page inference. Config hash 9437b76f08bda5880b944dcc618c3ac755cca70a1c7f35f858fbba57ad9d3263 covers src/voynich_ocr, build/lines, the non-test pages' segmentation, instances and features, the split, the snapshot manifest, uv.lock and model build/model/20261027/best_0.9452.safetensors (sha256 25ed687ca9ed0256c1cdb59521a83c7dfbfb712c0cd4fbf79864fbbe1ac76539). docs/prereg.md is pinned separately by VO-033 and is not in the hash.
   source: src/voynich_ocr/freeze.py; PR 16
+- id: VO-041
+  date: "2026-10-29"
+  by: brian
+  decision: G2-3 is not ratified. ZL helped choose which test lines were scored on all 36 test pages, by text alignment on 15 and by the word-length check on 21. The kill writeup records this as a protocol deviation. The kill stands. A reported-only rerun selects lines by a label-blind rule, pairing by count only when a page's single-height lines equal its paragraph loci and using no ZL information. If that rerun passes, it calls for a new pre-registration and is not a rescue.
+  source: owner response to the G2 packet, 2026-10-29
+- id: VO-042
+  date: "2026-10-29"
+  by: brian
+  decision: G2-2 approved with additions. The writeup says "kill by the pre-agreed rule; the images do not explain the disagreements at this test's power" and gives the effect size with its interval, the 40-page test's power to detect it, and the VO-041 deviation. A null at low power reads as "not shown", not "shown absent". The corrected side-check misreport stays in the writeup as written.
+  source: owner response to the G2 packet, 2026-10-29
+- id: VO-043
+  date: "2026-10-29"
+  by: brian
+  decision: G2-4 approved. Seeds 20261028 and 20261029 run through G2, crossed with the label-blind split of VO-041, and are reported as a consistency table. Nothing in that table changes the G2 verdict.
+  source: owner response to the G2 packet, 2026-10-29
+- id: VO-044
+  date: "2026-10-29"
+  by: brian
+  decision: G2-1. The Naibbe hand's glyph source is crops labelled by the recognizer's ZL token on non-test pages. The Naibbe arm is reframed as calibrating the pipeline on text with a known answer. Amendment A4, adding confidence calibration on synthetic ink, is drafted before that arm runs and goes to the next gate packet. HOG's G2 result is reported as an exploratory note, with no new gate.
+  source: owner response to the G2 packet and follow-up, 2026-10-29
+- id: VO-045
+  date: "2026-10-29"
+  by: brian
+  decision: The behaviours to keep, as evidence for the autonomy claim scored on 2026-11-23, are escalating code-plan conflicts at the gate (VO-037, VO-039) and the red-team catching a misreport before it reached the owner (G2 packet, k variants).
+  source: owner response to the G2 packet, 2026-10-29
