@@ -13,6 +13,9 @@ from voynich_ocr.snapshot import RAW, ROOT
 OUT = ROOT / "build" / "lines"
 # A line image this many times its page's median height holds two text rows (a doubled blla baseline).
 TALL = 1.5
+# A page whose line widths track its label lengths this weakly has rows paired with the wrong loci.
+MIN_PAIRING_R = 0.5
+MIN_PAIRING_LINES = 6
 EARLY_STOPPING_SHARE = 0.1
 EARLY_STOPPING_SEED = 20261027
 SPACE = " "
@@ -39,6 +42,20 @@ def single_row(heights: list[int]) -> list[bool]:
     return [h <= TALL * median for h in heights]
 
 
+def paired(widths: list[float], lengths: list[int]) -> bool:
+    if len(widths) < MIN_PAIRING_LINES:
+        return True
+    return float(np.corrcoef(widths, lengths)[0, 1]) >= MIN_PAIRING_R
+
+
+def paper_fill(im: Image.Image) -> Image.Image:
+    """The line image with kraken's black polygon fill replaced by the median colour of the rest."""
+    a = np.asarray(im.convert("RGB")).copy()
+    fill = (a == 0).all(axis=-1)
+    a[fill] = np.median(a[~fill], axis=0).astype(np.uint8)
+    return Image.fromarray(a)
+
+
 def early_stopping_pages(pages: list[str]) -> list[str]:
     pages = sorted(pages)
     rng = np.random.default_rng(EARLY_STOPPING_SEED)
@@ -60,7 +77,7 @@ def stem(locus: str) -> str:
     return locus.replace(".", "_")
 
 
-def extract(page: str, rows: dict[str, dict], out: Path) -> None:
+def extract(page: str, rows: dict[str, dict], out: Path, fill: str) -> None:
     from kraken.containers import BaselineLine, Segmentation
     from kraken.lib.segmentation import extract_polygons
     from PIL import Image
@@ -69,13 +86,14 @@ def extract(page: str, rows: dict[str, dict], out: Path) -> None:
     seg = Segmentation(type="baselines", imagename=str(segment.IMAGES / f"{page}.jpg"), text_direction="horizontal-lr",
                        script_detection=False, lines=lines)
     for im, line in extract_polygons(Image.open(segment.IMAGES / f"{page}.jpg"), seg):
-        im.save(out / f"{stem(line.id)}.png")
+        (paper_fill(im) if fill == "paper" else im).save(out / f"{stem(line.id)}.png")
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="lines")
     p.add_argument("--seg", type=Path, default=segment.OUT)
     p.add_argument("--out", type=Path, default=OUT)
+    p.add_argument("--fill", choices=["black", "paper"], default="black", help="outside the line polygon")
     args = p.parse_args(argv)
     inputs = d.load()
     zl = inputs.sources["ZL"].loci
@@ -103,12 +121,18 @@ def main(argv: list[str] | None = None) -> int:
     for page, rows in pages.items():
         target = args.out / page
         target.mkdir(exist_ok=True)
-        extract(page, {k: rows[k] for k in labelled[page]}, target)
+        extract(page, {k: rows[k] for k in labelled[page]}, target, args.fill)
         heights = [Image.open(target / f"{stem(k)}.png").size[1] for k in labelled[page]]
         for k, keep in zip(list(labelled[page]), single_row(heights), strict=True):
             if not keep:
                 (target / f"{stem(k)}.png").unlink()
                 del labelled[page][k]
+        sizes = [Image.open(target / f"{stem(k)}.png").size for k in labelled[page]]
+        report[page]["paired"] = paired([w / h for w, h in sizes], [len(ts) for ts in labelled[page].values()])
+        if not report[page]["paired"]:
+            for k in labelled[page]:
+                (target / f"{stem(k)}.png").unlink()
+            continue
         for k, ts in labelled[page].items():
             (target / f"{stem(k)}.gt.txt").write_text("".join(table[t] for t in ts) + "\n")
             manifests["eval" if page in held else "train"].append(str((target / f"{stem(k)}.png").relative_to(ROOT)))
