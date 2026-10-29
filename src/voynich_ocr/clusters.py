@@ -45,6 +45,8 @@ def _unit(x: np.ndarray) -> np.ndarray:
 def hog(crops: list[Image.Image]) -> np.ndarray:
     from skimage.feature import hog as skhog
 
+    if not crops:
+        return np.empty((0, 9 * 4 * (HOG_SIZE // 8 - 1) ** 2))  # orientations, cells per block, blocks
     return _unit(np.stack([
         skhog(np.asarray(c.convert("L").resize((HOG_SIZE, HOG_SIZE), Image.Resampling.BILINEAR)) / 255.0,
               orientations=9, pixels_per_cell=(8, 8), cells_per_block=(2, 2))

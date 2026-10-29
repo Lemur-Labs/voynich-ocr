@@ -40,3 +40,8 @@ def test_k_counts_distinct_tokens_in_the_training_labels_not_the_codec(tmp_path)
     (root / "train.txt").write_text(f"{root}/f1r/f1r_1.png\n")
     (root / "eval.txt").write_text(f"{root}/f1r/f1r_2.png\n")
     assert cl.k(root) == cl.K_PER_TOKEN * 2
+
+
+def test_hog_of_no_crops_is_an_empty_matrix_of_the_feature_width():
+    one = cl.hog([Image.new("RGB", (cl.CROP, cl.CROP), (230, 220, 200))])
+    assert cl.hog([]).shape == (0, one.shape[1])
