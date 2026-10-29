@@ -90,7 +90,8 @@ def k() -> int:
 def fit(features: np.ndarray, n_clusters: int):
     from sklearn.cluster import KMeans
 
-    return KMeans(n_clusters=n_clusters, random_state=KMEANS_SEED, n_init=KMEANS_INIT).fit(features)
+    # In float32, BLAS rounding noise flips which restart has the lowest inertia, so refits relabel.
+    return KMeans(n_clusters=n_clusters, random_state=KMEANS_SEED, n_init=KMEANS_INIT).fit(features.astype(np.float64))
 
 
 def main(argv: list[str] | None = None) -> int:

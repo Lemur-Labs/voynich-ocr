@@ -23,3 +23,9 @@ def test_features_are_unit_length():
 def test_blank_crop_gives_a_zero_feature_not_nan():
     feats = cl.hog([Image.new("RGB", (cl.CROP, cl.CROP), (230, 220, 200))])
     assert not np.isnan(feats).any()
+
+
+
+def test_kmeans_fits_in_float64():
+    x = np.random.default_rng(0).standard_normal((200, 8)).astype(np.float32)
+    assert cl.fit(x, 4).cluster_centers_.dtype == np.float64
