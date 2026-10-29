@@ -192,7 +192,7 @@
 - id: VO-039
   date: "2026-10-29"
   by: brian
-  decision: G2 narrows only when the control arm's point estimate has the sign opposite to the primary gap's, as docs/prereg.md states. A control of zero, or one without an estimate, does not narrow, and the gate packet reports it as uninformative with its n. scoring.decide_clusters had narrowed on zero; no amendment.
+  decision: G2 narrows only when the control arm's point estimate has the sign opposite to the primary gap's, as docs/prereg.md states. A control of zero, or one without an estimate, does not narrow, and docs/gates/G2.md reports it as uninformative with its n. scoring.decide_clusters had narrowed on zero; no amendment.
   source: owner chose "Follow prereg" at G2, 2026-10-29
 - id: VO-040
   date: "2026-10-29"
