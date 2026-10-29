@@ -18,3 +18,11 @@ def test_pipeline_coverage_draws_only_non_test_pages_of_gated_instances(tmp_path
     assert out["eligible"] == 6
     assert out["within_type_p5_p50_p95"] == [1.0, 1.0, 1.0]
     assert out["within_page_p5_p50_p95"] == [0.0, 0.0, 0.0]
+
+
+def test_void_share_counts_draws_whose_lower_coverage_falls_below_the_minimum(tmp_path):
+    for i in range(6):
+        _page(tmp_path, f"f{i}r", 5, 10)
+    out = g1.pipeline_coverage(tmp_path, test=set(), pages=4, draws=5)
+    assert out["min_of_both_p5"] == 0.0
+    assert out["void_share"] == {"0.72": 1.0, str(g1.scoring.MIN_GROUP_COVERAGE): 1.0}

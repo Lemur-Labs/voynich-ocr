@@ -231,14 +231,17 @@ These are reported beside it:
   dry-run only, 2,343 of 4,608 gated columns were covered (51%). Of the 2,475 readable columns, 2,343 were covered
   (94.7%). No test-page figure has been computed, and no test page has been segmented or read.
 
-### A5 — 2026-10-29 — H3, coverage minimum re-fixed on the scored pipeline
+### A5 — 2026-10-29 — H3, coverage minimum re-fixed on the scored pipeline (declared deviation)
 
 - **Change:** `scoring.MIN_GROUP_COVERAGE = 0.56`, replacing A1's 0.72.
 - **Reason:** A1's rule is that H3 voids only when the test set is less scorable than about 95% of same-size
   non-test sets. A1 measured coverage on the whole map, with the column majority standing in for the recognizer's
   glyph. H3 scores only the gated glyph instances the W2 pipeline yields: paragraph lines on pages with their own
-  image, with the recognized token as the type. On that population, 200 draws of 36 pages (the test pages that can
-  yield instances), seed 20261031, from the 135 non-test pages with gated instances, give a 5th percentile of 0.567
-  within type and 0.760 within page (`g1.pipeline_coverage`, `results/a5/coverage.json`). At 0.72, 39.5% of draws
-  void; at 0.56, 3.5%. This keeps A1's rule on the population H3 actually scores. No G3 test-page statistic has been
-  computed. The test pages' G2 instances exist, but their coverage hasn't been looked at.
+  image, with the recognized token as the type. On that population, `g1.pipeline_coverage` makes 200 draws of 36
+  pages, seed 20261031, from the 135 non-test pages with gated instances in `build/instances`. Those instances come
+  from the gate model (seed 20261027) with G2's pairing (VO-047). 36 is the 40 test pages less the 4 without their
+  own image (VO-030). As in A1, the cutoff is the 5th percentile of the lower of the two coverages per draw, 0.567,
+  rounded down. At A1's 0.72, 39.5% of draws void; at 0.56, 3.5% (`g1.write_pipeline_coverage`, `results/a5/coverage.json`).
+- **Deviation:** H3 fixes the minimum before any test-page inference. The W2/W3 model had already read the test
+  pages for G2, as the prereg provides. No G3 coverage or other G3 statistic had been computed on test pages when
+  A5 was fixed. The owner kept A5 as a declared deviation (VO-048).

@@ -206,6 +206,9 @@ def coverage() -> dict:
     }
 
 
+A1_MIN_GROUP_COVERAGE = 0.72
+
+
 def pipeline_coverage(instances: Path, test: set[str], pages: int, draws: int = COVERAGE_DRAWS) -> dict:
     """H3's coverage figures on seeded draws of non-test pages, from the gated glyph instances the recognizer
     pipeline actually yields; the token is the recognized one."""
@@ -231,8 +234,20 @@ def pipeline_coverage(instances: Path, test: set[str], pages: int, draws: int = 
         "eligible": len(eligible),
         "within_type_p5_p50_p95": [round(float(x), 4) for x in np.percentile(out[:, 0], [5, 50, 95])],
         "within_page_p5_p50_p95": [round(float(x), 4) for x in np.percentile(out[:, 1], [5, 50, 95])],
+        "min_of_both_p5": round(float(np.percentile(out.min(axis=1), 5)), 4),
+        "void_share": {
+            str(t): round(float((out.min(axis=1) < t).mean()), 4)
+            for t in (A1_MIN_GROUP_COVERAGE, scoring.MIN_GROUP_COVERAGE)
+        },
         "min_of_both": [round(float(x), 4) for x in np.sort(out.min(axis=1))],
     }
+
+
+def write_pipeline_coverage() -> None:
+    test = set(json.loads(d.SPLITS.read_text())["test"])
+    out = pipeline_coverage(ROOT / "build" / "instances", test, pages=36)
+    (ROOT / "results" / "a5").mkdir(parents=True, exist_ok=True)
+    (ROOT / "results" / "a5" / "coverage.json").write_text(json.dumps(out, indent=1) + "\n")
 
 def spot_check_sample() -> list[dict]:
     """One locus with a gated disagreement from each of 20 non-test pages, for checking against the images."""

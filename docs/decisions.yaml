@@ -227,7 +227,7 @@
 - id: VO-046
   date: "2026-10-29"
   by: claude
-  decision: The VO-043 consistency runs use `instances --blind` (label-blind pairing, VO-041) and `g2 --report`, which scores test pages into its own directory and never writes results/g2. Config hashes recorded before those test-page runs are 32962f13ca64bcf6b463a42c504415175268a71a60e0e3fc89d6f0b393af4889 (seed 20261027, model sha256 25ed687c…6539), 4bf87039d88e4f544f85351aefdb15222811df74cf8dcbd7fd980d62daa43147 (seed 20261028, best_0.9448, sha256 d16e4b30d0fa70e6731ea1f14d0d1d5b0f16d9324cff87bbbe5b861186a8bfc7) and 03367089ee89489942314f32410b6b1769ebd88be672e581b8413c70e4aa1252 (seed 20261029, best_0.9495, sha256 ece4893d2e5955c18183acd4f454d6a512d4a6d9f5a753ba1cf1f0aba37d7351). Label-blind covers line pairing only: the page's loci and their order still come from the map, and glyphs are still placed in columns by the all-source consensus (ZL included), as the prereg defines instances. Power for VO-042 uses a normal approximation, with the standard error taken as the distance from the gap to its page-bootstrap lower bound over 1.96, and the null's 97.5th percentile treated as fixed.
+  decision: "The VO-043 consistency runs use `instances --blind` (label-blind pairing, VO-041) and `g2 --report`, which scores test pages into its own directory and never writes results/g2. Config hashes recorded before those test-page runs are 32962f13ca64bcf6b463a42c504415175268a71a60e0e3fc89d6f0b393af4889 (seed 20261027, model sha256 25ed687c…6539), 4bf87039d88e4f544f85351aefdb15222811df74cf8dcbd7fd980d62daa43147 (seed 20261028, best_0.9448, sha256 d16e4b30d0fa70e6731ea1f14d0d1d5b0f16d9324cff87bbbe5b861186a8bfc7) and 03367089ee89489942314f32410b6b1769ebd88be672e581b8413c70e4aa1252 (seed 20261029, best_0.9495, sha256 ece4893d2e5955c18183acd4f454d6a512d4a6d9f5a753ba1cf1f0aba37d7351). Label-blind covers line pairing only: the page's loci and their order still come from the map, and glyphs are still placed in columns by the all-source consensus (ZL included), as the prereg defines instances. Power for VO-042 uses a normal approximation, with the standard error taken as the distance from the gap to its page-bootstrap lower bound over 1.96, and the null's 97.5th percentile treated as fixed."
   source: src/voynich_ocr/{instances,g2,clusters}.py; PR 19
 - id: VO-047
   date: "2026-10-29"
@@ -237,10 +237,10 @@
 - id: VO-048
   date: "2026-10-29"
   by: brian
-  decision: Amendment A5 re-fixes H3's coverage minimum at 0.56, keeping A1's rule (void only if the test set is less scorable than about 95% of same-size non-test sets) on the glyph instances H3 actually scores. Supersedes VO-023's value.
+  decision: Amendment A5 re-fixes H3's coverage minimum at 0.56, keeping A1's rule (void only if the test set is less scorable than about 95% of same-size non-test sets) on the glyph instances H3 actually scores. Supersedes VO-023's value. A5 is a declared deviation, because H3 fixes the minimum before any test-page inference and the W2/W3 model had already read the test pages for G2. No G3 coverage or other G3 statistic had been computed on test pages.
   source: owner chose "A5, re-fix at 0.56", 2026-10-29; results/a5/coverage.json
 - id: VO-049
   date: "2026-10-29"
   by: claude
-  decision: docs/prereg.md with A1, A2, A3 and A5 appended has sha256 81d138f965c79a7aab53f839d91661390fa8b9efc69bb8bb6e28d5497f11caf0. A4 is a draft (docs/prereg-A4-draft.md) and is not appended.
+  decision: docs/prereg.md with A1, A2, A3 and A5 appended has sha256 df12191346c0b592ea35a81f5a6c5862b77ce6ec89fd45f1dba8040bd49388bc. A4 is a draft (docs/prereg-A4-draft.md) and is not appended.
   source: docs/prereg.md Amendments
