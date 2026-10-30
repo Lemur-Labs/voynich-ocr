@@ -369,3 +369,18 @@
   by: claude
   decision: "Greshko's naibbe-cipher is fetched unchanged at commit 719f2f4c4d1eacf95fabf48381cd84fc6cd94279 into data/raw/naibbe through snapshot/sources.toml, with sha256 pins in snapshot/manifest.sha256, and is not committed (VO-016). `voynich_ocr.naibbe` imports his naibbe.py and decrypt_naibbe.py as they are, seeding Python's global random before encipherment. The port check (`python -m voynich_ocr.naibbe check`) passed on 2026-10-30. Decrypting his shipped Natural History ciphertext with his decrypter reproduces his shipped decrypted file exactly (1641 lines). Every line is consistent with his shipped respaced plaintext: each plaintext token is the decrypted token or one of the options the decrypter lists, and 221 lines carry such options. decrypt(encrypt(p)) is consistent for all 100 seeds on 20 plaintext lines, and the seeded output repeats. Limits: the exact known-answer is the shipped decrypted file; the consistency rule accepts any listed option, and the round trip uses his decrypter on both sides, so a table error would cancel there. No shipped file records a seed, so the wrapper's draw order follows his main loop by reading and is checked only for repeatability."
   source: src/voynich_ocr/naibbe.py; build/naibbe/port_check.json
+- id: VO-075
+  date: "2026-10-30"
+  by: brian
+  decision: "Amendment A8 (option B) is approved and appended to docs/prereg.md before any Naibbe text is rendered. It is a change to the instrument found while calibrating the instrument, not a change to the hypothesis. Evidence from dev renders on non-Naibbe text, recorded before the first Naibbe render: A7's glyph collage read at 62–65% CER on ZL token lines from training pages; real lines read at about 7% (G3 CER against ZL, 7.0%); a word-level collage read at 14% CER on 20 dev lines, which is optimistic because those lines were chosen so that every word had an exemplar. The owner's four conditions, all written into A8: (1) the deviation is recorded as a pre-data discovery with that evidence; (2) matched-word glyphs are the primary arm for the clean bound and the calibration verdict, unmatched-word glyph collage is reported only and cannot pass or fail anything, the expected shares are stated, and below a minimum matched-glyph count a level is reported as underpowered; (3) word exemplars come only from pages that are neither test nor validation pages, and the clean CER is a bound on recognizer capacity given ZL's segmentation; (4) degradation stays per glyph inside word crops. The dev lines are listed by folio in A8, and their folios are excluded from every exemplar pool. Options A (run as registered) and C (drop calibration) were rejected. The config hash is recorded after A8's sha."
+  source: owner reply to the collage finding, 2026-10-30
+- id: VO-076
+  date: "2026-10-30"
+  by: brian
+  decision: Owner hours are 2.7 of 4 as of 2026-10-30, after 10 minutes for the A8 decision.
+  source: owner reply, 2026-10-30
+- id: VO-077
+  date: "2026-10-30"
+  by: claude
+  decision: docs/prereg.md with A1, A2, A3, A5, A6, A4, A7 and A8 appended has sha256 613a6d81f75d5668ae5fa65deb349850b20abd2fd726d47bb5d64e8bbb742452.
+  source: docs/prereg.md Amendments
