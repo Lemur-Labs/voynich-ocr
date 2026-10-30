@@ -317,5 +317,30 @@
 - id: VO-064
   date: "2026-10-30"
   by: brian
-  decision: G3 is done, so the 40 test pages' rows withheld by VO-019 are released, in the same columns as map-v0 (no readings or codes, VO-028), as a separate GitHub release map-v0-test. map-v0 itself is unchanged and its figures stay those of the 187 non-test pages. The rows are transliteration comparisons, not model output, and no remaining hypothesis reads test pages: H4 draws only on non-test pages.
+  decision: "G3 is done, so the 40 test pages' rows withheld by VO-019 are released, in the same columns as map-v0 (no readings or codes, VO-028), as a separate GitHub release map-v0-test. map-v0 itself is unchanged and its figures stay those of the 187 non-test pages. The rows are transliteration comparisons, not model output, and no remaining hypothesis reads test pages: H4 draws only on non-test pages."
   source: owner answered "do it" to the test-page release question after G3, 2026-10-30
+- id: VO-065
+  date: "2026-10-30"
+  by: brian
+  decision: Amendment A7 (docs/prereg-A7-draft.md) is approved and appended to docs/prereg.md, with one addition before its sha is recorded. It must state the degraded test's power per level, meaning the glyphs per level and the calibration miss the rule can detect, so a pass is not read as stronger than the sample allows. Two red-team passes with no reopened issues are enough, and no third pass is run.
+  source: owner reply to the A7 approval request, 2026-10-30
+- id: VO-066
+  date: "2026-10-30"
+  by: brian
+  decision: The clean rendering R0 is signed off as a deliberate extension of VO-060, as an upper bound only. "The clean CER is a bound on recognizer capacity, not a claim about the manuscript."
+  source: owner reply to the A7 approval request, 2026-10-30
+- id: VO-067
+  date: "2026-10-30"
+  by: brian
+  decision: The A7 line-assembly rule is accepted with one change. R0 and R1 keep word spaces as wide as the line's median glyph width. R2, the disputed arm, draws each word space from the empirical inter-word gaps on the validation pages, seeded, because a fixed median makes those lines easier than real ones. Page resolution, bottom alignment, the 8 px margin and the 8 px baseline are kept, and the prereg records all of these values as set by the agent, not carried over from A4 or H4.
+  source: owner reply to the A7 approval request, 2026-10-30
+- id: VO-068
+  date: "2026-10-30"
+  by: claude
+  decision: Phase 2's reported-only reruns are recorded and closed, so A7 runs against a closed Phase 2. G2's label-blind rerun (VO-041, VO-043) was three readers on 17 of 40 test pages; 21 is the count of pages G2 paired by line count. Its config hashes are in VO-046, its rows are in docs/gates/G2.md under "Consistency table", and its files are in results/g2/consistency/. G3's label-blind subset is reported in docs/gates/G3.md. Neither changes a verdict, and no Phase 2 run is outstanding.
+  source: docs/gates/G2.md, docs/gates/G3.md, results/g2/consistency/
+- id: VO-069
+  date: "2026-10-30"
+  by: claude
+  decision: docs/prereg.md with A1, A2, A3, A5, A6, A4 and A7 appended has sha256 cc4f5ae5f7d29975f53f01b3619fd00eec64e779ce0a40cdfdc431c50cde0a08.
+  source: docs/prereg.md Amendments
