@@ -16,7 +16,7 @@ from voynich_ocr.instances import OUT as INSTANCES
 from voynich_ocr.snapshot import RAW, ROOT
 
 SEED = 20261027
-STREAMS = ("exemplar", "level", "band", "disputed", "bootstrap", "spacing")
+STREAMS = ("exemplar", "level", "band", "disputed", "bootstrap", "spacing", "word")
 BOOTSTRAP_CHILDREN = ("R1", "level 0", "level 1", "level 2", "R2")
 WORDS_PER_LINE = 9
 LINES = 600
@@ -25,6 +25,10 @@ LEVELS = ((0.0, 1.0, 0.0), (0.03, 0.6, 0.2), (0.06, 0.35, 0.4))
 MARGIN = 8
 BASELINE = 8
 WORD_SPACES = (".", "-")
+MIN_LEVEL_GLYPHS = 3000
+ECE_MAX = 0.05
+# A8: folios of the dev lines that exposed the glyph collage; no exemplar comes from them.
+DEV_FOLIOS = frozenset({"f1r", "f2r", "f2v", "f3r", "f4v", "f5r", "f6r", "f6v", "f8r", "f8v", "f9v", "f10r"})
 OUT = ROOT / "results" / "g4"
 BUILD = ROOT / "build" / "g4"
 
@@ -45,6 +49,29 @@ class Exemplar:
         """The bounding box `clusters.crop` takes before padding."""
         xs, ys = [p[0] for p in self.cut], [p[1] for p in self.cut]
         return (max(0, int(min(xs))), max(0, int(min(ys))), min(width, int(max(xs)) + 1), min(height, int(max(ys)) + 1))
+
+
+@dataclass(frozen=True)
+class WordExemplar:
+    page: str
+    locus: str
+    column: int
+    cuts: tuple
+
+    @property
+    def key(self) -> str:
+        return f"{self.page}/{self.locus}/{self.column}/word"
+
+    def box(self, width: int, height: int) -> tuple[int, int, int, int]:
+        return Exemplar(self.page, self.locus, self.column, 0, tuple(p for c in self.cuts for p in c)).box(width, height)
+
+    def regions(self, crop_width: int) -> list[tuple[int, int]]:
+        """A8: glyph i spans from its cut box's left edge to the next one's, the first from the crop's left edge
+        and the last to its right edge; edges clamped non-decreasing and into the crop."""
+        x0 = max(0, int(min(p[0] for c in self.cuts for p in c)))
+        lefts = [0] + [max(0, int(min(p[0] for p in c))) - x0 for c in self.cuts[1:]] + [crop_width]
+        edges = [min(max(e, 0), crop_width) for e in itertools.accumulate(lefts, max)]
+        return list(itertools.pairwise(edges))
 
 
 def background(box: np.ndarray) -> np.ndarray:
@@ -190,13 +217,53 @@ def _zl_spaced_columns(locus: d.Locus, inputs: d.Inputs) -> set[int]:
     return spaced
 
 
-def plan(text_lines, exemplars, disputed, gaps) -> dict:
-    """Every random draw, in A7's order: each stream in line order, then glyph (or word-space) order."""
+def word_pool(instances_dir: Path, pages: list[str], inputs: d.Inputs) -> dict[tuple[str, ...], list[WordExemplar]]:
+    """A8: runs of instances between ZL word spaces or row ends, on consecutive columns, each read as ZL reads
+    it, keyed by their token sequence."""
+    by_id = {lo.id: lo for lo in inputs.loci}
+    pools: dict[tuple[str, ...], list[WordExemplar]] = {}
+    for page in sorted(pages):
+        f = instances_dir / f"{page}.json"
+        if not f.exists():
+            continue
+        rows: dict[str, list[dict]] = {}
+        for m in json.loads(f.read_text())["instances"]:
+            rows.setdefault(m["locus"], []).append(m)
+        for locus, row in rows.items():
+            spaced = _zl_spaced_columns(by_id[locus], inputs)
+            last = len(d.locus_columns(by_id[locus], inputs, d.ORDER)[0]) - 1
+            for run in _runs_between(row, spaced):
+                cols = [m["column"] for m in run]
+                starts = cols[0] == 0 or cols[0] - 1 in spaced
+                ends = cols[-1] == last or cols[-1] in spaced
+                consecutive = all(b == a + 1 for a, b in itertools.pairwise(cols))
+                if starts and ends and consecutive and all(m["token"] == m["zl"] for m in run):
+                    cuts = tuple(tuple(map(tuple, m["cut"])) for m in run)
+                    pools.setdefault(tuple(m["token"] for m in run), []).append(WordExemplar(page, locus, cols[0], cuts))
+    return {t: sorted(v, key=lambda e: (e.page, e.locus, e.column)) for t, v in pools.items()}
+
+
+def _runs_between(row: list[dict], spaced: set[int]) -> list[list[dict]]:
+    runs, cur = [], []
+    for m, nxt in itertools.zip_longest(row, row[1:]):
+        cur.append(m)
+        if nxt is None or (m["column"] < nxt["column"] and spaced & set(range(m["column"], nxt["column"]))):
+            runs.append(cur)
+            cur = []
+    return runs
+
+
+def plan(text_lines, words, exemplars, disputed, gaps) -> dict:
+    """Every random draw, in A7's and A8's order: each stream in line order, then word, glyph or word-space order."""
     rng = streams()
-    out = {"R0": [], "R1": [], "R2": [], "gaps": 0}
+    out = {"R0": [], "R1": [], "R2": [], "gaps": 0, "R2_gaps": 0}
     for line in text_lines:
         r0, r1, r2, spacing = [], [], [], []
         for w, word in enumerate(line):
+            wpool = words.get(tuple(word), [])
+            u_word = rng["word"].random()
+            wex = wpool[draw(u_word, len(wpool))] if wpool else None
+            arm = "matched" if wex else "unmatched"
             w0, w1, w2 = [], [], []
             for t in word:
                 pool = exemplars.get(t, [])
@@ -205,15 +272,19 @@ def plan(text_lines, exemplars, disputed, gaps) -> dict:
                 level = draw(u_level, len(LEVELS))
                 dpool = disputed.get(t, [])
                 dex = dpool[draw(u_dis, len(dpool))] if dpool else None
-                if ex is None:
+                if ex is None and wex is None:
                     out["gaps"] += 1
                     continue
-                w0.append({"token": t, "exemplar": ex, "level": 0, "u": u_band})
-                w1.append({"token": t, "exemplar": ex, "level": level, "u": u_band})
-                w2.append({"token": t, "exemplar": dex or ex, "level": 0, "u": u_band, "disputed": dex is not None})
-            r0.append(w0)
-            r1.append(w1)
-            r2.append(w2)
+                g = {"token": t, "exemplar": ex, "u": u_band, "arm": arm}
+                w0.append({**g, "level": 0})
+                w1.append({**g, "level": level})
+                if ex is None:
+                    out["R2_gaps"] += 1
+                else:
+                    w2.append({**g, "exemplar": dex or ex, "level": 0, "arm": "glyph", "disputed": dex is not None})
+            r0.append({"exemplar": wex, "glyphs": w0})
+            r1.append({"exemplar": wex, "glyphs": w1})
+            r2.append({"exemplar": None, "glyphs": w2})
             if w < len(line) - 1:
                 spacing.append(gaps[draw(rng["spacing"].random(), len(gaps))])
         out["R0"].append({"words": r0})
@@ -223,13 +294,14 @@ def plan(text_lines, exemplars, disputed, gaps) -> dict:
 
 
 def _crops(planned: dict) -> dict[str, np.ndarray]:
-    """Each needed exemplar's box, reading every page image once."""
-    needed: dict[str, dict[str, Exemplar]] = {}
+    """Each needed exemplar's box, word or glyph, reading every page image once."""
+    needed: dict[str, dict] = {}
     for name in ("R0", "R1", "R2"):
         for line in planned[name]:
             for word in line["words"]:
-                for g in word:
-                    needed.setdefault(g["exemplar"].page, {})[g["exemplar"].key] = g["exemplar"]
+                exs = [word["exemplar"]] if word["exemplar"] else [g["exemplar"] for g in word["glyphs"]]
+                for e in exs:
+                    needed.setdefault(e.page, {})[e.key] = e
     boxes = {}
     for page, exs in sorted(needed.items()):
         im = Image.open(segment.IMAGES / f"{page}.jpg").convert("RGB")
@@ -238,11 +310,23 @@ def _crops(planned: dict) -> dict[str, np.ndarray]:
     return boxes
 
 
+def pieces(word: dict, boxes: dict[str, np.ndarray]) -> list[np.ndarray]:
+    """The word's undegraded glyph pieces: regions of its word crop, or its glyphs' own boxes."""
+    if word["exemplar"] is None:
+        return [boxes[g["exemplar"].key] for g in word["glyphs"]]
+    crop = boxes[word["exemplar"].key]
+    return [crop[:, a:b] for a, b in word["exemplar"].regions(crop.shape[1])]
+
+
 def render(line: dict, boxes: dict[str, np.ndarray]) -> tuple[Image.Image, list]:
-    words = [[degrade(boxes[g["exemplar"].key], g["level"], g["u"]) for g in w] for w in line["words"]]
-    flat = [boxes[g["exemplar"].key] for w in line["words"] for g in w]
-    fill = np.median([background(b) for b in flat], axis=0)
-    spaces = line.get("spaces") or [int(np.rint(np.median([b.shape[1] for b in flat])))] * (len(words) - 1)
+    parts = [pieces(w, boxes) for w in line["words"]]
+    words = []
+    for word, ps in zip(line["words"], parts, strict=True):
+        done = [degrade(p, g["level"], g["u"]) if p.shape[1] else p for p, g in zip(ps, word["glyphs"], strict=True)]
+        words.append([np.concatenate(done, axis=1)] if word["exemplar"] else done)
+    flat = [p for ps in parts for p in ps if p.shape[1]]
+    fill = np.median([background(p) for p in flat], axis=0)
+    spaces = line.get("spaces") or [int(np.rint(np.median([p.shape[1] for p in flat])))] * (len(words) - 1)
     return collage(words, spaces, fill)
 
 
@@ -285,21 +369,35 @@ def alignment(recognized: list[str], reference: list[str]) -> list[tuple[int | N
 
 
 def score_line(row: list[dict], glyphs: list[dict]) -> dict:
-    """`row` is the rendered glyphs in order; `glyphs` the recognized ones, spaces removed."""
+    """`row` is the rendered glyphs in order; `glyphs` the recognized ones, spaces removed. Errors are charged to an
+    arm: a substitution or deletion to its rendered glyph's, an insertion to the nearest rendered glyph's before it,
+    or after it at the start of a line."""
     pairs = alignment([g["token"] for g in glyphs], [g["token"] for g in row])
-    scored, deleted = [], []
-    for r, k in pairs:
+    scored, deleted, errors = [], [], {}
+    for n, (r, k) in enumerate(pairs):
+        if k is None:
+            near = next((pairs[j][1] for j in range(n - 1, -1, -1) if pairs[j][1] is not None), None)
+            if near is None:
+                near = next(pairs[j][1] for j in range(n + 1, len(pairs)) if pairs[j][1] is not None)
+            arm = row[near]["arm"]
+            errors[arm] = errors.get(arm, 0) + 1
+            scored.append({"confidence": glyphs[r]["confidence"], "correct": False, "inserted": True, "arm": arm})
+            continue
+        arm = row[k]["arm"]
         if r is None:
             deleted.append(row[k])
-        elif k is None:
-            scored.append({"confidence": glyphs[r]["confidence"], "correct": False, "inserted": True})
-        else:
-            scored.append({"confidence": glyphs[r]["confidence"], "correct": glyphs[r]["token"] == row[k]["token"],
-                           "inserted": False, "level": row[k]["level"], "disputed": row[k].get("disputed", False),
-                           "source": row[k]["exemplar"].key})  # fmt: skip
-    return {"scored": scored, "deleted": deleted,
-            "distance": recognize._distance([g["token"] for g in glyphs], [g["token"] for g in row]),
-            "length": len(row)}  # fmt: skip
+            errors[arm] = errors.get(arm, 0) + 1
+            continue
+        correct = glyphs[r]["token"] == row[k]["token"]
+        if not correct:
+            errors[arm] = errors.get(arm, 0) + 1
+        source = row[k]["exemplar"].key if row[k]["exemplar"] else None
+        scored.append({"confidence": glyphs[r]["confidence"], "correct": correct, "inserted": False, "arm": arm,
+                       "level": row[k]["level"], "disputed": row[k].get("disputed", False), "source": source})  # fmt: skip
+    counts = {}
+    for g in row:
+        counts[g["arm"]] = counts.get(g["arm"], 0) + 1
+    return {"scored": scored, "deleted": deleted, "errors": errors, "counts": counts}
 
 
 def _ece(metas: list[dict], groups: list, seed) -> dict:
@@ -319,51 +417,80 @@ def reliability(metas: list[dict]) -> list[dict]:
              "accuracy": float(correct[idx == b].mean())} for b in range(g3.ECE_BINS) if (idx == b).any()]  # fmt: skip
 
 
-def summarize(scored: dict[str, list[dict]]) -> dict:
-    """A7's statistics from each rendering's scored lines."""
-    seeds = bootstrap_seeds()
-    out: dict = {}
-    for name in ("R0", "R1"):
-        lines_ = scored[name]
-        out[name] = {"cer": sum(s["distance"] for s in lines_) / sum(s["length"] for s in lines_),
-                     "deleted": sum(len(s["deleted"]) for s in lines_)}  # fmt: skip
-    r1 = [(i, m) for i, s in enumerate(scored["R1"]) for m in s["scored"]]
+def _cer(lines_: list[dict], arm: str) -> float | None:
+    n = sum(s["counts"].get(arm, 0) for s in lines_)
+    return sum(s["errors"].get(arm, 0) for s in lines_) / n if n else None
+
+
+def _arm(scored: dict[str, list[dict]], arm: str, seeds: dict) -> dict:
+    """A7's statistics for one arm of R0 and R1."""
+    out = {"R0": {"cer": _cer(scored["R0"], arm), "rendered": sum(s["counts"].get(arm, 0) for s in scored["R0"])},
+           "R1": {"cer": _cer(scored["R1"], arm)}}  # fmt: skip
+    r1 = [(i, m) for i, s in enumerate(scored["R1"]) for m in s["scored"] if m["arm"] == arm]
+    if not r1:
+        return out
     out["R1"]["ece"] = _ece([m for _, m in r1], [i for i, _ in r1], seeds["R1"])
     out["R1"]["reliability"] = reliability([m for _, m in r1])
     out["R1"]["levels"] = {}
     for level in range(len(LEVELS)):
         at = [(i, m) for i, m in r1 if not m["inserted"] and m["level"] == level]
-        deleted = sum(1 for s in scored["R1"] for g in s["deleted"] if g["level"] == level)
-        out["R1"]["levels"][str(level)] = {**_ece([m for _, m in at], [i for i, _ in at], seeds[f"level {level}"]),
-                                           "deleted": deleted, "reliability": reliability([m for _, m in at])}  # fmt: skip
-    rows = [out["R1"]["ece"]] + list(out["R1"]["levels"].values())
-    out["calibrated_on_synthetic_ink"] = all(r["hi"] <= 0.05 for r in rows)
+        deleted = sum(1 for s in scored["R1"] for g in s["deleted"] if g["arm"] == arm and g["level"] == level)
+        rendered = len(at) + deleted
+        row = {"rendered": rendered, "deleted": deleted, "underpowered": rendered < MIN_LEVEL_GLYPHS}
+        if at:
+            row.update(_ece([m for _, m in at], [i for i, _ in at], seeds[f"level {level}"]))
+            row["reliability"] = reliability([m for _, m in at])
+        out["R1"]["levels"][str(level)] = row
+    return out
+
+
+def calibrated(arm: dict) -> bool:
+    """A7's rule on the primary arm, with A8's minimum: the pooled and every level's upper bound ≤ 0.05, and no
+    level underpowered."""
+    levels = arm["R1"].get("levels", {})
+    if "ece" not in arm["R1"] or len(levels) != len(LEVELS):
+        return False
+    rows = [arm["R1"]["ece"]] + list(levels.values())
+    return all("hi" in r and r["hi"] <= ECE_MAX for r in rows) and not any(r["underpowered"] for r in levels.values())
+
+
+def summarize(scored: dict[str, list[dict]]) -> dict:
+    seeds = bootstrap_seeds()
+    out = {arm: _arm(scored, arm, seeds) for arm in ("matched", "unmatched")}
+    out["calibrated_on_synthetic_ink"] = calibrated(out["matched"])
     r2 = [m for s in scored["R2"] for m in s["scored"] if not m["inserted"] and m["disputed"]]
     out["R2"] = {**_ece(r2, [m["source"] for m in r2], seeds["R2"]), "instances": len({m["source"] for m in r2}),
                  "reliability": reliability(r2)} if r2 else {"n": 0}  # fmt: skip
     return out
 
 
+def exemplar_pages(pages: set[str], split: dict) -> tuple[list[str], list[str]]:
+    """Pages word exemplars (A8: neither test nor validation) and glyph exemplars (A4: not test) may come from,
+    never a dev folio."""
+    glyph = pages - set(split["test"]) - DEV_FOLIOS
+    return sorted(glyph - set(split["validation"])), sorted(glyph)
+
+
 def run(model_path: Path, out: Path, text_lines: list, gate: bool) -> dict:
     if gate:
         freeze.require(model_path)
     split = json.loads(d.SPLITS.read_text())
-    test = set(split["test"])
-    pages = sorted({p.stem for p in INSTANCES.glob("*.json")} - test)
+    word_pages, glyph_pages = exemplar_pages({p.stem for p in INSTANCES.glob("*.json")}, split)
+    validation = sorted(split["validation"])
     table = json.loads((lines.OUT / "codec.json").read_text())
     inputs = d.load()
-    exemplars = exemplar_pool(INSTANCES, pages)
-    disputed = disputed_pool(INSTANCES, split["validation"], set(table))
-    gaps = gap_pool(INSTANCES, split["validation"], inputs)
-    planned = plan(text_lines, exemplars, disputed, gaps)
+    words = word_pool(INSTANCES, word_pages, inputs)
+    exemplars = exemplar_pool(INSTANCES, glyph_pages)
+    disputed = disputed_pool(INSTANCES, validation, set(table))
+    gaps = gap_pool(INSTANCES, validation, inputs)
+    planned = plan(text_lines, words, exemplars, disputed, gaps)
     boxes = _crops(planned)
     temperature = json.loads(g3.TEMPERATURE.read_text())["temperature"]
     model = recognize.load(model_path)
     l2c = model.net.codec.l2c
     chars = {ch: t for t, ch in table.items()}
     out.mkdir(parents=True, exist_ok=True)
-    result = out / "result.json"
-    with result.open("x") as fh:
+    with (out / "result.json").open("x") as fh:
         scored: dict[str, list[dict]] = {}
         for name in ("R0", "R1", "R2"):
             (out / name).mkdir(exist_ok=True)
@@ -371,14 +498,14 @@ def run(model_path: Path, out: Path, text_lines: list, gate: bool) -> dict:
             for i, line in enumerate(planned[name]):
                 image, baseline = render(line, boxes)
                 image.save(out / name / f"{i:03d}.png")
-                row = [g for w in line["words"] for g in w]
+                row = [g for w in line["words"] for g in w["glyphs"]]
                 read = g3.glyphs(read_image(model, image, baseline), temperature, l2c)
                 glyphs = [{**g, "token": chars[g["char"]]} for g in read if g["char"] != lines.SPACE]
                 scored[name].append(score_line(row, glyphs))
-        summary = {"lines": len(text_lines), "glyphs": sum(len(w) for line in planned["R0"] for w in line["words"]),
-                   "gaps": planned["gaps"], "temperature": temperature,
-                   "pools": {"exemplar_tokens": len(exemplars), "disputed_tokens": len(disputed),
-                             "disputed_instances": sum(map(len, disputed.values())), "word_gaps": len(gaps)},
+        summary = {"lines": len(text_lines), "gaps": planned["gaps"], "R2_gaps": planned["R2_gaps"], "temperature": temperature,
+                   "pools": {"word_types": len(words), "exemplar_tokens": len(exemplars),
+                             "disputed_tokens": len(disputed), "disputed_instances": sum(map(len, disputed.values())),
+                             "word_gaps": len(gaps)},
                    **summarize(scored)}  # fmt: skip
         fh.write(json.dumps(summary, indent=1) + "\n")
     return summary
