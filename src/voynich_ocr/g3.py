@@ -1,4 +1,5 @@
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -241,7 +242,8 @@ def run(
     if report:
         T = json.loads((report / TEMPERATURE.name).read_text())["temperature"]
     elif fit:
-        record = temperature_record(fit_from(reads, inputs, table, codec), model_path)
+        record = {**temperature_record(fit_from(reads, inputs, table, codec), model_path),
+                  "instances": str(instances_dir.resolve()), "instances_sha256": instances_digest(instances_dir)}  # fmt: skip
         (fit / TEMPERATURE.name).write_text(json.dumps(record, indent=1) + "\n")
         T = record["temperature"]
     else:
@@ -268,6 +270,13 @@ def b1_pages(instances_dir: Path, test: set[str], scored: list[str]) -> list[str
 
 def temperature_record(fit: dict, model_path: Path) -> dict:
     return {**fit, "model": str(model_path), "model_sha256": sha256(model_path)}
+
+
+def instances_digest(instances_dir: Path) -> str:
+    h = hashlib.sha256()
+    for f in sorted(instances_dir.glob("*.json")):
+        h.update(f.name.encode() + b"\0" + f.read_bytes())
+    return h.hexdigest()
 
 
 def temperature(gate: bool, fit, model_path: Path, store: bool = True) -> float:
@@ -310,8 +319,13 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit("--gate, --fit and --report are exclusive")
     own = args.fit or args.report
     out = OUT if args.gate else args.report or (args.fit / "validation" if args.fit else ROOT / "build" / "g3-dry")
-    if own is not None and not own.resolve().is_relative_to((ROOT / "build").resolve()):
-        raise SystemExit("reported runs and their fits write only under build/")
+    if own is not None:
+        if not own.resolve().is_relative_to((ROOT / "build").resolve()):
+            raise SystemExit("reported runs and their fits write only under build/")
+        if any(own.resolve().is_relative_to((ROOT / o).resolve()) for o in freeze.OUTPUTS):
+            raise SystemExit(f"{own} is inside a frozen output directory")
+        if args.instances is None:
+            raise SystemExit("--fit and --report need the seed's own --instances")
     if args.fit:
         if (args.fit / TEMPERATURE.name).exists():
             raise SystemExit(f"{args.fit / TEMPERATURE.name} is already fitted")
@@ -320,8 +334,15 @@ def main(argv: list[str] | None = None) -> int:
         fitted = args.report / TEMPERATURE.name
         if not fitted.exists():
             raise SystemExit(f"no fitted temperature at {fitted}; run --fit {args.report} first")
-        if json.loads(fitted.read_text()).get("model_sha256") != sha256(args.model):
+        record = json.loads(fitted.read_text())
+        if record.get("model_sha256") != sha256(args.model):
             raise SystemExit(f"{fitted} was fitted for another model")
+        if not (args.report / "validation" / "result.json").exists():
+            raise SystemExit(f"{fitted} has no validation run beside it; it was not made by --fit")
+        if (record.get("instances"), record.get("instances_sha256")) != (
+            str(args.instances.resolve()), instances_digest(args.instances)
+        ):
+            raise SystemExit(f"{fitted} was fitted on other instances than {args.instances}")
         freeze.require(args.model)
         with open(args.report / "result.json", "x") as f:
             f.write('{"status": "started"}\n')
