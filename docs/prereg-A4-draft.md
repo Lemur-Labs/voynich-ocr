@@ -1,7 +1,6 @@
 # Draft amendment A4: H4, glyph source and calibration on known text
 
-Status: **draft, not appended.** It goes to the G3 packet for the owner (VO-044) and is appended to `docs/prereg.md`
-only on approval, before any Naibbe rendering.
+Status: **appended** to `docs/prereg.md` on the owner's approval (VO-057), before any Naibbe rendering.
 
 ### A4 — H4, glyph source and calibration on known text
 
