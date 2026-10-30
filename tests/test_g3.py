@@ -283,3 +283,114 @@ def test_a_dry_run_on_other_pairs_fits_temperature_without_storing_it(monkeypatc
     (tmp_path / "m").write_bytes(b"weights")
     t = g3.temperature(False, lambda: {"temperature": 1.5}, tmp_path / "m", store=False)
     assert t == 1.5 and not (tmp_path / "temperature.json").exists()
+
+
+def _stub_run(tmp_path, monkeypatch, read_pages):
+    split = {"test": ["t1"], "validation": ["v1"]}
+    (tmp_path / "splits.json").write_text(json.dumps(split))
+    inst = tmp_path / "inst"
+    inst.mkdir()
+    for page in ("t1", "v1", "n1"):
+        (inst / f"{page}.json").write_text("{}")
+    (tmp_path / "lines").mkdir()
+    (tmp_path / "lines" / "codec.json").write_text("{}")
+    model = tmp_path / "m.safetensors"
+    model.write_bytes(b"weights")
+    monkeypatch.setattr(g3.d, "SPLITS", tmp_path / "splits.json")
+    monkeypatch.setattr(g3.d, "load", lambda: type("Inputs", (), {"loci": []})())
+    monkeypatch.setattr(g3.lines, "paragraph_loci", dict)
+    monkeypatch.setattr(g3.lines, "OUT", tmp_path / "lines")
+    monkeypatch.setattr(g3.recognize, "load", lambda p: type("M", (), {"net": type("N", (), {"codec": type("C", (), {"l2c": {}})})})())
+    monkeypatch.setattr(g3, "read", lambda m, p, ids, i: read_pages.append(p) or {"pairs": {}, "blind": {}})
+    monkeypatch.setattr(g3, "disagreement_rates", lambda *a: ({}, 0.3))
+    monkeypatch.setattr(g3, "surprisal", lambda *a: {})
+    monkeypatch.setattr(g3, "_evaluate", lambda *a: {"by_map": {"full": []}, "inserted": {}, "cer": {}, "lines": 0})
+    monkeypatch.setattr(g3, "decide", lambda *a: {"outcome": "void"})
+    monkeypatch.setattr(g3, "coverage", lambda metas: {})
+    monkeypatch.setattr(g3, "TEMPERATURE", tmp_path / "gate" / "temperature.json")
+    return model, inst
+
+
+def test_a_fit_for_a_reported_run_reads_validation_pages_and_stores_t_in_its_own_directory(tmp_path, monkeypatch):
+    pages = []
+    model, inst = _stub_run(tmp_path, monkeypatch, pages)
+    monkeypatch.setattr(g3, "fit_from", lambda *a: {"temperature": 1.5})
+    (tmp_path / "seed").mkdir()
+    out = g3.run(model, False, inst, None, tmp_path / "seed")
+    assert pages == ["v1"] and out["temperature"] == 1.5
+    assert json.loads((tmp_path / "seed" / "temperature.json").read_text())["model_sha256"] == g3.sha256(model)
+    assert not (tmp_path / "gate").exists()
+
+
+def test_a_reported_run_reads_test_pages_with_its_own_stored_t_and_never_fits(tmp_path, monkeypatch):
+    pages = []
+    model, inst = _stub_run(tmp_path, monkeypatch, pages)
+    monkeypatch.setattr(g3, "fit_from", lambda *a: pytest.fail("fitted on test pages"))
+    (tmp_path / "seed").mkdir()
+    (tmp_path / "seed" / "temperature.json").write_text(json.dumps(g3.temperature_record({"temperature": 1.5}, model)))
+    out = g3.run(model, False, inst, tmp_path / "seed", None)
+    assert pages == ["t1"] and out["temperature"] == 1.5 and out["eval"].startswith("test, reported only")
+
+
+@pytest.mark.parametrize("flag", ["--report", "--fit"])
+@pytest.mark.parametrize("where", ["results/g3/seed", "results"])
+def test_reported_runs_and_their_fits_refuse_any_directory_outside_build(flag, where, monkeypatch):
+    monkeypatch.setattr(g3, "run", lambda *a: pytest.fail("ran"))
+    with pytest.raises(SystemExit, match="build"):
+        g3.main(["m.safetensors", flag, str(g3.ROOT / where)])
+
+
+@pytest.mark.parametrize("flags", [["--gate", "--report", "x"], ["--gate", "--fit", "x"], ["--fit", "x", "--report", "y"]])
+def test_gate_report_and_fit_are_exclusive(flags, monkeypatch):
+    monkeypatch.setattr(g3, "run", lambda *a: pytest.fail("ran"))
+    with pytest.raises(SystemExit, match="exclusive"):
+        g3.main(["m.safetensors", *flags])
+
+
+def test_a_reported_run_refuses_to_start_without_its_own_fitted_temperature(tmp_path, monkeypatch):
+    monkeypatch.setattr(g3, "ROOT", tmp_path)
+    monkeypatch.setattr(g3.freeze, "require", lambda *a: None)
+    monkeypatch.setattr(g3, "run", lambda *a: pytest.fail("ran"))
+    with pytest.raises(SystemExit, match="--fit"):
+        g3.main(["m.safetensors", "--report", str(tmp_path / "build" / "seed")])
+    assert not (tmp_path / "build" / "seed" / "result.json").exists()
+
+
+def test_a_reported_run_refuses_a_temperature_fitted_for_another_model(tmp_path, monkeypatch):
+    monkeypatch.setattr(g3, "ROOT", tmp_path)
+    monkeypatch.setattr(g3.freeze, "require", lambda *a: None)
+    monkeypatch.setattr(g3, "run", lambda *a: pytest.fail("ran"))
+    (tmp_path / "m.safetensors").write_bytes(b"weights")
+    (tmp_path / "other.safetensors").write_bytes(b"other weights")
+    seed = tmp_path / "build" / "seed"
+    seed.mkdir(parents=True)
+    (seed / "temperature.json").write_text(json.dumps(g3.temperature_record({"temperature": 1.5}, tmp_path / "other.safetensors")))
+    with pytest.raises(SystemExit, match="model"):
+        g3.main([str(tmp_path / "m.safetensors"), "--report", str(seed)])
+
+
+def test_a_reported_run_needs_the_recorded_config_hash_writes_once_and_never_writes_results(tmp_path, monkeypatch):
+    monkeypatch.setattr(g3, "ROOT", tmp_path)
+    monkeypatch.setattr(g3, "OUT", tmp_path / "results" / "g3")
+    required = []
+    monkeypatch.setattr(g3.freeze, "require", lambda m: required.append(m))
+    monkeypatch.setattr(g3, "run", lambda *a: {"outcome": "pass"})
+    (tmp_path / "m.safetensors").write_bytes(b"weights")
+    seed = tmp_path / "build" / "seed"
+    seed.mkdir(parents=True)
+    (seed / "temperature.json").write_text(json.dumps(g3.temperature_record({"temperature": 1.5}, tmp_path / "m.safetensors")))
+    g3.main([str(tmp_path / "m.safetensors"), "--report", str(seed)])
+    assert required and json.loads((seed / "result.json").read_text())["outcome"] == "pass"
+    assert not (tmp_path / "results").exists()
+    with pytest.raises(FileExistsError):
+        g3.main([str(tmp_path / "m.safetensors"), "--report", str(seed)])
+
+
+def test_a_fit_refuses_to_overwrite_a_fitted_temperature(tmp_path, monkeypatch):
+    monkeypatch.setattr(g3, "ROOT", tmp_path)
+    monkeypatch.setattr(g3, "run", lambda *a: pytest.fail("ran"))
+    seed = tmp_path / "build" / "seed"
+    seed.mkdir(parents=True)
+    (seed / "temperature.json").write_text("{}")
+    with pytest.raises(SystemExit, match="fitted"):
+        g3.main(["m.safetensors", "--fit", str(seed)])

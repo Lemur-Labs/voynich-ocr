@@ -217,11 +217,15 @@ def _evaluate(reads: dict, key: str, temperature: float, inputs, loci: dict, l2c
     return {"by_map": by_map, "inserted": inserted, "cer": cers, "lines": len(texts)}
 
 
-def run(model_path: Path, gate: bool, instances_dir: Path | None = None) -> dict:
+def run(
+    model_path: Path, gate: bool, instances_dir: Path | None = None, report: Path | None = None, fit: Path | None = None
+) -> dict:
+    """`fit` fits T on the validation pages into that directory; `report` scores the test pages with the T stored
+    there, reported only (VO-056)."""
     store = instances_dir is None
     instances_dir = instances_dir or INSTANCES
     split = json.loads(d.SPLITS.read_text())
-    eval_pages = sorted(split["test"] if gate else split["validation"])
+    eval_pages = sorted(split["test"] if gate or report else split["validation"])
     inputs = d.load()
     by_id = {lo.id: lo for lo in inputs.loci}
     paragraph = lines.paragraph_loci()
@@ -234,10 +238,17 @@ def run(model_path: Path, gate: bool, instances_dir: Path | None = None) -> dict
         p: read(model, p, [lo.id for lo in loci[p]], instances_dir)
         for p in eval_pages if (instances_dir / f"{p}.json").exists()
     }  # fmt: skip
-    T = temperature(gate, lambda: fit_from(reads, inputs, table, codec), model_path, store)
+    if report:
+        T = json.loads((report / TEMPERATURE.name).read_text())["temperature"]
+    elif fit:
+        record = temperature_record(fit_from(reads, inputs, table, codec), model_path)
+        (fit / TEMPERATURE.name).write_text(json.dumps(record, indent=1) + "\n")
+        T = record["temperature"]
+    else:
+        T = temperature(gate, lambda: fit_from(reads, inputs, table, codec), model_path, store)
     b1, b1_pooled = disagreement_rates(instances_dir, b1_pages(instances_dir, set(split["test"]), eval_pages))
     b2 = surprisal(lines.OUT, tokens)
-    label = "test" if gate else "validation (dry run, not a result)"
+    label = "test" if gate else "test, reported only (VO-056)" if report else "validation (dry run, not a result)"
     main = _evaluate(reads, "pairs", T, inputs, loci, codec.l2c, tokens)
     out = {"eval": label, "temperature": T, "inserted": main["inserted"], "cer": main["cer"],
            "lines": main["lines"]}  # fmt: skip
@@ -292,8 +303,28 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("model", type=Path)
     p.add_argument("--gate", action="store_true", help="score test pages: the one G3 gate run")
     p.add_argument("--instances", type=Path, help="G2's stored row pairs (default build/instances)")
+    p.add_argument("--fit", type=Path, help="fit T on the validation pages into this directory, for --report")
+    p.add_argument("--report", type=Path, help="score test pages into this directory with its T, reported only")
     args = p.parse_args(argv)
-    out = OUT if args.gate else ROOT / "build" / "g3-dry"
+    if sum([args.gate, args.fit is not None, args.report is not None]) > 1:
+        raise SystemExit("--gate, --fit and --report are exclusive")
+    own = args.fit or args.report
+    out = OUT if args.gate else args.report or (args.fit / "validation" if args.fit else ROOT / "build" / "g3-dry")
+    if own is not None and not own.resolve().is_relative_to((ROOT / "build").resolve()):
+        raise SystemExit("reported runs and their fits write only under build/")
+    if args.fit:
+        if (args.fit / TEMPERATURE.name).exists():
+            raise SystemExit(f"{args.fit / TEMPERATURE.name} is already fitted")
+        args.fit.mkdir(parents=True, exist_ok=True)
+    if args.report:
+        fitted = args.report / TEMPERATURE.name
+        if not fitted.exists():
+            raise SystemExit(f"no fitted temperature at {fitted}; run --fit {args.report} first")
+        if json.loads(fitted.read_text()).get("model_sha256") != sha256(args.model):
+            raise SystemExit(f"{fitted} was fitted for another model")
+        freeze.require(args.model)
+        with open(args.report / "result.json", "x") as f:
+            f.write('{"status": "started"}\n')
     if args.gate:
         if args.instances is not None:
             raise SystemExit("the gate reads G2's stored pairs in build/instances; --instances is for dry runs")
@@ -307,7 +338,7 @@ def main(argv: list[str] | None = None) -> int:
         OUT.mkdir(parents=True, exist_ok=True)
         with open(OUT / "result.json", "x") as f:
             f.write('{"status": "started"}\n')
-    result = run(args.model, args.gate, args.instances)
+    result = run(args.model, args.gate, args.instances, args.report, args.fit)
     out.mkdir(parents=True, exist_ok=True)
     (out / "result.json").write_text(json.dumps(result, indent=1) + "\n")
     print(result["outcome"])
