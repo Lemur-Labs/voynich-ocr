@@ -227,3 +227,38 @@ def test_the_disputed_pool_takes_gated_disagree_columns_with_one_zl_codec_token(
 def test_degrade_returns_uint8_of_the_same_shape(level):
     out = h4.degrade(BOX, level, 0.5)
     assert out.dtype == np.uint8 and out.shape == BOX.shape
+@pytest.fixture
+def pool_of(tmp_path, monkeypatch):
+    def make(rows, spaced, last):
+        monkeypatch.setattr(h4, "_zl_spaced_columns", lambda locus, inputs: spaced)
+        monkeypatch.setattr(h4.d, "locus_columns", lambda locus, inputs, names: (list(range(last + 1)), []))
+        inputs = h4.d.Inputs({}, [h4.d.Locus("f1r.1", "f1r", {})], {})
+        return h4.word_pool(_instances(tmp_path, rows), ["f1r"], inputs)
+
+    return make
+
+
+def test_word_exemplars_are_whole_zl_words_read_as_zl_reads_them(pool_of):
+    rows = _word_rows(["a", "b", "c", "d", "e"], [0, 1, 2, 3, 4])
+    pool = pool_of(rows, spaced={1, 3}, last=4)
+    assert sorted(pool) == [("a", "b"), ("c", "d"), ("e",)]
+    assert pool[("a", "b")][0].column == 0 and len(pool[("a", "b")][0].cuts) == 2
+
+
+def test_a_word_with_a_skipped_column_or_a_misread_glyph_is_not_an_exemplar(pool_of):
+    skipped = _word_rows(["a", "c", "d"], [0, 2, 3])
+    assert ("a", "c") not in pool_of(skipped, spaced={2}, last=3)
+    misread = _word_rows(["a", "x", "d"], [0, 1, 2], zl=["a", "b", "d"])
+    assert sorted(pool_of(misread, spaced={1}, last=2)) == [("d",)]
+
+
+def test_a_run_cut_off_by_a_missing_first_or_last_column_is_not_a_word(pool_of):
+    late_start = _word_rows(["b", "c"], [1, 2])
+    assert pool_of(late_start, spaced=set(), last=2) == {}
+
+
+def test_level_counts_come_from_the_plan_alone():
+    pools = {"a": [_ex(i) for i in range(50)]}
+    p = h4.plan([[["a", "a"], ["a"]]], {("a", "a"): [_wex(0)]}, pools, {}, [3])
+    counts = h4.level_counts(p)
+    assert sum(counts["matched"].values()) == 2 and sum(counts["unmatched"].values()) == 1

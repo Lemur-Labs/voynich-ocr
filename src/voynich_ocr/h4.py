@@ -471,18 +471,32 @@ def exemplar_pages(pages: set[str], split: dict) -> tuple[list[str], list[str]]:
     return sorted(glyph - set(split["validation"])), sorted(glyph)
 
 
-def run(model_path: Path, out: Path, text_lines: list, gate: bool) -> dict:
-    if gate:
-        freeze.require(model_path)
+def pools(table: dict[str, str]) -> dict:
     split = json.loads(d.SPLITS.read_text())
     word_pages, glyph_pages = exemplar_pages({p.stem for p in INSTANCES.glob("*.json")}, split)
     validation = sorted(split["validation"])
-    table = json.loads((lines.OUT / "codec.json").read_text())
     inputs = d.load()
-    words = word_pool(INSTANCES, word_pages, inputs)
-    exemplars = exemplar_pool(INSTANCES, glyph_pages)
-    disputed = disputed_pool(INSTANCES, validation, set(table))
-    gaps = gap_pool(INSTANCES, validation, inputs)
+    return {"words": word_pool(INSTANCES, word_pages, inputs), "exemplars": exemplar_pool(INSTANCES, glyph_pages),
+            "disputed": disputed_pool(INSTANCES, validation, set(table)),
+            "gaps": gap_pool(INSTANCES, validation, inputs)}  # fmt: skip
+
+
+def level_counts(planned: dict) -> dict[str, dict[str, int]]:
+    """Rendered R1 glyphs per arm and level, known before anything is rendered (A8's minimum)."""
+    out: dict[str, dict[str, int]] = {"matched": {}, "unmatched": {}}
+    for line in planned["R1"]:
+        for word in line["words"]:
+            for g in word["glyphs"]:
+                out[g["arm"]][str(g["level"])] = out[g["arm"]].get(str(g["level"]), 0) + 1
+    return {arm: dict(sorted(c.items())) for arm, c in out.items()}
+
+
+def run(model_path: Path, out: Path, text_lines: list, gate: bool) -> dict:
+    if gate:
+        freeze.require(model_path)
+    table = json.loads((lines.OUT / "codec.json").read_text())
+    pool = pools(table)
+    words, exemplars, disputed, gaps = pool["words"], pool["exemplars"], pool["disputed"], pool["gaps"]
     planned = plan(text_lines, words, exemplars, disputed, gaps)
     boxes = _crops(planned)
     temperature = json.loads(g3.TEMPERATURE.read_text())["temperature"]
@@ -502,7 +516,8 @@ def run(model_path: Path, out: Path, text_lines: list, gate: bool) -> dict:
                 read = g3.glyphs(read_image(model, image, baseline), temperature, l2c)
                 glyphs = [{**g, "token": chars[g["char"]]} for g in read if g["char"] != lines.SPACE]
                 scored[name].append(score_line(row, glyphs))
-        summary = {"lines": len(text_lines), "gaps": planned["gaps"], "R2_gaps": planned["R2_gaps"], "temperature": temperature,
+        summary = {"lines": len(text_lines), "gaps": planned["gaps"], "R2_gaps": planned["R2_gaps"],
+                   "rendered": level_counts(planned), "temperature": temperature,
                    "pools": {"word_types": len(words), "exemplar_tokens": len(exemplars),
                              "disputed_tokens": len(disputed), "disputed_instances": sum(map(len, disputed.values())),
                              "word_gaps": len(gaps)},
@@ -511,12 +526,12 @@ def run(model_path: Path, out: Path, text_lines: list, gate: bool) -> dict:
     return summary
 
 
-def smoke_text(aaa: dict[str, str], lines_: int = 3) -> list:
-    """Not Naibbe text: a few lines of seeded random codec tokens, for checking the pipeline end to end."""
+def smoke_text(words: dict, table: dict[str, str], lines_: int = 3) -> list:
+    """Not Naibbe text: seeded lines alternating word-pool words and random codec tokens, so both arms run."""
     rng = np.random.default_rng(1)
-    tokens = sorted(set(aaa.values()))
-    return [[[tokens[k] for k in rng.integers(0, len(tokens), 4)] for _ in range(WORDS_PER_LINE)]
-            for _ in range(lines_)]  # fmt: skip
+    types, tokens = sorted(words), sorted(table)
+    return [[list(types[rng.integers(len(types))]) if w % 2 else [tokens[k] for k in rng.integers(0, len(tokens), 4)]
+             for w in range(WORDS_PER_LINE)] for _ in range(lines_)]  # fmt: skip
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -524,16 +539,24 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("model", type=Path, nargs="?", default=freeze.MODEL)
     p.add_argument("--gate", action="store_true", help="the one G4 run: Naibbe text into results/g4")
     p.add_argument("--smoke", type=Path, help="seeded non-Naibbe text into this directory under build/")
+    p.add_argument("--counts", action="store_true", help="rendered glyphs per arm and level for the Naibbe text")
     args = p.parse_args(argv)
-    if args.gate == bool(args.smoke):
-        p.error("give exactly one of --gate and --smoke DIR")
+    if sum([args.gate, bool(args.smoke), args.counts]) != 1:
+        p.error("give exactly one of --gate, --smoke DIR and --counts")
     aaa = sta.load_aaa((RAW / "bitrans" / "STA-aaa.bit").read_text())
     if args.gate:
         print(json.dumps(run(args.model, OUT, text(aaa), gate=True)))
         return 0
+    table = json.loads((lines.OUT / "codec.json").read_text())
+    if args.counts:
+        pool = pools(table)
+        planned = plan(text(aaa), pool["words"], pool["exemplars"], pool["disputed"], pool["gaps"])
+        counts = {"rendered": level_counts(planned), "gaps": planned["gaps"], "R2_gaps": planned["R2_gaps"]}
+        print(json.dumps(counts))
+        return 0 if all(n >= MIN_LEVEL_GLYPHS for n in counts["rendered"]["matched"].values()) else 1
     if (ROOT / "build") not in args.smoke.resolve().parents:
         p.error("--smoke writes under build/ only")
-    print(json.dumps(run(args.model, args.smoke, smoke_text(aaa), gate=False)))
+    print(json.dumps(run(args.model, args.smoke, smoke_text(pools(table)["words"], table), gate=False)))
     return 0
 
 
