@@ -122,3 +122,12 @@ def test_published_row_carries_the_gated_flag_and_no_transliteration_text():
     fields = d.published_row(cols[1]).split("\t")
     assert fields == ["f1r.1", "1", "3", "disagree", "", "ZL,IT,GC", "gated"]
     assert len(d.PUBLISHED_HEADER.split("\t")) == len(fields)
+
+
+def test_test_page_rows_are_written_apart_from_the_published_map(tmp_path):
+    inputs = _inputs({s: _g("A1Q1") for s in d.ORDER})
+    maps = {name: d.build(inputs, names) for name, names in d.MAPS.items()}
+    d.write(tmp_path, inputs, maps, {"f1r"})
+    assert (tmp_path / "published" / "full.tsv").read_text() == d.PUBLISHED_HEADER + "\n"
+    rows = (tmp_path / "published-test" / "full.tsv").read_text().splitlines()
+    assert rows == [d.PUBLISHED_HEADER] + [d.published_row(c) for c in maps["full"][0]]

@@ -314,3 +314,8 @@
   by: claude
   decision: "Findings for the autonomy claim, logged at the owner's request. Every error below that reached a merged file was caught before merge; the ones that reached the owner were in unchecked chat summaries. (1) The G2 chat summary said both k variants cleared their nulls; only HOG did (caught by red-team). (2) A G3 smoke test was reported as still running for about 2.5 hours while it was hung at 0% CPU; it was checked only when the owner asked twice (caught by the owner's question). (3) The first G3 packet draft said the label-blind subset gives kill (it would be void, and its 0.500 was a placeholder), said the pass depends on A5 only (A6 too), and misread where the prereg puts the seed spread; the chat summary repeated the last two (caught by red-team). (4) The G3 seed table gave a bar margin of 0.067 for 0.086 (caught by the agent's own script check). (5) VO-053's first draft omitted two readings that affect the outcome (caught by red-team). (6) The map v0 post draft owed to the owner since G1 (VO-026) was never written until the owner raised the outside-world criteria (dropped work, caught by the owner). The agent's chat count of these was 'three'; it was six."
   source: G2, G3 and PR 26, 27 and 31 red-team records; owner review, 2026-10-30
+- id: VO-064
+  date: "2026-10-30"
+  by: brian
+  decision: G3 is done, so the 40 test pages' rows withheld by VO-019 are released, in the same columns as map-v0 (no readings or codes, VO-028), as a separate GitHub release map-v0-test. map-v0 itself is unchanged and its figures stay those of the 187 non-test pages.
+  source: owner answered "do it" to the test-page release question after G3, 2026-10-30
