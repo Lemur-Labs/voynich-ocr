@@ -809,3 +809,40 @@ url = "https://collections.library.yale.edu/iiif/2/1006277/full/max/0/default.jp
 [[source]]
 path = "models/vit_small_patch14_dinov2.lvd142m.safetensors"
 url = "https://huggingface.co/timm/vit_small_patch14_dinov2.lvd142m/resolve/4610ca143709d58a633b6397a74412c2c3842454/model.safetensors"
+
+# Greshko naibbe-cipher (MIT, citation requested: doi 10.1080/01611194.2025.2566408), pinned to a GitHub commit.
+[[source]]
+path = "naibbe/LICENSE"
+url = "https://raw.githubusercontent.com/greshko/naibbe-cipher/719f2f4c4d1eacf95fabf48381cd84fc6cd94279/LICENSE"
+
+[[source]]
+path = "naibbe/README.md"
+url = "https://raw.githubusercontent.com/greshko/naibbe-cipher/719f2f4c4d1eacf95fabf48381cd84fc6cd94279/README.md"
+
+[[source]]
+path = "naibbe/naibbe.py"
+url = "https://raw.githubusercontent.com/greshko/naibbe-cipher/719f2f4c4d1eacf95fabf48381cd84fc6cd94279/naibbe.py"
+
+[[source]]
+path = "naibbe/decrypt_naibbe.py"
+url = "https://raw.githubusercontent.com/greshko/naibbe-cipher/719f2f4c4d1eacf95fabf48381cd84fc6cd94279/decrypt_naibbe.py"
+
+[[source]]
+path = "naibbe/references/naibbe_tables.csv"
+url = "https://raw.githubusercontent.com/greshko/naibbe-cipher/719f2f4c4d1eacf95fabf48381cd84fc6cd94279/references/naibbe_tables.csv"
+
+[[source]]
+path = "naibbe/input/examples/nathist_book16.txt"
+url = "https://raw.githubusercontent.com/greshko/naibbe-cipher/719f2f4c4d1eacf95fabf48381cd84fc6cd94279/input/examples/nathist_book16.txt"
+
+[[source]]
+path = "naibbe/encrypted/nathist_output_ciphertext.txt"
+url = "https://raw.githubusercontent.com/greshko/naibbe-cipher/719f2f4c4d1eacf95fabf48381cd84fc6cd94279/encrypted/nathist_output_ciphertext.txt"
+
+[[source]]
+path = "naibbe/respaced_plaintext/nathist_pre_encryption_respaced_plaintext.txt"
+url = "https://raw.githubusercontent.com/greshko/naibbe-cipher/719f2f4c4d1eacf95fabf48381cd84fc6cd94279/respaced_plaintext/nathist_pre_encryption_respaced_plaintext.txt"
+
+[[source]]
+path = "naibbe/decrypted/nathist_output_ciphertext_decrypted.txt"
+url = "https://raw.githubusercontent.com/greshko/naibbe-cipher/719f2f4c4d1eacf95fabf48381cd84fc6cd94279/decrypted/nathist_output_ciphertext_decrypted.txt"
