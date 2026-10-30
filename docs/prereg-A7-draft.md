@@ -11,6 +11,10 @@ Status: **draft**, for the owner's approval of its text. VO-060 approved the des
   - **R2, disputed:** disputed exemplars where available, at level 0.
 - **Exemplar draws:** A4's "drawn per token" means one draw per rendered glyph, with replacement, from the pool of
   that glyph's token.
+- **How a draw is made:** every draw is one `rng.random()` value u.
+  - **From a pool:** a pool of n instances is ordered by (page, locus, column), and the draw takes item floor(un).
+  - **Level:** floor(3u).
+  - **No pool:** a glyph whose token has no pool still consumes its u.
 - **Random streams:** `numpy.random.SeedSequence(20261027).spawn(5)` gives five streams. In order, they are for
   exemplar, level, band, disputed and bootstrap. Each stream is consumed in line order, then glyph order.
   - Every rendered glyph takes one exemplar draw.
@@ -19,23 +23,32 @@ Status: **draft**, for the owner's approval of its text. VO-060 approved the des
 - **Degradation operator:** applied to an exemplar's pixels before collage scaling.
   - **Pixels:** the RGB pixels of its cut's bounding box on the page image. This is the box `clusters.crop` takes
     before padding, so it has no padding or fill.
-  - **Notation:** W and h are the box's width and height in pixels. b is the per-channel 90th percentile of the
-    box's pixels (`numpy.percentile`, linear).
+  - **Notation:** W and H are the box's width and height in pixels. b is the per-channel 90th percentile of the
+    box's pixels before degradation (`numpy.percentile`, linear).
   - **Order of operations:**
     1. In floating point, fade each channel: I → b + a(I − b).
-    2. Blur each channel with `scipy.ndimage.gaussian_filter` (σ as below, `truncate=4.0`, `mode="nearest"`).
-    3. Set a full-height band of width w = round(fW) to b. Its left edge is floor(u(W − w + 1)), with u the glyph's
+    2. Blur with `scipy.ndimage.gaussian_filter` (`sigma=(σ, σ, 0)`, so channels never mix; `truncate=4.0`;
+       `mode="nearest"`).
+    3. Set a full-height band of width w = rint(fW) to b. Its left edge is floor(u(W − w + 1)), with u the glyph's
        band draw.
-    4. Clip to [0, 255] and round to uint8, once.
+    4. Clip to [0, 255] and round to uint8 with `numpy.rint`, once.
   - **Faint results:** a glyph left with no ink above b is still rendered and keeps its label.
 
   | Level | σ | a | f |
   |---|---|---|---|
   | 0 | 0 (no blur) | 1 | 0 |
-  | 1 | 0.03h | 0.6 | 0.2 |
-  | 2 | 0.06h | 0.35 | 0.4 |
+  | 1 | 0.03H | 0.6 | 0.2 |
+  | 2 | 0.06H | 0.35 | 0.4 |
 
   Levels are drawn uniformly. The label is always the enciphered token.
+- **Collage:** each line of text becomes one image.
+  - **Placement:** boxes are pasted after degradation, at page resolution, with no rescaling or padding. They are
+    placed left to right with their bottom edges aligned.
+  - **Spacing:** a word space is as wide as the median width of the line's boxes.
+  - **Canvas:** the canvas has an 8 px margin on every side. It is filled with the per-channel median, over the
+    line's boxes, of their b.
+  - **Recognizer input:** the recognizer gets the whole canvas as the line polygon, with a horizontal baseline 8 px
+    above its bottom edge.
 - **Freeze:** before the first rendering:
   - a byte-exact fixture test of the operator is committed;
   - the config hash of the renderer and its inputs is recorded in `docs/decisions.yaml`.
@@ -45,6 +58,16 @@ Status: **draft**, for the owner's approval of its text. VO-060 approved the des
   - ECE and its interval are also reported per level, with a reliability curve for each.
   - In the per-level figures, a recognized glyph takes the level of the rendered glyph the alignment places it on.
   - Insertions count only in the pooled figure.
+  - Deleted rendered glyphs are counted per level, as A4 counts them, and are not in any ECE.
+  - Each per-level interval resamples that level's glyphs, grouped by line, so no resample is empty.
+  - **Bootstrap seeds:** the bootstrap stream spawns five children, used in this order:
+    1. R1 pooled;
+    2. level 0;
+    3. level 1;
+    4. level 2;
+    5. R2.
+
+    Each child is passed as `scoring.page_bootstrap`'s seed.
   - A4's permission, "calibrated on synthetic Naibbe ink", now needs the pooled upper bound **and every level's**
     upper bound to be ≤ 0.05. The claim names the three levels.
 - **CER:** H4's CER, the bound, is computed on R0. CER on R1 is reported as descriptive and is not a bound.
@@ -56,8 +79,8 @@ Status: **draft**, for the owner's approval of its text. VO-060 approved the des
   - **Draws:** with replacement, from the disputed stream.
   - **Glyphs with no disputed pool:** they use their R0 exemplar and are not scored.
   - **Scoring:** recognized glyphs aligned to a disputed glyph are scored. Insertions are not scored.
-  - **Reported:** ECE and accuracy against the ZL label, the instance count, and a 95% bootstrap over source
-    instances from the bootstrap stream.
+  - **Reported:** ECE and accuracy against the ZL label, the instance count, and a 95% bootstrap grouped by source
+    instance, from the bootstrap stream's fifth child.
   - **What an error means:** disagreement with ZL, which may or may not be a misread of the ink.
   - **Where ZL and the model still enter:**
     - ZL is one of the sources that defines "disagree";
