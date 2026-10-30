@@ -264,3 +264,28 @@
   by: claude
   decision: "Readings of H3 made in code, recorded before the G3 gate. Each map (full, leave-ZL-out, leave-ZL-IT-out) aligns the recognized line to its own column consensus and gates by its own columns' tier and flags, so the three maps score different glyph populations. In leave-ZL-out the zl_uncertain filter has no effect, and in leave-ZL-IT-out a column is tier 3 only when GC, FG and CD all contribute. The leave-ZL-out lower bound decides pass versus narrow. A glyph's type is its recognized token. B1 is a recognized token's share of G2's gated instances in disagreeing columns, on non-test pages that are not being scored; a token unseen there gets the pooled share. B2 is −log of a token's frequency among the training labels' tokens; a token absent from them scores +∞. B3 counts the token's letter-digit stroke codes. B5 is the mean confidence at T of all non-space glyphs on the page's paired rows, gated or not, inserted ones included. ECE is computed on the leave-{ZL, IT}-out map's gated glyphs. A glyph agrees when that column's majority, taken over all covering sources' readings with a gap counted as a reading and ties going to the earliest source, is non-empty and every token in it equals the glyph's token, since a merged column holds a run of one token. CER is the summed token edit distance over the summed reference length, spaces excluded. The references are the line's ZL tokens, which keep `?`, a token the recognizer cannot emit, and are empty where ZL does not cover the locus, and the full-map column consensus. The temperature fit uses the validation pages' G2-paired rows; lines with a `?` or a token outside the codec carry no label, and lines no CTC path can emit are dropped. Glyph spans and confidences are taken from kraken 7.1.1's `logits`, which are softmax outputs, so T divides their logarithms and the result is renormalized."
   source: src/voynich_ocr/{g3,recognize,instances,align,disagreement}.py on main 670a54c
+- id: VO-054
+  date: "2026-10-29"
+  by: brian
+  decision: "G3-1 approved. The writeup states G3 as \"Passed, under amendments A5 and A6 (fixed after G2's test-page inference; void under A1's original 0.72 coverage minimum): recognizer confidence predicts where transliterations disagree, beyond glyph type and page\", followed by the VO-047 line-selection deviation. \"Calibrated\" and \"independent of ZL\" are used only with the qualifiers in docs/gates/G3.md."
+  source: owner approved the G3 packet recommendations, 2026-10-29
+- id: VO-055
+  date: "2026-10-29"
+  by: brian
+  decision: G3-2 approved. The H3 readings made in code (VO-053) are ratified.
+  source: owner approved the G3 packet recommendations, 2026-10-29
+- id: VO-056
+  date: "2026-10-29"
+  by: brian
+  decision: G3-3 approved, option A. Seeds 20261028 and 20261029 are run through G3 on the test pages, each with T fitted on the validation pages, and scored into a report directory that never writes results/g3. Each run's config hash is recorded before its test-page run. The spread is reported beside the gated number and changes nothing in the verdict.
+  source: owner approved the G3 packet recommendations, 2026-10-29
+- id: VO-057
+  date: "2026-10-29"
+  by: brian
+  decision: G3-4 approved. Amendment A4 (docs/prereg-A4-draft.md) is appended to docs/prereg.md before any Naibbe rendering.
+  source: owner approved the G3 packet recommendations, 2026-10-29
+- id: VO-058
+  date: "2026-10-29"
+  by: claude
+  decision: docs/prereg.md with A1, A2, A3, A5, A6 and A4 appended has sha256 b1d5b8c29c6b9850fa9fb7b5e55c98cb5abfbb63ecc99d592d570ec75f38daa0.
+  source: docs/prereg.md Amendments
