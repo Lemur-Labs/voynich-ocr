@@ -344,3 +344,8 @@
   by: claude
   decision: docs/prereg.md with A1, A2, A3, A5, A6, A4 and A7 appended has sha256 cc4f5ae5f7d29975f53f01b3619fd00eec64e779ce0a40cdfdc431c50cde0a08.
   source: docs/prereg.md Amendments
+- id: VO-070
+  date: "2026-10-30"
+  by: brian
+  decision: "pandas is added as a dependency, pinned to pandas==3.0.6 in pyproject.toml and uv.lock, because Greshko's naibbe-cipher code is vendored unchanged (VO-016) and imports it. Only read_csv and iterrows are used. The check stays his shipped ciphertext and plaintext pairs. No reimplementation, since that would add a place to be wrong for no gain."
+  source: owner reply to the A7 approval request, 2026-10-30
