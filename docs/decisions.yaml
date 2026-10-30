@@ -349,3 +349,18 @@
   by: brian
   decision: "pandas is added as a dependency, pinned to pandas==3.0.6 in pyproject.toml and uv.lock, because Greshko's naibbe-cipher code is vendored unchanged (VO-016) and imports it. Only read_csv and iterrows are used. The check stays his shipped ciphertext and plaintext pairs. No reimplementation, since that would add a place to be wrong for no gain."
   source: owner reply to the A7 approval request, 2026-10-30
+- id: VO-071
+  date: "2026-10-30"
+  by: claude
+  decision: "Correction recorded under VO-068. The owner's request named the Phase 2 rerun as \"the 21 label-clean pages, three readers\". The label-blind rerun kept 17 of 40 test pages. 21 is the number of test pages G2 paired by line count, which used ZL's word-length check (VO-041). VO-068 gives the right figure, 17, and this row records that it corrects the earlier one."
+  source: owner reply, 2026-10-30; docs/gates/G2.md consistency table
+- id: VO-072
+  date: "2026-10-30"
+  by: brian
+  decision: "A glyph-level disagreement resolver (a possible A8) was considered and rejected, and is not pre-registered. Scored against a held-out transcriber, it measures agreement with another transcriber, not with the ink, which is the circularity G3 already established. It would also be scored on test pages the recognizer has already read for G2 and G3, since the validation pages are too few. Roughly two agent days against the 2026-11-21 W4 start, for a result that cannot be a finding. Meaning-level forks (mirrored, reordered, chunked) are out of scope as decipherment."
+  source: owner reply, 2026-10-30
+- id: VO-073
+  date: "2026-10-30"
+  by: brian
+  decision: Owner hours are 2.5 of 4 as of 2026-10-30. The last figure was 1.75 after G2. The G3 review and the two A7 approvals took about 45 minutes. The remaining 1.5 hours are reserved for the A7 gate (G4) and the final writeup review.
+  source: owner reply, 2026-10-30
