@@ -38,8 +38,8 @@ def _module(name: str) -> ModuleType:
 
 def encipher(plain: list[str], seed: int) -> tuple[list[str], list[str]]:
     """Ciphertext and respaced plaintext per line, as naibbe.py's main loop writes them, with Python's global
-    `random` seeded first. Its space-removal step still runs, so the draws match the script's, but its output is
-    discarded."""
+    `random` seeded first. Its space-removal step still runs, so the draws follow the script's, but its output is
+    discarded. No shipped file records a seed, so the draw order is checked only for repeatability."""
     n = _module("naibbe")
     random.seed(seed)
     cipher, respaced = [], []
@@ -67,12 +67,13 @@ def decipher(cipher: list[str]) -> list[str]:
 
 
 def consistent(decrypted: str, respaced: str) -> bool:
-    """Every plaintext token is the decrypted token, or one of the options decrypt_naibbe lists for it."""
+    """Every plaintext token is the decrypted token, or one of the options decrypt_naibbe lists for it. A wrong
+    decryption that still lists the true token passes; the exact known-answer is the shipped decrypted file."""
     got = re.findall(r"\([^)]*\)|\S+", decrypted)
     want = respaced.split()
     if len(got) != len(want):
         return False
-    return all(g == w or w in [o.rstrip("*") for o in g.strip("()").split("|")] for g, w in zip(got, want))
+    return all(g == w or w in [o.rstrip("*") for o in g.strip("()").split("|")] for g, w in zip(got, want, strict=True))
 
 
 def _lines(path) -> list[str]:
@@ -86,11 +87,11 @@ def check() -> dict:
     trips = 0
     for seed in range(ROUND_TRIP_SEEDS):
         c, r = encipher(sample, seed)
-        trips += all(consistent(x, y) for x, y in zip(decipher(c), r))
+        trips += all(consistent(x, y) for x, y in zip(decipher(c), r, strict=True))
     report = {
         "shipped_lines": len(cipher),
         "shipped_decrypted_identical": ours == decrypted,
-        "shipped_plaintext_consistent": sum(consistent(x, y) for x, y in zip(ours, respaced)),
+        "shipped_plaintext_consistent": sum(consistent(x, y) for x, y in zip(ours, respaced, strict=True)),
         "round_trip_seeds": ROUND_TRIP_SEEDS,
         "round_trip_lines": len(sample),
         "round_trip_passed": trips,
