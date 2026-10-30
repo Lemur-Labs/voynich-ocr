@@ -140,7 +140,10 @@ def eva_tokens(words: list[str], aaa: dict[str, str]) -> list[list[str]]:
     out = subprocess.run(
         [str(bitrans()), "-2", "-m2", "-f", str(RAW / "bitrans" / "STA-Eva_def.bit")],
         input="\n".join(words) + "\n", capture_output=True, text=True, check=True,
-    ).stdout.split("\n")[: len(words)]  # fmt: skip
+    ).stdout.split("\n")  # fmt: skip
+    if len(out) != len(words) + 1 or out[-1]:
+        raise AssertionError(f"bitrans returned {len(out) - 1} lines for {len(words)} words")
+    out = out[:-1]
     return [[aaa[g.code] for g in sta.glyphs(w)] for w in out]
 
 
@@ -200,8 +203,8 @@ def gap_pool(instances_dir: Path, pages: list[str], inputs: d.Inputs) -> list[in
             spaced = _zl_spaced_columns(by_id[locus], inputs)
             for left, right in itertools.pairwise(row):
                 if left["column"] < right["column"] and spaced & set(range(left["column"], right["column"])):
-                    gap = min(p[0] for p in right["cut"]) - max(p[0] for p in left["cut"])
-                    found.append(((page, locus, left["column"]), max(0, int(np.rint(gap)))))
+                    gap = max(0, int(min(p[0] for p in right["cut"]))) - (int(max(p[0] for p in left["cut"])) + 1)
+                    found.append(((page, locus, left["column"]), max(0, gap)))
     return [g for _, g in sorted(found, key=lambda x: x[0])]
 
 
@@ -255,6 +258,8 @@ def _runs_between(row: list[dict], spaced: set[int]) -> list[list[dict]]:
 
 def plan(text_lines, words, exemplars, disputed, gaps) -> dict:
     """Every random draw, in A7's and A8's order: each stream in line order, then word, glyph or word-space order."""
+    if not gaps:
+        raise SystemExit("the gap pool is empty; R2 has no word spacing to draw")
     rng = streams()
     out = {"R0": [], "R1": [], "R2": [], "gaps": 0, "R2_gaps": 0}
     for line in text_lines:
@@ -272,13 +277,13 @@ def plan(text_lines, words, exemplars, disputed, gaps) -> dict:
                 level = draw(u_level, len(LEVELS))
                 dpool = disputed.get(t, [])
                 dex = dpool[draw(u_dis, len(dpool))] if dpool else None
+                g = {"token": t, "exemplar": ex, "u": u_band, "arm": arm}
                 if ex is None and wex is None:
                     out["gaps"] += 1
-                    continue
-                g = {"token": t, "exemplar": ex, "u": u_band, "arm": arm}
-                w0.append({**g, "level": 0})
-                w1.append({**g, "level": level})
-                if ex is None:
+                else:
+                    w0.append({**g, "level": 0})
+                    w1.append({**g, "level": level})
+                if dex is None and ex is None:
                     out["R2_gaps"] += 1
                 else:
                     w2.append({**g, "exemplar": dex or ex, "level": 0, "arm": "glyph", "disputed": dex is not None})
@@ -325,6 +330,8 @@ def render(line: dict, boxes: dict[str, np.ndarray]) -> tuple[Image.Image, list]
         done = [degrade(p, g["level"], g["u"]) if p.shape[1] else p for p, g in zip(ps, word["glyphs"], strict=True)]
         words.append([np.concatenate(done, axis=1)] if word["exemplar"] else done)
     flat = [p for ps in parts for p in ps if p.shape[1]]
+    if not flat:
+        raise AssertionError("a line with nothing to render")
     fill = np.median([background(p) for p in flat], axis=0)
     spaces = line.get("spaces") or [int(np.rint(np.median([p.shape[1] for p in flat])))] * (len(words) - 1)
     return collage(words, spaces, fill)
@@ -378,7 +385,9 @@ def score_line(row: list[dict], glyphs: list[dict]) -> dict:
         if k is None:
             near = next((pairs[j][1] for j in range(n - 1, -1, -1) if pairs[j][1] is not None), None)
             if near is None:
-                near = next(pairs[j][1] for j in range(n + 1, len(pairs)) if pairs[j][1] is not None)
+                near = next((pairs[j][1] for j in range(n + 1, len(pairs)) if pairs[j][1] is not None), None)
+            if near is None:
+                raise AssertionError("an insertion on a line with nothing rendered")
             arm = row[near]["arm"]
             errors[arm] = errors.get(arm, 0) + 1
             scored.append({"confidence": glyphs[r]["confidence"], "correct": False, "inserted": True, "arm": arm})
@@ -474,7 +483,7 @@ def exemplar_pages(pages: set[str], split: dict) -> tuple[list[str], list[str]]:
 def pools(table: dict[str, str]) -> dict:
     split = json.loads(d.SPLITS.read_text())
     word_pages, glyph_pages = exemplar_pages({p.stem for p in INSTANCES.glob("*.json")}, split)
-    validation = sorted(split["validation"])
+    validation = sorted(set(split["validation"]) - DEV_FOLIOS)
     inputs = d.load()
     return {"words": word_pool(INSTANCES, word_pages, inputs), "exemplars": exemplar_pool(INSTANCES, glyph_pages),
             "disputed": disputed_pool(INSTANCES, validation, set(table)),
@@ -504,18 +513,21 @@ def run(model_path: Path, out: Path, text_lines: list, gate: bool) -> dict:
     l2c = model.net.codec.l2c
     chars = {ch: t for t, ch in table.items()}
     out.mkdir(parents=True, exist_ok=True)
+    # Written before the first render: a crashed run leaves it behind, and a rerun has to remove it on the record.
+    with (out / "started").open("x") as fh:
+        fh.write(json.dumps({"rendered": level_counts(planned)}) + "\n")
+    scored: dict[str, list[dict]] = {}
+    for name in ("R0", "R1", "R2"):
+        (out / name).mkdir(exist_ok=True)
+        scored[name] = []
+        for i, line in enumerate(planned[name]):
+            image, baseline = render(line, boxes)
+            image.save(out / name / f"{i:03d}.png")
+            row = [g for w in line["words"] for g in w["glyphs"]]
+            read = g3.glyphs(read_image(model, image, baseline), temperature, l2c)
+            glyphs = [{**g, "token": chars[g["char"]]} for g in read if g["char"] != lines.SPACE]
+            scored[name].append(score_line(row, glyphs))
     with (out / "result.json").open("x") as fh:
-        scored: dict[str, list[dict]] = {}
-        for name in ("R0", "R1", "R2"):
-            (out / name).mkdir(exist_ok=True)
-            scored[name] = []
-            for i, line in enumerate(planned[name]):
-                image, baseline = render(line, boxes)
-                image.save(out / name / f"{i:03d}.png")
-                row = [g for w in line["words"] for g in w["glyphs"]]
-                read = g3.glyphs(read_image(model, image, baseline), temperature, l2c)
-                glyphs = [{**g, "token": chars[g["char"]]} for g in read if g["char"] != lines.SPACE]
-                scored[name].append(score_line(row, glyphs))
         summary = {"lines": len(text_lines), "gaps": planned["gaps"], "R2_gaps": planned["R2_gaps"],
                    "rendered": level_counts(planned), "temperature": temperature,
                    "pools": {"word_types": len(words), "exemplar_tokens": len(exemplars),

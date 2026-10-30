@@ -262,3 +262,19 @@ def test_level_counts_come_from_the_plan_alone():
     p = h4.plan([[["a", "a"], ["a"]]], {("a", "a"): [_wex(0)]}, pools, {}, [3])
     counts = h4.level_counts(p)
     assert sum(counts["matched"].values()) == 2 and sum(counts["unmatched"].values()) == 1
+
+
+def test_r2_uses_a_disputed_glyph_even_without_an_a4_exemplar_and_counts_a_gap_only_without_both():
+    p = h4.plan([[["a", "z"]]], {("a", "z"): [_wex(0)]}, {}, {"a": [_ex(900)]}, [3])
+    assert [g["exemplar"] for g in _glyphs(p, "R2")] == [_ex(900)]
+    assert p["R2_gaps"] == 1 and p["gaps"] == 0
+
+
+def test_a_glyph_with_no_exemplar_anywhere_is_a_gap_in_every_rendering():
+    p = h4.plan([[["z"]]], {}, {}, {}, [3])
+    assert p["gaps"] == 1 and p["R2_gaps"] == 1
+
+
+def test_an_empty_gap_pool_stops_the_plan():
+    with pytest.raises(SystemExit):
+        h4.plan([[["a"]]], {}, {}, {}, [])
