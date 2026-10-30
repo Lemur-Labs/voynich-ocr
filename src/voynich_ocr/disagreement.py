@@ -337,11 +337,14 @@ def test_pages(path: Path = SPLITS) -> set[str]:
 def write(out: Path, inputs: Inputs, maps: dict[str, tuple[list[Column], list[Boundary]]], test: set[str]) -> None:
     (out / "columns").mkdir(parents=True, exist_ok=True)
     (out / "published").mkdir(parents=True, exist_ok=True)
+    (out / "published-test").mkdir(parents=True, exist_ok=True)
     for name, (columns, _) in maps.items():
         rows = [COLUMN_HEADER] + [column_row(c) for c in columns]
         (out / "columns" / f"{name}.tsv").write_text("\n".join(rows) + "\n")
         shown = [PUBLISHED_HEADER] + [published_row(c) for c in columns if c.page not in test]
         (out / "published" / f"{name}.tsv").write_text("\n".join(shown) + "\n")
+        held = [PUBLISHED_HEADER] + [published_row(c) for c in columns if c.page in test]
+        (out / "published-test" / f"{name}.tsv").write_text("\n".join(held) + "\n")
     summary = summarize(maps, inputs, test)
     (out / "summary.json").write_text(json.dumps(summary, indent=1, sort_keys=False) + "\n")
 
