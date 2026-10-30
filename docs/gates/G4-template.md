@@ -5,7 +5,8 @@ owner (2026-10-30) and appear in the packet and the writeup unchanged, whatever 
 
 ## Outcome, computed
 
-Primary arm: matched-word glyphs (A8). Each level needs at least 3,000 matched glyphs. A level under that is marked
+Primary arm: matched-word glyphs (A8), entirely training-page ink. Each level needs at least 3,000 rendered
+matched glyphs, counted before rendering. A level under that is marked
 **underpowered**: its failure is not evidence of miscalibration, and the claim cannot be made.
 
 | Quantity (matched-word glyphs) | Value | Glyphs | Rule |
@@ -15,7 +16,7 @@ Primary arm: matched-word glyphs (A8). Each level needs at least 3,000 matched g
 | R1 ECE, level 0 | | | upper bound ≤ 0.05; ≥ 3,000 glyphs or underpowered |
 | R1 ECE, level 1 | | | upper bound ≤ 0.05; ≥ 3,000 glyphs or underpowered |
 | R1 ECE, level 2 | | | upper bound ≤ 0.05; ≥ 3,000 glyphs or underpowered |
-| Claim "calibrated on synthetic Naibbe ink" | | | all four ECE rows pass, no level underpowered |
+| Claim "calibrated on synthetic Naibbe ink built from training-page word crops" | | | all four ECE rows pass, no level underpowered |
 
 ## What a pass means
 
