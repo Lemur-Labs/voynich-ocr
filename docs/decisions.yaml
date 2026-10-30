@@ -289,3 +289,8 @@
   by: claude
   decision: docs/prereg.md with A1, A2, A3, A5, A6 and A4 appended has sha256 b1d5b8c29c6b9850fa9fb7b5e55c98cb5abfbb63ecc99d592d570ec75f38daa0.
   source: docs/prereg.md Amendments
+- id: VO-059
+  date: "2026-10-30"
+  by: claude
+  decision: "The VO-056 seed runs use `g3 MODEL --instances INST --fit DIR` (validation pages only), then `g3 MODEL --instances INST --report DIR`, on main 9db5390. Config hashes recorded before those test-page runs: seed 20261028 858445806ac6910676303de9ee17183939613609cd438e60d74dde14e26b3af3 (model build/model/20261028/best_0.9448.safetensors, sha256 d16e4b30d0fa70e6731ea1f14d0d1d5b0f16d9324cff87bbbe5b861186a8bfc7; INST build/consistency/20261028-gated/instances, digest ab08c18863ca0091fad1f845b4d1278eb2a634f31f1bbacca76b0f7dfa1575a4; DIR build/consistency/20261028-g3, temperature.json sha256 30e506358f7308147660f488443e88c501826fe1540147a7a4d24a850b1e7e0c, T = 2.85 on 102 lines, 0 dropped, 5 unlabelled) and seed 20261029 0fa821bed55aa69d51811e9257ff328c1c5bd6b7cc79bc65dcff3e60dc7c5ee7 (model build/model/20261029/best_0.9495.safetensors, sha256 ece4893d2e5955c18183acd4f454d6a512d4a6d9f5a753ba1cf1f0aba37d7351; INST build/consistency/20261029-gated/instances, digest 0952adcf0132d5b7671122cfc676117829a2e956d33ab58ab0019af0d0d5f397; DIR build/consistency/20261029-g3, temperature.json sha256 b2a79e697bc392a2bf142177e4841f457957322ded328e16c9ac3340a6b97c68, T = 2.90 on 102 lines, 0 dropped, 5 unlabelled). The config hash does not cover INST or DIR; `--report` checks INST's digest against the fit, and the temperature.json sha256 here pins T. The gate model's T was 2.65."
+  source: src/voynich_ocr/{g3,freeze}.py; PR 29
