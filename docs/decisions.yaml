@@ -317,5 +317,5 @@
 - id: VO-064
   date: "2026-10-30"
   by: brian
-  decision: G3 is done, so the 40 test pages' rows withheld by VO-019 are released, in the same columns as map-v0 (no readings or codes, VO-028), as a separate GitHub release map-v0-test. map-v0 itself is unchanged and its figures stay those of the 187 non-test pages.
+  decision: G3 is done, so the 40 test pages' rows withheld by VO-019 are released, in the same columns as map-v0 (no readings or codes, VO-028), as a separate GitHub release map-v0-test. map-v0 itself is unchanged and its figures stay those of the 187 non-test pages. The rows are transliteration comparisons, not model output, and no remaining hypothesis reads test pages: H4 draws only on non-test pages.
   source: owner answered "do it" to the test-page release question after G3, 2026-10-30

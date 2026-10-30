@@ -125,9 +125,14 @@ def test_published_row_carries_the_gated_flag_and_no_transliteration_text():
 
 
 def test_test_page_rows_are_written_apart_from_the_published_map(tmp_path):
-    inputs = _inputs({s: _g("A1Q1") for s in d.ORDER})
+    loci = [d.Locus("f1r.1", "f1r", {}), d.Locus("f2r.1", "f2r", {})]
+    sources = {s: d.Source({lo.id: _g("A1Q1") for lo in loci}, ALL) for s in d.ORDER}
+    inputs = d.Inputs(sources, loci, AAA)
     maps = {name: d.build(inputs, names) for name, names in d.MAPS.items()}
-    d.write(tmp_path, inputs, maps, {"f1r"})
-    assert (tmp_path / "published" / "full.tsv").read_text() == d.PUBLISHED_HEADER + "\n"
-    rows = (tmp_path / "published-test" / "full.tsv").read_text().splitlines()
-    assert rows == [d.PUBLISHED_HEADER] + [d.published_row(c) for c in maps["full"][0]]
+    d.write(tmp_path, inputs, maps, {"f2r"})
+    shown = (tmp_path / "published" / "full.tsv").read_text().splitlines()
+    held = (tmp_path / "published-test" / "full.tsv").read_text().splitlines()
+    assert shown[0] == held[0] == d.PUBLISHED_HEADER
+    assert {r.split("\t")[0] for r in shown[1:]} == {"f1r.1"}
+    assert {r.split("\t")[0] for r in held[1:]} == {"f2r.1"}
+    assert sorted(shown[1:] + held[1:]) == sorted(d.published_row(c) for c in maps["full"][0])
