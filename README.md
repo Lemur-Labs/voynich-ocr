@@ -3,7 +3,7 @@
 Calibrated glyph recognition for the Voynich manuscript (Beinecke MS 408), scored against where the published
 transliterations disagree rather than against any single one. Not a decipherment.
 
-Status: formulation (F0). Nothing is built yet.
+Status: the G1–G4 research program is complete (G1 map pass, G2 cluster kill, G3 recognizer-confidence pass under amendments A5/A6, G4 not calibrated); see [docs/writeup.md](docs/writeup.md). Publish readiness is in progress.
 
 | | |
 |---|---|
