@@ -1,6 +1,11 @@
-.PHONY: snapshot snapshot-verify snapshot-push snapshot-pull test lint map g1 seg lines audit
+.PHONY: snapshot snapshot-verify snapshot-map snapshot-push snapshot-pull test lint map g1 seg lines audit reproduce
 
 BUCKET := gs://lemur-voynich-ocr-snapshot
+
+# Everything the map and its CI proof need: the five STA transliterations, the STA-AAA alphabet
+# and the ivtt oracle source. Deliberately not the ~150 page images.
+MAP_SNAPSHOT_PATHS := transliterations/sta bitrans/STA-aaa.bit ivtt/ivtt.c
+MAP_SNAPSHOT_ARGS := $(foreach p,$(MAP_SNAPSHOT_PATHS),--path=$(p))
 
 snapshot:
 	uv run python -m voynich_ocr.snapshot fetch
@@ -8,6 +13,10 @@ snapshot:
 
 snapshot-verify:
 	uv run python -m voynich_ocr.snapshot verify
+
+snapshot-map:
+	uv run python -m voynich_ocr.snapshot fetch $(MAP_SNAPSHOT_ARGS)
+	uv run python -m voynich_ocr.snapshot verify $(MAP_SNAPSHOT_ARGS)
 
 snapshot-push: snapshot-verify
 	gcloud storage rsync --recursive data/raw $(BUCKET)/raw
@@ -22,13 +31,22 @@ test:
 lint:
 	uv run ruff check .
 
-map: snapshot-verify
+map: snapshot-map
 	uv run python -m voynich_ocr.disagreement --out build/map
-	mkdir -p results/map-v0
-	cp build/map/summary.json results/map-v0/summary.json
 
 g1: map
 	uv run python -m voynich_ocr.g1
+
+# Full fresh-clone proof: snapshot → map → g1, every regenerated artifact byte-compared
+# against the committed record (results/) and the map-v0 release's SHA256SUMS.
+reproduce:
+	uv sync --locked
+	$(MAKE) snapshot
+	mkdir -p build/reproduce
+	git show HEAD:results/g1/checks.json > build/reproduce/g1-checks-expected.json
+	$(MAKE) g1
+	uv run python -m voynich_ocr.reproduce
+	@echo "reproduce: all regenerated artifacts match the committed record"
 
 seg: snapshot-verify
 	uv run python -m voynich_ocr.segment

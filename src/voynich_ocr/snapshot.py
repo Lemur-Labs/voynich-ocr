@@ -35,8 +35,10 @@ def write_manifest(pins: dict[str, str], manifest: Path = MANIFEST) -> None:
     manifest.write_text("".join(f"{pins[p]}  {p}\n" for p in sorted(pins)))
 
 
-def fetch(sources: list[dict], raw: Path = RAW) -> None:
+def fetch(sources: list[dict], raw: Path = RAW, paths: list[str] | None = None) -> None:
     for s in sources:
+        if paths and not selects(s["path"], paths):
+            continue
         dest = raw / s["path"]
         if dest.exists():
             continue
@@ -47,6 +49,11 @@ def fetch(sources: list[dict], raw: Path = RAW) -> None:
         tmp = dest.with_suffix(dest.suffix + ".part")
         tmp.write_bytes(body)
         tmp.rename(dest)
+
+
+def selects(path: str, paths: list[str]) -> bool:
+    """A filter selects a manifest path when it equals it or names one of its directories."""
+    return any(path == p or path.startswith(p.rstrip("/") + "/") for p in paths)
 
 
 def mismatches(pins: dict[str, str], raw: Path = RAW) -> list[str]:
@@ -63,15 +70,26 @@ def mismatches(pins: dict[str, str], raw: Path = RAW) -> list[str]:
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="snapshot")
     p.add_argument("command", choices=["fetch", "pin", "verify"])
+    p.add_argument(
+        "--path",
+        action="append",
+        default=[],
+        metavar="PATH",
+        help="restrict the command to one manifest path or directory; repeatable, default is everything",
+    )
     args = p.parse_args(argv)
+    paths = args.path or None
     sources = load_sources()
     if args.command == "fetch":
-        fetch(sources)
+        fetch(sources, paths=paths)
         return 0
     if args.command == "pin":
         write_manifest({s["path"]: sha256(RAW / s["path"]) for s in sources})
         return 0
-    bad = mismatches(read_manifest())
+    pins = read_manifest()
+    if paths:
+        pins = {path: digest for path, digest in pins.items() if selects(path, paths)}
+    bad = mismatches(pins)
     for line in bad:
         print(line, file=sys.stderr)
     return 1 if bad else 0
