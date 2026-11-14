@@ -14,3 +14,14 @@ jobs:
       - run: uv sync --locked
       - run: uv run ruff check .
       - run: uv run pytest -q
+
+  # Proves the H1 disagreement map on every change: subset fetch (no page images),
+  # manifest verify, regenerate, byte-diff against the committed map-v0 summary.
+  map:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked
+      - run: make map
+      - run: cmp build/map/summary.json results/map-v0/summary.json
