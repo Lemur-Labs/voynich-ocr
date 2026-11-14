@@ -1,4 +1,4 @@
-.PHONY: snapshot snapshot-verify snapshot-map snapshot-push snapshot-pull test lint map g1 seg lines audit reproduce
+.PHONY: snapshot snapshot-verify snapshot-map snapshot-push snapshot-pull test lint map g1 seg lines audit reproduce explorer
 
 BUCKET := gs://lemur-voynich-ocr-snapshot
 
@@ -56,3 +56,7 @@ lines: seg
 
 audit:
 	uv run python -m voynich_ocr.audit
+
+# Static disagreement explorer over the published no-readings map outputs (needs `make map`).
+explorer: map
+	uv run python -m voynich_ocr.explorer
